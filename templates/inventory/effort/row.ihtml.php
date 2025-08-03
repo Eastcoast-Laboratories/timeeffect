@@ -3,7 +3,7 @@
 ?>
 <!-- inventory/effort/row.ihtml - START -->
 					<TR>
-						<TD COLSPAN="<?php echo (empty($cid) ? 1 : 0) + (empty($pid) ? 1 : 0) + 6; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
+						<TD COLSPAN="<?php echo (empty($cid) ? 1 : 0) + (empty($pid) ? 1 : 0) + 8; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
 					</TR>
 					<TR HEIGHT="25">
 						<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>" WIDTH="30%">&nbsp;<?php if($effort->checkUserAccess('write')) { ?><A CLASS="list" HREF="<?= $GLOBALS['_PJ_efforts_inventory_script'] . "?edit=1&cid=$cid&pid=$pid&eid=" . $effort->giveValue('id') ?>"><?php } ?><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/effort<?php if(!($effort->giveValue('billed') == '' || $effort->giveValue('billed') == '0000-00-00')) print 'b' ?>.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;<?= $effort->giveValue('description') ?></A></TD>

@@ -59,7 +59,7 @@ if($pid && $project && $project->checkUserAccess('new')) {
 	}
 ?>
 					<TR>
-						<TD COLSPAN="6"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
+						<TD COLSPAN="<?php echo (empty($cid) ? 1 : 0) + (empty($pid) ? 1 : 0) + 8; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
 					</TR>
 <?php
 	// Calculate and display totals
@@ -69,7 +69,7 @@ if($pid && $project && $project->checkUserAccess('new')) {
 	if($total_hours > 0 || $total_costs > 0) {
 ?>
 					<TR>
-						<TD COLSPAN="6"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="2" BORDER="0"></TD>
+						<TD COLSPAN="<?php echo (empty($cid) ? 1 : 0) + (empty($pid) ? 1 : 0) + 8; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="2" BORDER="0"></TD>
 					</TR>
 					<TR HEIGHT="25">
 						<TD CLASS="listSum" WIDTH="35%">&nbsp;<B><?= $GLOBALS['_PJ_strings']['sum'] ?>:</B></TD>
@@ -83,7 +83,7 @@ if($pid && $project && $project->checkUserAccess('new')) {
 	}
 ?>
 					<TR>
-						<TD COLSPAN="6"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
+						<TD COLSPAN="<?php echo (empty($cid) ? 1 : 0) + (empty($pid) ? 1 : 0) + 8; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
 					</TR>
 				</TABLE></TD>
 			</TR><TR>

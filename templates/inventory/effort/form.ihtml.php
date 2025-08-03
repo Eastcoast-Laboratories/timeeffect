@@ -360,7 +360,7 @@
 							⚙️ Erweitert
 						</button>
 					</TD>
-				</TR><TR id="duration-row" class="advanced-field" style="display: none;">
+				</TR><TR id="duration-row"<?php if(!(isset($effort) && is_object($effort) && $effort->giveValue('id'))) { ?> class="advanced-field" style="display: none;"<?php } ?>>
 					<TD CLASS="FormFieldName"><?php if(!empty($GLOBALS['_PJ_strings']['duration'])) echo $GLOBALS['_PJ_strings']['duration'] ?>:</TD>
 					<TD CLASS="FormField">
 					<button type="button" class="time-btn time-btn-minus" onclick="adjustTime('hours', -1)">−</button>

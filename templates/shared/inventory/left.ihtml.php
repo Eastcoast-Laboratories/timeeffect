@@ -41,7 +41,7 @@
 				while($nav_customers->nextCustomer()) {
 					$nav_customer = $nav_customers->giveCustomer();
 					?>
-					<a href="<?= $GLOBALS['_PJ_project_inventory_script'] . '?list=1&cid=' . $nav_customer->giveValue('id') ?>" 
+					<a href="<?= $GLOBALS['_PJ_project_script'] . '?list=1&cid=' . $nav_customer->giveValue('id') ?>" 
 					class="nav-item" 
 					style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; margin-bottom: 0.25rem; font-size: 0.875rem;">
 						<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity: 0.6;">
