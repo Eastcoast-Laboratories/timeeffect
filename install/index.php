@@ -1,5 +1,6 @@
 <?php
 require_once('../include/fix_php7.php');
+require_once('../include/functions.inc.php');
 require_once('../include/db_mysql.inc.php');
 $db = new DB_Sql();
 
