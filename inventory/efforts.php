@@ -131,24 +131,21 @@
 		// Only exit if we're editing an existing effort without project context
 	}
 	
-	// Only create project object if we have a valid pid
-	$project = null;
-	if($pid) {
-		$project = new Project($customer, $_PJ_auth, $pid);
-	}
-
-	if($cid == '') {
-		if(isset($project) && is_object($project)) {
-			$cid = $project->giveValue('customer_id');
-		}
-		// For new efforts, it's OK to have no customer initially
-		// Only exit if we're editing an existing effort without customer/project context
-	}
-	
-	// Only create customer object if we have a valid cid
+	// First, create customer object if we have a valid cid
 	$customer = null;
 	if($cid) {
 		$customer = new Customer($cid, $_PJ_auth);
+	}
+
+	// Then create project object if we have a valid pid
+	$project = null;
+	if($pid) {
+		$project = new Project($customer, $_PJ_auth, $pid);
+		// If we didn't have a customer but got one from the project, create customer object
+		if(!$customer && $project->giveValue('customer_id')) {
+			$cid = $project->giveValue('customer_id');
+			$customer = new Customer($cid, $_PJ_auth);
+		}
 	}
 	$center_template	= "inventory/effort";
 
