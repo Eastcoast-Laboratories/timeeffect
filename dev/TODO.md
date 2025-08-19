@@ -1,4 +1,5 @@
 # TODO
 
 - Reports Auswahl muss erweitert werden um Aufwände, die keinem Projekt bzw. Kunden zugeordnet sind (ev. schon fertig)
-- wenn man einen aufwand bearbeitet, dasnn soll die dauer und der reset button für die dauer ausserhalb des bereichs sein, der erst auftaucht, wenn man erweitert drueckt
+- es werden immer noch  keine abgerechneten aufwände angezeigt
+-  Fatal error: Uncaught Error: Call to undefined function debugLog() in /var/kunden/webs/ruben/www/timeeffect.z11.de/include/db_mysql.inc.php:97 Stack trace: #0 /var/kunden/webs/ruben/www/timeeffect.z11.de/install/index.php(35): DB_Sql->connect() #1 {main} thrown in /var/kunden/webs/ruben/www/timeeffect.z11.de/include/db_mysql.inc.php on line 97

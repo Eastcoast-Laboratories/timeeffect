@@ -2,12 +2,18 @@
     require_once(__DIR__ . "/../bootstrap.php"); // Modern PHP 8.4 compatibility
 	include_once("../include/config.inc.php");
 	include_once($_PJ_include_path . '/scripts.inc.php');
+	include_once($_PJ_include_path . '/aperetiv.inc.php'); // Fix: Include aperetiv for sbe parameter handling
 
 	// Debug: Log request start
 	debugLog("LOG_EFFORTS_START", "Request method: " . $_SERVER['REQUEST_METHOD'] . ", URI: " . $_SERVER['REQUEST_URI']);
 	if($_SERVER['REQUEST_METHOD'] === 'POST') {
 		debugLog("LOG_EFFORTS_POST", "POST data keys: " . implode(', ', array_keys($_POST)));
 	}
+
+	// Debug: Log sbe parameter handling after aperetiv include
+	$sbe_param = $_REQUEST['sbe'] ?? 'not_set';
+	$shown_be = isset($shown['be']) ? ($shown['be'] ? 'true' : 'false') : 'not_set';
+	debugLog("LOG_SBE_HANDLING", "sbe parameter: $sbe_param, shown[be]: $shown_be");
 
 	$eid = $_REQUEST['eid'] ?? null;
 	$stop = $_REQUEST['stop'] ?? null;
@@ -197,7 +203,7 @@
 			if(empty($final_pid) && !empty($description)) {
 				// Check if description starts with 'k' followed by customer ID
 				if(preg_match('/^k(\d+)\s*/i', ltrim($description), $matches)) { // LOG_EFFORT_AUTOASSIGN: Try k<ID> at start (case-insensitive, trim left)
-    debugLog("LOG_EFFORT_AUTOASSIGN", "Detected k<ID> pattern: " . $matches[1]);
+    				debugLog("LOG_EFFORT_AUTOASSIGN", "Detected k<ID> pattern: " . $matches[1]);
 					$auto_cid = intval($matches[1]);
 					// Try direct DB query first to check if customer exists
 					$db = new Database();
@@ -245,7 +251,7 @@
 				}
 				// Check if description starts with 'p' followed by project ID
 				elseif(preg_match('/^p(\d+)\s*/i', ltrim($description), $matches)) { // LOG_EFFORT_AUTOASSIGN: Try p<ID> at start (case-insensitive, trim left)
-    debugLog("LOG_EFFORT_AUTOASSIGN", "Detected p<ID> pattern: " . $matches[1]);
+    				debugLog("LOG_EFFORT_AUTOASSIGN", "Detected p<ID> pattern: " . $matches[1]);
 					$auto_pid = intval($matches[1]);
 					// Verify project exists and user has access
 					// Fix: Create dummy customer variable for by-reference parameter
@@ -257,7 +263,7 @@
 						$final_cid = $test_project->giveValue('customer_id');
 						// Remove the shortcode from the description
 						$cleaned_description = preg_replace('/^p\d+\s*/i', '', ltrim($description));
-debugLog("LOG_EFFORT_AUTOASSIGN", "Cleaned description after p<ID>: '" . $cleaned_description . "'");
+						debugLog("LOG_EFFORT_AUTOASSIGN", "Cleaned description after p<ID>: '" . $cleaned_description . "'");
 					}
 				}
 				// Check if customer name appears in description
@@ -267,7 +273,7 @@ debugLog("LOG_EFFORT_AUTOASSIGN", "Cleaned description after p<ID>: '" . $cleane
 						$customer_check = $customer_list->giveCustomer();
 						$customer_name = $customer_check->giveValue('customer_name');
 						if(!empty($customer_name) && stripos($description, $customer_name) !== false) {
-    debugLog("LOG_EFFORT_AUTOASSIGN", "Found customer name '$customer_name' in description. Assigning customer ID " . $customer_check->giveValue('id'));
+   			 			debugLog("LOG_EFFORT_AUTOASSIGN", "Found customer name '$customer_name' in description. Assigning customer ID " . $customer_check->giveValue('id'));
 							$final_cid = $customer_check->giveValue('id');
 							// Auto-assign project from newest effort of this customer (effort table has no customer_id column)
 							$db = new Database();
@@ -567,4 +573,3 @@ debugLog("LOG_EFFORT_AUTOASSIGN", "Cleaned description after p<ID>: '" . $cleane
 	include("$_PJ_root/templates/list.ihtml.php");
 
 	include_once("$_PJ_include_path/degestiv.inc.php");
-?>
