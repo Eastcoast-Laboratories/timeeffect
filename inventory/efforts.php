@@ -85,7 +85,11 @@
 	$delete = $_REQUEST['delete'] ?? null;
 	$cancel = $_REQUEST['cancel'] ?? null;
 	$confirm = $_REQUEST['confirm'] ?? null;
-	$shown = $_REQUEST['shown'] ?? array();
+	// Preserve $shown array from aperetiv.inc.php (handles sbe parameter)
+	// Only merge with $_REQUEST['shown'] if it exists, don't overwrite
+	if(isset($_REQUEST['shown']) && is_array($_REQUEST['shown'])) {
+		$shown = array_merge($shown, $_REQUEST['shown']);
+	}
 	$list = $_REQUEST['list'] ?? null;
 
 	// AJAX endpoint removed - now using client-side filtering of pre-generated project options
