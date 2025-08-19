@@ -119,6 +119,7 @@
 			$query .= " LEFT JOIN {$safeProjectTable} ON {$safeEffortTable}.project_id = {$safeProjectTable}.id";
 			$query .= " LEFT JOIN {$safeCustomerTable} ON {$safeProjectTable}.customer_id = {$safeCustomerTable}.id";
 			$query .= " WHERE 1=1"; // Always true condition to allow adding AND clauses
+			
 			if(isset($project) && is_object($project) && $project->giveValue('id')) {
 				$safeProjectId = DatabaseSecurity::escapeInt($project->giveValue('id'));
 				$query .= " AND project_id={$safeProjectId}";

@@ -4,24 +4,11 @@
 	include_once($_PJ_include_path . '/scripts.inc.php');
 	include_once($_PJ_include_path . '/aperetiv.inc.php'); // Fix: Include aperetiv for sbe parameter handling
 
-	// Debug: Enable logging and check aperetiv processing
-	$GLOBALS['_PJ_debug'] = true;
-	debugLog("LOG_APERETIV_AFTER", "After aperetiv include - shown array: " . json_encode($shown ?? []));
-	debugLog("LOG_APERETIV_SBE", "sbe from REQUEST: " . ($_REQUEST['sbe'] ?? 'not_set'));
-
 	// Debug: Log request start
 	debugLog("LOG_EFFORTS_START", "Request method: " . $_SERVER['REQUEST_METHOD'] . ", URI: " . $_SERVER['REQUEST_URI']);
 	if($_SERVER['REQUEST_METHOD'] === 'POST') {
 		debugLog("LOG_EFFORTS_POST", "POST data keys: " . implode(', ', array_keys($_POST)));
 	}
-
-	// Debug: Log sbe parameter handling after aperetiv include
-	$GLOBALS['_PJ_debug'] = true; // Enable debugging for sbe issue
-	$sbe_param = $_REQUEST['sbe'] ?? 'not_set';
-	$shown_be = isset($shown['be']) ? ($shown['be'] ? 'true' : 'false') : 'not_set';
-	debugLog("LOG_SBE_HANDLING", "sbe parameter: $sbe_param, shown[be]: $shown_be");
-	debugLog("LOG_SBE_FULL_SHOWN", "Full shown array: " . json_encode($shown));
-	debugLog("LOG_SBE_REQUEST", "Full REQUEST: " . json_encode($_REQUEST));
 
 	$eid = $_REQUEST['eid'] ?? null;
 	$stop = $_REQUEST['stop'] ?? null;
