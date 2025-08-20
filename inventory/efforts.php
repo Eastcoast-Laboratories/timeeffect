@@ -534,7 +534,14 @@
 		debugLog("LOG_PROJECT_ACCESS", "No project object available for pid=$pid, allowing access");
 	}
 	$sort_order = $_GET['sort'] ?? 'desc';
-	$efforts			= new EffortList($customer, $project, $_PJ_auth, isset($shown['be']) ? $shown['be'] : false, NULL, $sort_order);
+	// Handle SBE limit parameter for billed entries
+	$billed_limit = null;
+	if(isset($shown['be']) && isset($sbe) && is_numeric($sbe) && $sbe > 0) {
+		$config_default = isset($GLOBALS['_PJ_default_billed_entries_limit']) ? $GLOBALS['_PJ_default_billed_entries_limit'] : 100;
+		$billed_limit = ($sbe == 1) ? $config_default : intval($sbe); // Convert sbe=1 to config default, use numeric value otherwise
+		debugLog("LOG_SBE_LIMIT", "SBE parameter: sbe=$sbe, billed_limit=$billed_limit, config_default=$config_default");
+	}
+	$efforts			= new EffortList($customer, $project, $_PJ_auth, isset($shown['be']) ? $shown['be'] : false, NULL, $sort_order, $billed_limit);
 	// LOG_TITLE_GENERATION: Set appropriate title based on project context
 	if ($project && $project->giveValue('project_name')) {
 		// Single project view

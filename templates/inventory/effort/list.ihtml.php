@@ -93,9 +93,14 @@ if($pid && $project && $project->checkUserAccess('new')) {
 					</TR><TR>
 						<TD CLASS="listFoot" ALIGN="left"><?php
 if(empty($shown['be'])) {
-						?><A CLASS="listFoot" HREF="<?= $GLOBALS['_PJ_efforts_inventory_script'] . "?sbe=1&cid=".@$cid.'&pid='.@$pid.'&eid='.@$eid.""; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/show-closed.gif" WIDTH="16" HEIGHT="16" BORDER="0" ALIGN="absmiddle">&nbsp;<?php if(!empty($GLOBALS['_PJ_strings']['show_closed_efforts'])) echo $GLOBALS['_PJ_strings']['show_closed_efforts'] ?></A><?php
+						?><A CLASS="listFoot" HREF="<?= $GLOBALS['_PJ_efforts_inventory_script'] . "?sbe=" . (isset($GLOBALS['_PJ_default_billed_entries_limit']) ? $GLOBALS['_PJ_default_billed_entries_limit'] : 100) . "&cid=".@$cid.'&pid='.@$pid.'&eid='.@$eid.""; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/show-closed.gif" WIDTH="16" HEIGHT="16" BORDER="0" ALIGN="absmiddle">&nbsp;<?php if(!empty($GLOBALS['_PJ_strings']['show_closed_efforts'])) echo $GLOBALS['_PJ_strings']['show_closed_efforts'] ?></A><?php
 } else {
 						?><A CLASS="listFoot" HREF="<?= $GLOBALS['_PJ_efforts_inventory_script'] . "?sbe=0&cid=".@$cid.'&pid='.@$pid.'&eid='.@$eid.""; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/hide-closed.gif" WIDTH="16" HEIGHT="16" BORDER="0" ALIGN="absmiddle">&nbsp;<?php if(!empty($GLOBALS['_PJ_strings']['hide_closed_efforts'])) echo $GLOBALS['_PJ_strings']['hide_closed_efforts'] ?></A><?php
+	// Add "Show All" link when showing limited billed entries
+	$current_sbe = $_GET['sbe'] ?? null;
+	if(isset($shown['be']) && is_numeric($current_sbe) && $current_sbe < 9999 && $efforts && $efforts->giveEffortCount() >= $current_sbe) {
+						?><br><A CLASS="listFoot" HREF="<?= $GLOBALS['_PJ_efforts_inventory_script'] . "?sbe=9999&cid=".@$cid.'&pid='.@$pid.'&eid='.@$eid.""; ?>">ALLE abgerechnete Aufwände anzeigen</A><?php
+	}
 }
 						?></TD>
 						<TD CLASS="listFoot" ALIGN="right">&nbsp;</TD>

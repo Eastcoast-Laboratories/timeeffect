@@ -50,8 +50,6 @@
 			$query .= " WHERE (project_id IN ($pids) OR project_id = 0)";
 			$query .= " AND `billed` IS NULL";
 			$query .= " AND `begin` = `END`";
-			$order_query = ' ORDER BY date DESC, begin, last DESC';
-			$limit_query = ' LIMIT 1000';
 
 			$this->__db->query($query);
 			$this->__efforts = array();
@@ -97,7 +95,7 @@
 			self::__construct($customer, $project, $user, $show_billed, $limit);
 		}
 		
-		function __construct(&$customer, &$project, &$user, $show_billed = false, $limit = NULL, $sort_order = 'desc') {
+		function __construct(&$customer, &$project, &$user, $show_billed = false, $limit = NULL, $sort_order = 'desc', $billed_limit = NULL) {
 			$this->customer	= $customer;
 			$this->project	= $project;
 			$this->user		= $user;
@@ -124,14 +122,19 @@
 				$safeProjectId = DatabaseSecurity::escapeInt($project->giveValue('id'));
 				$query .= " AND project_id={$safeProjectId}";
 				$sort_direction = ($sort_order === 'asc') ? 'ASC' : 'DESC';
+				// Fix: Sort billed entries newest first, then unbilled entries
 				$order_query = " ORDER BY billed, date $sort_direction, begin $sort_direction";
 				$limit_query = '';
 			} else if(isset($customer) && is_object($customer) && $customer->giveValue('id')) {
 				$safeCustomerId = DatabaseSecurity::escapeInt($customer->giveValue('id'));
 				// Filter by customer, but also include efforts without project (project_id = 0)
 				$query .= " AND ({$safeCustomerTable}.id={$safeCustomerId} OR {$safeEffortTable}.project_id = 0)";
-				$order_query = ' ORDER BY billed, last DESC, date, begin';
-				$limit_query = ' LIMIT 1000';
+				// Fix: Sort billed entries newest first, respecting sort parameter
+				$sort_direction = ($sort_order === 'asc') ? 'ASC' : 'DESC';
+				$order_query = " ORDER BY billed, last $sort_direction, date $sort_direction, begin $sort_direction";
+				// Default limit for customer queries to prevent performance issues
+				$default_limit = isset($GLOBALS['_PJ_max_efforts_total']) ? $GLOBALS['_PJ_max_efforts_total'] : 1000;
+				$limit_query = ' LIMIT ' . $default_limit;
 			} else {
 				$this->db->query("SELECT id FROM {$safeCustomerTable} WHERE 1 $raw_access_query");
 				$cids = '';
@@ -161,13 +164,32 @@
 				}
 				// Sort by project_id first, then by customer_id within project, then by date
 				$order_query = ' ORDER BY billed, project_id, ' . $GLOBALS['_PJ_customer_table'] . '.id, date DESC, begin DESC, last DESC';
-				$limit_query = ' LIMIT 1000';
+				// Default limit for general queries to prevent performance issues with large datasets
+				$default_limit = isset($GLOBALS['_PJ_max_efforts_total']) ? $GLOBALS['_PJ_max_efforts_total'] : 1000;
+				$limit_query = ' LIMIT ' . $default_limit;
 			}
 			if(!empty($limit)) {
 				$limit_query = ' LIMIT ' . $limit;
 			}
+			
+			// Handle billed entries filtering and limiting
 			if(!$this->show_billed) {
 				$query .= " AND (billed IS NULL OR billed = '0000-00-00')";
+			} else if(!empty($billed_limit) && is_numeric($billed_limit)) {
+				// When showing billed entries with limit, use subquery approach
+				// First get unbilled entries, then limited billed entries
+				$sort_direction = ($sort_order === 'asc') ? 'ASC' : 'DESC';
+				$unbilled_query = $query . " AND (billed IS NULL OR billed = '0000-00-00')";
+				$billed_query = $query . " AND (billed IS NOT NULL AND billed != '0000-00-00') ORDER BY date $sort_direction, begin $sort_direction LIMIT " . intval($billed_limit);
+				
+				// Debug: Log the billed limit being applied
+				debugLog("LOG_BILLED_LIMIT", "Applying billed entries limit: " . intval($billed_limit) . ", sort: $sort_direction");
+				debugLog("LOG_BILLED_QUERY", "Billed query: " . $billed_query);
+				
+				// Combine queries with UNION - billed query already has LIMIT
+				$query = "($unbilled_query) UNION ALL ($billed_query)";
+				$order_query = " ORDER BY (billed IS NULL OR billed = '0000-00-00'), date $sort_direction, begin $sort_direction"; // Sort unbilled first, then billed by date
+				$limit_query = ""; // Don't apply additional limit
 			}
 			if(!$this->user->checkPermission('admin')) {
 				$query .= " AND (" . $GLOBALS['_PJ_customer_table'] . ".readforeignefforts = 1 OR " . $GLOBALS['_PJ_effort_table'] . ".user = '" . $this->user->giveValue('id') . "')";
@@ -201,6 +223,10 @@
 		}
 
 		function effortCount() {
+			return $this->effort_count;
+		}
+
+		function giveEffortCount() {
 			return $this->effort_count;
 		}
 

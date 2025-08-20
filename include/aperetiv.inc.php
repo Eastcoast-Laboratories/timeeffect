@@ -144,8 +144,11 @@ if(isset($exc)) {
 	unset($shown['cp']);
 } else if(isset($sbe) && $sbe == 1) {
 	$shown['be'] = 1;
+	$sbe = isset($GLOBALS['_PJ_default_billed_entries_limit']) ? $GLOBALS['_PJ_default_billed_entries_limit'] : 100; // Convert sbe=1 to configurable limit
 } else if(isset($sbe) && $sbe == 0) {
 	unset($shown['be']);
+} else if(isset($sbe) && is_numeric($sbe) && $sbe > 1) {
+	$shown['be'] = 1; // Show billed entries when numeric limit is set
 }
 
 // Fix: Default expand all when no specific arguments are provided
