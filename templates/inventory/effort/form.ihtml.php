@@ -138,6 +138,32 @@
 	}
 ?>
 
+<?php
+// Show recent efforts suggestions for new efforts (when no existing effort is being edited)
+if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
+	if(isset($recent_efforts) && count($recent_efforts) > 0) {
+?>
+	<div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 15px; margin: 20px auto; max-width: 800px;">
+		<h4 style="color: #007bff; margin-top: 0; margin-bottom: 10px;">🕒 Zuletzt genutzt</h4>
+		<div style="display: flex; flex-wrap: wrap; gap: 8px;">
+			<?php foreach($recent_efforts as $index => $recent): ?>
+				<button type="button" 
+						class="recent-effort-btn" 
+						style="background: #fff; border: 1px solid #007bff; color: #007bff; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-size: 1.1em; transition: all 0.2s;"
+						onmouseover="this.style.background='#007bff'; this.style.color='#fff';"
+						onmouseout="this.style.background='#fff'; this.style.color='#007bff';"
+						onclick="applyRecentEffort(<?= htmlspecialchars(json_encode($recent)) ?>)">
+					<strong><?= htmlspecialchars($recent['customer_name']) ?></strong>: <?= htmlspecialchars($recent['project_name']) ?> 
+					— <?= htmlspecialchars(strlen($recent['description']) > 40 ? substr($recent['description'], 0, 40) . '...' : $recent['description']) ?>
+				</button>
+			<?php endforeach; ?>
+		</div>
+	</div>
+<?php
+	}
+}
+?>
+
 <FORM ACTION="<? print $PHP_SELF; ?>" METHOD="<? print $_PJ_form_method; ?>">
 <INPUT TYPE="hidden" NAME="edit" VALUE="1">
 <INPUT TYPE="hidden" NAME="altered" VALUE="1">
@@ -575,6 +601,45 @@ if($_PJ_auth->checkPermission('admin') || (!$effort || !$effort->giveValue('id')
 	</div>
 
 <script type="text/javascript">
+// Apply recent effort data to form fields
+function applyRecentEffort(recentData) {
+	console.log('LOG_RECENT_EFFORTS_UI: Applying recent effort:', recentData);
+	
+	var customerSelect = document.getElementById('customer-select');
+	var projectSelect = document.getElementById('project-select');
+	var descriptionField = document.getElementById('description-field');
+	var pidHidden = document.getElementsByName('pid')[0];
+	
+	// Set customer
+	if (customerSelect && recentData.customer_id) {
+		customerSelect.value = recentData.customer_id;
+		console.log('LOG_RECENT_EFFORTS_UI: Set customer to:', recentData.customer_id);
+	}
+	
+	// Update project list to show projects for selected customer
+	updateProjectList();
+	
+	// Set project after a small delay to ensure project list is updated
+	setTimeout(function() {
+		if (projectSelect && recentData.project_id) {
+			projectSelect.value = recentData.project_id;
+			console.log('LOG_RECENT_EFFORTS_UI: Set project to:', recentData.project_id);
+		}
+		
+		// Sync hidden pid field
+		if (pidHidden && recentData.project_id) {
+			pidHidden.value = recentData.project_id;
+		}
+	}, 50);
+	
+	// Set description
+	if (descriptionField && recentData.description) {
+		descriptionField.value = recentData.description;
+		descriptionField.focus();
+		console.log('LOG_RECENT_EFFORTS_UI: Set description to:', recentData.description);
+	}
+}
+
 // Update project list when customer is selected
 function updateProjectList() {
 	var customerSelect = document.getElementById('customer-select');

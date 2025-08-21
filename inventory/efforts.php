@@ -149,6 +149,44 @@
 	}
 
 	if(isset($new)) {
+		// Fetch last 6 efforts for current user to show as suggestions
+		$recent_efforts = array();
+		$current_user_id = $_PJ_auth->giveValue('id');
+		
+		if($current_user_id) {
+			$db = new Database();
+			$db->connect();
+			$safe_user_id = DatabaseSecurity::escapeString($current_user_id, $db->Link_ID);
+			
+			// Query last 6 efforts with project and customer info, only where user has 'new' rights
+			$query = "SELECT e.project_id, e.description, p.project_name, p.customer_id, c.customer_name 
+					  FROM " . $GLOBALS['_PJ_effort_table'] . " e 
+					  INNER JOIN " . $GLOBALS['_PJ_project_table'] . " p ON e.project_id = p.id 
+					  INNER JOIN " . $GLOBALS['_PJ_customer_table'] . " c ON p.customer_id = c.id 
+					  WHERE e.user = '$safe_user_id' AND e.project_id > 0 
+					  ORDER BY e.last DESC 
+					  LIMIT 6";
+			
+			$db->query($query);
+			while($db->next_record()) {
+				// Check if user has 'new' rights for this project
+				$test_customer = new Customer($_PJ_auth, $db->Record['customer_id']);
+				$test_project = new Project($test_customer, $_PJ_auth, $db->Record['project_id']);
+				
+				if($test_project->checkUserAccess('new')) {
+					$recent_efforts[] = array(
+						'project_id' => $db->Record['project_id'],
+						'customer_id' => $db->Record['customer_id'],
+						'project_name' => $db->Record['project_name'],
+						'customer_name' => $db->Record['customer_name'],
+						'description' => $db->Record['description']
+					);
+				}
+			}
+			
+			debugLog("LOG_RECENT_EFFORTS", "Found " . count($recent_efforts) . " recent efforts with 'new' access for user " . $current_user_id);
+		}
+		
 		$center_title		= $GLOBALS['_PJ_strings']['inventory'] . ': ' . $GLOBALS['_PJ_strings']['new_effort'];
 		include("$_PJ_root/templates/add.ihtml.php");
 		exit;
