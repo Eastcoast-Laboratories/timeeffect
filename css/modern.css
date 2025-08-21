@@ -647,6 +647,10 @@ select {
     background: transparent;
 }
 
+.spacer_before_path{
+    width: 47px;
+}
+
 .breadcrumb-icon {
     margin-right: 0.5rem;
     vertical-align: middle;

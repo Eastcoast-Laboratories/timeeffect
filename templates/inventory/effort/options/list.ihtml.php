@@ -1,8 +1,8 @@
 <!-- inventory/effort/option/list.ihtml - START -->
 		<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0" WIDTH="100%">
 			<TR VALIGN="center">
-				<TD WIDTH="40"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="40" HEIGHT="60" BORDER="0"></TD>
-				<TD HEIGHT="60" CLASS="path"><?php include($GLOBALS['_PJ_root'] . '/templates/shared/path.ihtml.php'); ?>&nbsp;</TD>
+				<td class="spacer_before_path"></td>
+				<TD class="path"><?php include($GLOBALS['_PJ_root'] . '/templates/shared/path.ihtml.php'); ?></TD>
 			</TR>
 		</TABLE>
 		<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0" WIDTH="100%">
