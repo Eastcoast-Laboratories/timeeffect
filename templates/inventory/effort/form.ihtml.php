@@ -3,15 +3,19 @@
 
 	// Check if there are existing efforts with non-5-divisible minutes
 	$show_all_minutes = false;
+	$customer_id = 0; // Initialize customer_id variable
+	if (isset($customer) && $customer && $customer->giveValue('id')) {
+		$customer_id = $customer->giveValue('id');
+	}
 	if ($customer_id > 0) {
 		$db = new Database();
-		$query = "SELECT COUNT(*) as count FROM effort WHERE customer = ? AND (MINUTE(date) % 5 != 0 OR MINUTE(end) % 5 != 0)";
-		$stmt = $db->prepare($query);
-		$stmt->bind_param('i', $customer_id);
-		$stmt->execute();
-		$result = $stmt->get_result();
-		$row = $result->fetch_assoc();
-		$show_all_minutes = ($row['count'] > 0);
+		$db->connect();
+		$safe_customer_id = DatabaseSecurity::escapeString($customer_id, $db->Link_ID);
+		$query = "SELECT COUNT(*) as count FROM " . $GLOBALS['_PJ_effort_table'] . " WHERE customer = '$safe_customer_id' AND (MINUTE(date) % 5 != 0 OR MINUTE(end) % 5 != 0)";
+		$db->query($query);
+		if ($db->next_record()) {
+			$show_all_minutes = ($db->Record['count'] > 0);
+		}
 		debugLog("LOG_MINUTE_CHECK", "Customer ID: $customer_id, Non-5-divisible minutes found: " . ($show_all_minutes ? 'yes' : 'no'));
 	}
 
@@ -580,9 +584,17 @@ if($_PJ_auth->checkPermission('admin') || (!$effort || !$effort->giveValue('id')
 	</TABLE>
 	</CENTER>
 
+	<!-- help toggle button -->
+	<div style="text-align: center; margin: 1rem 0;">
+		<button type="button" class="help-toggle-btn" onclick="toggleHelpSection()">
+			<span id="help-icon">❓</span>
+			<span id="help-text">Hilfe anzeigen</span>
+		</button>
+	</div>
+
 	<!-- help section for auto-assignment -->
-	<div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin: 20px auto; max-width: 600px; font-size: 0.9em; color: #495057;">
-		<h4 style="color: #007bff; margin-top: 0;">💡 <?php echo $GLOBALS['_PJ_strings']['auto_assignment_help_title']; ?></h4>
+	<div id="help-section" class="help-section">
+		<h4>💡 <?php echo $GLOBALS['_PJ_strings']['auto_assignment_help_title']; ?></h4>
 		<p><strong><?php echo $GLOBALS['_PJ_strings']['auto_assignment_help_desc']; ?></strong></p>
 		<ul>
 			<li><?php echo $GLOBALS['_PJ_strings']['auto_assignment_help_1']; ?></li>
@@ -720,6 +732,23 @@ document.addEventListener('DOMContentLoaded', function() {
 		toggleNoteField();
 	}
 });
+
+// Toggle help section visibility
+function toggleHelpSection() {
+	var helpSection = document.getElementById('help-section');
+	var helpIcon = document.getElementById('help-icon');
+	var helpText = document.getElementById('help-text');
+	
+	if (helpSection.classList.contains('show')) {
+		helpSection.classList.remove('show');
+		helpIcon.textContent = '❓';
+		helpText.textContent = 'Hilfe anzeigen';
+	} else {
+		helpSection.classList.add('show');
+		helpIcon.textContent = '❌';
+		helpText.textContent = 'Hilfe ausblenden';
+	}
+}
 
 // JavaScript function to adjust time values with plus/minus buttons
 function adjustTime(fieldName, increment) {

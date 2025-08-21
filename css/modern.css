@@ -233,7 +233,7 @@ input[type="submit"], button[type="submit"], button {
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
     outline: none;
-    margin: 0.5rem 0;
+    margin: 0.1rem 0;
     display: inline-block;
 }
 input[type="submit"]:hover, button[type="submit"]:hover, button:hover {
@@ -276,7 +276,7 @@ input:not([type="radio"]):not([type="submit"]):not([type="checkbox"]):focus, tex
 
 /* Date fields styling for inline layout (day, month, year in one line) */
 select.date-field {
-    width: 28%;
+    width: 6em;
     display: inline-block;
     margin-right: 2%;
     vertical-align: top;
@@ -289,7 +289,7 @@ select.date-field:last-of-type {
 
 /* Time fields styling for inline layout (hour, minute in one line) */
 select.time-field {
-    width: 25%;
+    width: 4.4em;
     display: inline-block;
     margin: 0;
     vertical-align: top;
@@ -1429,8 +1429,8 @@ a.start-anything-btn{
     background: var(--surface-color);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
-    padding: 1rem;
-    margin: 1.25rem auto;
+    padding: 0.5rem;
+    margin: 0.1rem auto;
     max-width: 50rem;
     box-shadow: var(--shadow-sm);
 }
@@ -1579,5 +1579,183 @@ html[data-theme="dark"] .recent-effort-btn:hover {
     .system-dark .recent-effort-btn:hover {
         background: var(--primary-light) !important;
         color: var(--surface-color) !important;
+    }
+    
+    .system-dark .help-section {
+        background: var(--surface-color) !important;
+        border-color: var(--border-color) !important;
+        color: var(--text-primary) !important;
+    }
+    
+    .system-dark .help-toggle-btn {
+        background: var(--surface-color) !important;
+        border-color: var(--primary-light) !important;
+        color: var(--primary-light) !important;
+    }
+    
+    .system-dark .help-toggle-btn:hover {
+        background: var(--primary-light) !important;
+        color: var(--surface-color) !important;
+    }
+    
+    .system-dark .help-section h4 {
+        color: var(--primary-light) !important;
+    }
+    
+    .system-dark .help-section code {
+        background: var(--border-color) !important;
+        color: var(--text-primary) !important;
+    }
+}
+
+/* Help Section Styles */
+.help-section {
+    background: var(--surface-gradient);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin: 1.5rem auto;
+    max-width: 600px;
+    font-size: 1.5em;
+    color: var(--text-primary);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition-normal);
+    display: none; /* Hidden by default */
+}
+
+.help-section.show {
+    display: block;
+    animation: helpSlideDown 0.3s ease-out;
+}
+
+.help-toggle-btn {
+    background: var(--surface-gradient);
+    border: 1px solid var(--primary-color);
+    border-radius: var(--radius-sm);
+    color: var(--primary-color);
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem auto;
+    box-shadow: var(--shadow-sm);
+}
+
+.help-toggle-btn:hover {
+    background: var(--primary-color);
+    color: var(--surface-color);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.help-toggle-btn:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+.help-section h4 {
+    color: var(--primary-color);
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.help-section p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.help-section ul {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+}
+
+.help-section li {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.help-section code {
+    background: var(--border-color);
+    color: var(--text-primary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.85em;
+}
+
+.help-section em {
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+@keyframes helpSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Dark mode support for help section */
+[data-theme="dark"] .help-section {
+    background: var(--surface-color);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .help-toggle-btn {
+    background: var(--surface-color);
+    border-color: var(--primary-light);
+    color: var(--primary-light);
+}
+
+[data-theme="dark"] .help-toggle-btn:hover {
+    background: var(--primary-light);
+    color: var(--surface-color);
+}
+
+[data-theme="dark"] .help-section h4 {
+    color: var(--primary-light);
+}
+
+[data-theme="dark"] .help-section code {
+    background: var(--border-color);
+    color: var(--text-primary);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .help-section {
+        background: var(--surface-color);
+        border-color: var(--border-color);
+        color: var(--text-primary);
+    }
+    
+    :root:not([data-theme="light"]) .help-toggle-btn {
+        background: var(--surface-color);
+        border-color: var(--primary-light);
+        color: var(--primary-light);
+    }
+    
+    :root:not([data-theme="light"]) .help-toggle-btn:hover {
+        background: var(--primary-light);
+        color: var(--surface-color);
+    }
+    
+    :root:not([data-theme="light"]) .help-section h4 {
+        color: var(--primary-light);
+    }
+    
+    :root:not([data-theme="light"]) .help-section code {
+        background: var(--border-color);
+        color: var(--text-primary);
     }
 }
