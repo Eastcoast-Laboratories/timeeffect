@@ -159,7 +159,7 @@
 			$safe_user_id = DatabaseSecurity::escapeString($current_user_id, $db->Link_ID);
 			
 			// Query last 6 efforts with project and customer info, only where user has 'new' rights
-			$query = "SELECT e.project_id, e.description, p.project_name, p.customer_id, c.customer_name 
+			$query = "SELECT distinct concat(e.description, '~', e.project_id), e.description, e.project_id, p.project_name, p.customer_id, c.customer_name 
 					  FROM " . $GLOBALS['_PJ_effort_table'] . " e 
 					  INNER JOIN " . $GLOBALS['_PJ_project_table'] . " p ON e.project_id = p.id 
 					  INNER JOIN " . $GLOBALS['_PJ_customer_table'] . " c ON p.customer_id = c.id 

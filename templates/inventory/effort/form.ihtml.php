@@ -143,15 +143,12 @@
 if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
 	if(isset($recent_efforts) && count($recent_efforts) > 0) {
 ?>
-	<div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 15px; margin: 20px auto; max-width: 800px;">
-		<h4 style="color: #007bff; margin-top: 0; margin-bottom: 10px;">🕒 Zuletzt genutzt</h4>
-		<div style="display: flex; flex-wrap: wrap; gap: 8px;">
+	<div class="recent-efforts-container">
+		<h4 class="recent-efforts-title">🕒 Zuletzt genutzt</h4>
+		<div class="recent-efforts-buttons">
 			<?php foreach($recent_efforts as $index => $recent): ?>
 				<button type="button" 
-						class="recent-effort-btn" 
-						style="background: #fff; border: 1px solid #007bff; color: #007bff; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-size: 1.1em; transition: all 0.2s;"
-						onmouseover="this.style.background='#007bff'; this.style.color='#fff';"
-						onmouseout="this.style.background='#fff'; this.style.color='#007bff';"
+						class="recent-effort-btn"
 						onclick="applyRecentEffort(<?= htmlspecialchars(json_encode($recent)) ?>)">
 					<strong><?= htmlspecialchars($recent['customer_name']) ?></strong>: <?= htmlspecialchars($recent['project_name']) ?> 
 					— <?= htmlspecialchars(strlen($recent['description']) > 40 ? substr($recent['description'], 0, 40) . '...' : $recent['description']) ?>

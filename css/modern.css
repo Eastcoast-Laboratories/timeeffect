@@ -1424,6 +1424,101 @@ a.start-anything-btn{
     box-shadow: var(--shadow-sm);
 }
 
+/* Recent efforts suggestions styling */
+.recent-efforts-container {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    margin: 1.25rem auto;
+    max-width: 50rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.recent-efforts-title {
+    color: var(--primary-color);
+    margin-top: 0;
+    margin-bottom: 0.625rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.recent-efforts-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.recent-effort-btn {
+    background: var(--surface-color);
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 0.625rem 0.9375rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 500;
+    transition: var(--transition-normal);
+    font-family: inherit;
+    line-height: 1.4;
+}
+
+.recent-effort-btn:hover {
+    background: var(--primary-color);
+    color: var(--surface-color);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.recent-effort-btn:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Dark mode support for recent efforts */
+html[data-theme="dark"] .recent-efforts-container {
+    background: var(--surface-color);
+    border-color: var(--border-color);
+}
+
+html[data-theme="dark"] .recent-efforts-title {
+    color: var(--primary-light);
+}
+
+html[data-theme="dark"] .recent-effort-btn {
+    background: var(--surface-color);
+    border-color: var(--primary-light);
+    color: var(--primary-light);
+}
+
+html[data-theme="dark"] .recent-effort-btn:hover {
+    background: var(--primary-light);
+    color: var(--surface-color);
+}
+
+/* Auto dark mode support */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .recent-efforts-container {
+        background: var(--surface-color);
+        border-color: var(--border-color);
+    }
+    
+    :root:not([data-theme="light"]) .recent-efforts-title {
+        color: var(--primary-light);
+    }
+    
+    :root:not([data-theme="light"]) .recent-effort-btn {
+        background: var(--surface-color);
+        border-color: var(--primary-light);
+        color: var(--primary-light);
+    }
+    
+    :root:not([data-theme="light"]) .recent-effort-btn:hover {
+        background: var(--primary-light);
+        color: var(--surface-color);
+    }
+}
+
 /* Force Chrome Android to respect dark mode variables */
 @supports (-webkit-touch-callout: none) {
     .system-dark body,
@@ -1464,5 +1559,25 @@ a.start-anything-btn{
         background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
         color: #f1f5f9 !important;
         border-color: #64748b !important;
+    }
+    
+    .system-dark .recent-efforts-container {
+        background: var(--surface-color) !important;
+        border-color: var(--border-color) !important;
+    }
+    
+    .system-dark .recent-efforts-title {
+        color: var(--primary-light) !important;
+    }
+    
+    .system-dark .recent-effort-btn {
+        background: var(--surface-color) !important;
+        border-color: var(--primary-light) !important;
+        color: var(--primary-light) !important;
+    }
+    
+    .system-dark .recent-effort-btn:hover {
+        background: var(--primary-light) !important;
+        color: var(--surface-color) !important;
     }
 }
