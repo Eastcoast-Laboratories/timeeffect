@@ -26,15 +26,16 @@
 	// Handle registration completion with token
 	if (isset($complete) && isset($token)) {
 		$db = new Database();
+		$db->connect(); // Ensure connection is established
 		$query = sprintf("SELECT * FROM %s WHERE confirmation_token='%s' AND confirmed=0", 
 						 $GLOBALS['_PJ_auth_table'], 
-						 mysqli_real_escape_string($db->Link_ID, $token));
+						 DatabaseSecurity::escapeString($token, $db->Link_ID));
 		$db->query($query);
 		
 		if ($db->next_record()) {
 			$email = $db->f('email');
 			// Show completion form - this will use the template with completion_step = true
-			include("$_PJ_root/templates/user/register.ihtml");
+			include("$_PJ_root/templates/user/register.ihtml.php");
 			include_once("$_PJ_include_path/degestiv.inc.php");
 			exit;
 		} else {
@@ -48,9 +49,10 @@
 	// Handle email confirmation (legacy flow)
 	if (isset($confirm) && isset($token)) {
 		$db = new Database();
+		$db->connect(); // Ensure connection is established
 		$query = sprintf("SELECT * FROM %s WHERE confirmation_token='%s' AND confirmed=0", 
 						 $GLOBALS['_PJ_auth_table'], 
-						 mysqli_real_escape_string($db->Link_ID, $token));
+						 DatabaseSecurity::escapeString($token, $db->Link_ID));
 		$db->query($query);
 		
 		if ($db->next_record()) {
@@ -76,21 +78,22 @@
 		
 		if ($email == '') {
 			$message = $GLOBALS['_PJ_strings']['error_email_empty'] ?? 'Email address is required.';
-			include("$_PJ_root/templates/user/register.ihtml");
+			include("$_PJ_root/templates/user/register.ihtml.php");
 			include_once("$_PJ_include_path/degestiv.inc.php");
 			exit;
 		}
 		
 		// Check if email is already registered
 		$db = new Database();
+		$db->connect(); // Ensure connection is established
 		$check_query = sprintf("SELECT id FROM %s WHERE email='%s'", 
-							   $GLOBALS['_PJ_auth_table'], 
-							   mysqli_real_escape_string($db->Link_ID, $email));
+						   $GLOBALS['_PJ_auth_table'], 
+						   DatabaseSecurity::escapeString($email, $db->Link_ID));
 		$db->query($check_query);
 		
 		if ($db->next_record()) {
 			$message = $GLOBALS['_PJ_strings']['error_email_exists'] ?? 'This email address is already registered.';
-			include("$_PJ_root/templates/user/register.ihtml");
+			include("$_PJ_root/templates/user/register.ihtml.php");
 			include_once("$_PJ_include_path/degestiv.inc.php");
 			exit;
 		}
@@ -116,14 +119,14 @@
 		$insert_query = sprintf(
 			"INSERT INTO %s (email, confirmed, confirmation_token, username, password, firstname, lastname, telephone, facsimile, gids, permissions) VALUES ('%s', 0, '%s', '', '', '', '', '', '', '', 'agent')",
 			$GLOBALS['_PJ_auth_table'],
-			mysqli_real_escape_string($db->Link_ID, $email),
-			$confirmation_token
+			DatabaseSecurity::escapeString($email, $db->Link_ID),
+			DatabaseSecurity::escapeString($confirmation_token, $db->Link_ID)
 		);
 		
 		$result = $db->query($insert_query);
 		if (!$result) {
 			$message = 'Registration failed. Please try again.';
-			include("$_PJ_root/templates/user/register.ihtml");
+			include("$_PJ_root/templates/user/register.ihtml.php");
 			include_once("$_PJ_include_path/degestiv.inc.php");
 			exit;
 		}
@@ -149,9 +152,10 @@
 	// Handle registration completion (second step)
 	if (isset($register) && isset($altered) && isset($complete) && isset($token)) {
 		$db = new Database();
+		$db->connect(); // Ensure connection is established
 		$query = sprintf("SELECT * FROM %s WHERE confirmation_token='%s' AND confirmed=0", 
 						 $GLOBALS['_PJ_auth_table'], 
-						 mysqli_real_escape_string($db->Link_ID, $token));
+						 DatabaseSecurity::escapeString($token, $db->Link_ID));
 		$db->query($query);
 		
 		if (!$db->next_record()) {
@@ -214,7 +218,7 @@
 			$telephone = $_POST['telephone'] ?? '';
 			$facsimile = $_POST['facsimile'] ?? '';
 			
-			include("$_PJ_root/templates/user/register.ihtml");
+			include("$_PJ_root/templates/user/register.ihtml.php");
 			include_once("$_PJ_include_path/degestiv.inc.php");
 			exit;
 		}

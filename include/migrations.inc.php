@@ -126,22 +126,58 @@ class MigrationManager {
      */
     private function runMigration1() {
         try {
-            // Check if fields already exist
-            $query = "SHOW COLUMNS FROM " . $GLOBALS['_PJ_auth_table'] . " LIKE 'reset_token'";
+            // Check each field individually and add only missing ones
+            $fields_to_add = array();
+            
+            // Check confirmed field
+            $query = "SHOW COLUMNS FROM " . $GLOBALS['_PJ_auth_table'] . " LIKE 'confirmed'";
             $this->db->query($query);
-            if ($this->db->next_record()) {
-                return true; // Already exists
+            if (!$this->db->next_record()) {
+                $fields_to_add[] = "ALTER TABLE " . $GLOBALS['_PJ_auth_table'] . " ADD COLUMN confirmed TINYINT(1) NOT NULL DEFAULT 1 AFTER facsimile";
             }
             
-            // Add registration and password reset fields
-            $queries = array(
-                "ALTER TABLE " . $GLOBALS['_PJ_auth_table'] . " ADD COLUMN reset_token VARCHAR(64) NULL AFTER facsimile",
-                "ALTER TABLE " . $GLOBALS['_PJ_auth_table'] . " ADD COLUMN reset_expires DATETIME NULL AFTER reset_token",
-                "ALTER TABLE " . $GLOBALS['_PJ_auth_table'] . " ADD COLUMN email_confirmed TINYINT(1) DEFAULT 1 AFTER reset_expires",
-                "ALTER TABLE " . $GLOBALS['_PJ_auth_table'] . " ADD COLUMN confirmation_token VARCHAR(64) NULL AFTER email_confirmed"
-            );
+            // Check confirmation_token field
+            $query = "SHOW COLUMNS FROM " . $GLOBALS['_PJ_auth_table'] . " LIKE 'confirmation_token'";
+            $this->db->query($query);
+            if (!$this->db->next_record()) {
+                $fields_to_add[] = "ALTER TABLE " . $GLOBALS['_PJ_auth_table'] . " ADD COLUMN confirmation_token VARCHAR(64) NULL AFTER " . (in_array('confirmed', array_column($fields_to_add, 0)) ? 'confirmed' : 'facsimile');
+            }
             
-            foreach ($queries as $query) {
+            // Check reset_token field
+            $query = "SHOW COLUMNS FROM " . $GLOBALS['_PJ_auth_table'] . " LIKE 'reset_token'";
+            $this->db->query($query);
+            if (!$this->db->next_record()) {
+                $last_field = 'facsimile';
+                if (strpos(implode(' ', $fields_to_add), 'confirmation_token') !== false) {
+                    $last_field = 'confirmation_token';
+                } elseif (strpos(implode(' ', $fields_to_add), 'confirmed') !== false) {
+                    $last_field = 'confirmed';
+                }
+                $fields_to_add[] = "ALTER TABLE " . $GLOBALS['_PJ_auth_table'] . " ADD COLUMN reset_token VARCHAR(64) NULL AFTER " . $last_field;
+            }
+            
+            // Check reset_expires field
+            $query = "SHOW COLUMNS FROM " . $GLOBALS['_PJ_auth_table'] . " LIKE 'reset_expires'";
+            $this->db->query($query);
+            if (!$this->db->next_record()) {
+                $last_field = 'facsimile';
+                if (strpos(implode(' ', $fields_to_add), 'reset_token') !== false) {
+                    $last_field = 'reset_token';
+                } elseif (strpos(implode(' ', $fields_to_add), 'confirmation_token') !== false) {
+                    $last_field = 'confirmation_token';
+                } elseif (strpos(implode(' ', $fields_to_add), 'confirmed') !== false) {
+                    $last_field = 'confirmed';
+                }
+                $fields_to_add[] = "ALTER TABLE " . $GLOBALS['_PJ_auth_table'] . " ADD COLUMN reset_expires DATETIME NULL AFTER " . $last_field;
+            }
+            
+            // If no fields to add, migration already complete
+            if (empty($fields_to_add)) {
+                return true;
+            }
+            
+            // Execute queries for missing fields only
+            foreach ($fields_to_add as $query) {
                 if (!$this->db->query($query)) {
                     return false;
                 }

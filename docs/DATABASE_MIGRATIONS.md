@@ -140,7 +140,10 @@ CREATE TABLE IF NOT EXISTS `<%db_prefix%>table_name` (
 -- Replace <%table_prefix%> with your actual table prefix (e.g. te_)
 ALTER TABLE `<%table_prefix%>auth` 
 ADD COLUMN `confirmed` tinyint(1) NOT NULL DEFAULT '1' AFTER `facsimile`,
-ADD COLUMN `confirmation_token` varchar(64) DEFAULT NULL AFTER `confirmed`;
+ADD COLUMN `confirmation_token` varchar(64) DEFAULT NULL AFTER `confirmed`,
+ADD COLUMN `reset_token` varchar(64) DEFAULT NULL AFTER `confirmation_token`,
+ADD COLUMN `reset_expires` datetime DEFAULT NULL AFTER `reset_token`;
+
 ```
 
 ## Future Enhancements
