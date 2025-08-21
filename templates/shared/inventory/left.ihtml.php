@@ -36,8 +36,8 @@
 		<!-- Customer Submenu -->
 		<div style="margin-left: 1rem; border-left: 2px solid rgba(99, 102, 241, 0.1); padding-left: 1rem;">
 			<?php
-				// CustomerList für Navigation laden
-				$nav_customers = new CustomerList($_PJ_auth, true);
+				// CustomerList für Navigation laden - nur aktive Kunden
+				$nav_customers = new CustomerList($_PJ_auth);
 				while($nav_customers->nextCustomer()) {
 					$nav_customer = $nav_customers->giveCustomer();
 					?>
