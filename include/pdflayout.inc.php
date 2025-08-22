@@ -11,7 +11,7 @@
 	$_PJ_pdf_print_header_string = '1';
 	$_PJ_pdf_print_header_line = '1';
 	$_PJ_pdf_footer_string = 'TIMEEFFECT - enhanced time recording
-http://www.timeeffect.de/ - info@timeeffect.de';
+https://timeeffect.z11.de/ - info@example.de';
 	$_PJ_pdf_print_footer = '1';
 	$_PJ_pdf_print_footer_line = '1';
 	$_PJ_pdf_print_footer_string = '1';

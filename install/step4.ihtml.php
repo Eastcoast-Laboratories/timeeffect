@@ -47,6 +47,11 @@ if($a_file = @fopen('config.inc.php-dist', 'r')) {
 	$a_buffer = str_replace('<%session_length%>', $session_length, $a_buffer);
 	$a_buffer = str_replace('<%http_root%>', $http_root, $a_buffer);
 	$a_buffer = str_replace('<%allow_delete%>', $allow_delete, $a_buffer);
+	$a_buffer = str_replace('<%allow_registration%>', $allow_registration, $a_buffer);
+	$a_buffer = str_replace('<%registration_email_confirm%>', $registration_email_confirm, $a_buffer);
+	$a_buffer = str_replace('<%allow_password_recovery%>', $allow_password_recovery, $a_buffer);
+	$a_buffer = str_replace('<%registration_secure_defaults%>', $registration_secure_defaults, $a_buffer);
+	$a_buffer = str_replace('<%registration_default_access%>', $registration_default_access, $a_buffer);
 	if($a_file = @fopen('../include/config.inc.php', 'w')) {
 		fputs($a_file, $a_buffer);
 		@fclose($a_file);
@@ -112,8 +117,30 @@ if(!empty($error_message)) {
 ?>
 				<b>TIMEEFFECT Installation - finished</b><br><br>
 				The installation process has been successfully finished.<br><br>
-				<b>NOTE:</b> For security reasons please remove the 'install' directory and change the access rights for
-				your web server process of the file 'include/config.inc.php' to read only.<br><br>
-				<b>NOTE:</b> Please make sure to set the access rights to file 'include/pdflayout.inc.php' to writeable to your
-				web server process!<br><br>
-				You can access your TIMEEFFECT installation <a href="../index.html"><b>>> here</b></a>;
+				
+				<b>IMPORTANT: Complete the following steps to finalize your installation:</b><br><br>
+				
+				<b>Step 1: Install Composer Dependencies</b><br>
+				Run the following commands in your terminal:<br>
+				<code style="background: #f0f0f0; padding: 5px; display: block; margin: 5px 0;">
+				# Navigate to your TimeEffect directory<br>
+				cd <?php echo $_SERVER['DOCUMENT_ROOT'] . str_replace('/install', '', dirname($_SERVER['PHP_SELF'])); ?><br><br>
+				# Install dependencies<br>
+				composer install --no-dev --optimize-autoloader
+				</code><br>
+				
+				<b>Step 2: Generate .env Configuration</b><br>
+				Generate a .env file from your configuration:<br>
+				<code style="background: #f0f0f0; padding: 5px; display: block; margin: 5px 0;">
+				# Generate .env from config.inc.php<br>
+				php dev/generate_env_from_config.php<br><br>
+				# Review and adjust the generated .env file if needed<br>
+				nano .env
+				</code><br>
+				
+				<b>Step 3: Security & Permissions</b><br>
+				• Remove the 'install' directory for security reasons<br>
+				• Set 'include/config.inc.php' to read-only for your web server process<br>
+				• Set 'include/pdflayout.inc.php' to writeable for your web server process<br><br>
+				
+				After completing these steps, you can access your TIMEEFFECT installation <a href="../index.php"><b>>> here</b></a>;

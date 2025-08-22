@@ -172,6 +172,64 @@ while($file = readdir($dir)) {
 					</tr><tr>
 						<td colspan="2"><img src="../images/abstand.gif" height="10" width="1" border="0"></td>
 					</tr><tr>
+						<td width="500" colspan="2"><b>User Registration Settings</b></td>
+					</tr><tr>
+						<td colspan="2"><img src="../images/abstand.gif" height="10" width="1" border="0"></td>
+					</tr><tr>
+						<td width="500" colspan="2">Configure user self-registration and security settings:</td>
+					</tr><tr>
+						<td colspan="2"><img src="../images/abstand.gif" height="10" width="1" border="0"></td>
+					</tr>
+					<tr>
+						<td class="FormFieldName">Allow user self-registration:</td>
+						<td class="FormField" width="300"><select class="FormField" name="allow_registration">
+							<option value="true" <?php if(isset($allow_registration) && $allow_registration == 'true') echo 'selected'; ?>>Yes
+							<option value="false" <?php if(!isset($allow_registration) || $allow_registration == 'false') echo 'selected'; ?>>No
+						</select></td>
+					</tr><tr>
+						<td colspan="2"><img src="../images/abstand.gif" height="5" width="1" border="0"></td>
+					</tr>
+					<tr>
+						<td class="FormFieldName">Email confirmation for new users:</td>
+						<td class="FormField" width="300"><select class="FormField" name="registration_email_confirm">
+							<option value="true" <?php if(isset($registration_email_confirm) && $registration_email_confirm == 'true') echo 'selected'; ?>>Yes
+							<option value="false" <?php if(!isset($registration_email_confirm) || $registration_email_confirm == 'false') echo 'selected'; ?>>No
+						</select></td>
+					</tr><tr>
+						<td colspan="2"><img src="../images/abstand.gif" height="5" width="1" border="0"></td>
+					</tr>
+					<tr>
+						<td class="FormFieldName">Allow password recovery:</td>
+						<td class="FormField" width="300"><select class="FormField" name="allow_password_recovery">
+							<option value="true" <?php if(isset($allow_password_recovery) && $allow_password_recovery == 'true') echo 'selected'; ?>>Yes
+							<option value="false" <?php if(!isset($allow_password_recovery) || $allow_password_recovery == 'false') echo 'selected'; ?>>No
+						</select></td>
+					</tr><tr>
+						<td colspan="2"><img src="../images/abstand.gif" height="5" width="1" border="0"></td>
+					</tr>
+					<tr>
+						<td class="FormFieldName">Secure defaults for new users:</td>
+						<td class="FormField" width="300"><select class="FormField" name="registration_secure_defaults">
+							<option value="true" <?php if(!isset($registration_secure_defaults) || $registration_secure_defaults == 'true') echo 'selected'; ?>>Yes (recommended)
+							<option value="false" <?php if(isset($registration_secure_defaults) && $registration_secure_defaults == 'false') echo 'selected'; ?>>No
+						</select></td>
+					</tr><tr>
+						<td colspan="2"><img src="../images/abstand.gif" height="5" width="1" border="0"></td>
+					</tr>
+					<tr>
+						<td class="FormFieldName">Default access permissions:</td>
+						<td class="FormField" width="300"><select class="FormField" name="registration_default_access">
+							<option value="rwxr-----" <?php if(!isset($registration_default_access) || $registration_default_access == 'rwxr-----') echo 'selected'; ?>>Owner: full, Group: read, Others: none (recommended)
+							<option value="rwxrwx---" <?php if(isset($registration_default_access) && $registration_default_access == 'rwxrwx---') echo 'selected'; ?>>Owner: full, Group: full, Others: none
+							<option value="rwxrwxrwx" <?php if(isset($registration_default_access) && $registration_default_access == 'rwxrwxrwx') echo 'selected'; ?>>Full access for everyone
+						</select></td>
+					</tr><tr>
+						<td colspan="2"><img src="../images/abstand.gif" height="10" width="1" border="0"></td>
+					</tr><tr>
+						<td colspan="2"><IMG SRC="../images/gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></td>
+					</tr><tr>
+						<td colspan="2"><img src="../images/abstand.gif" height="10" width="1" border="0"></td>
+					</tr><tr>
 						<td width="500" colspan="2" align="right"><input type="submit" value="next &gt;&gt;"></td>
 					</tr>
 </form>

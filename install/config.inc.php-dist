@@ -56,7 +56,15 @@
 	// format: owner/group/other (rwx format)
 	// 'rwxr-----' = owner: full access, group: read only, others: no access
 	$_PJ_registration_default_access = '<%registration_default_access%>';
+
+	// optional Default limit for showing billed entries (sbe parameter)
+	// When sbe=1 or sbe=true, this value will be used as the limit
+	// $_PJ_default_billed_entries_limit = 100; // default 100
 	
+	// Maximum number of efforts to load in general queries (customer/project overviews)
+	// Prevents performance issues with large datasets
+	// $_PJ_max_efforts_total = 1000; // default 1000
+
 	// Database charset encoding
 	$GLOBALS['mysql_charset']='utf8';
 
@@ -65,7 +73,5 @@
 /* ******************************************************** */
 
 require_once('fix_php7.php');
-
-session_name('timeeffect');
 
 require_once('aperetiv.inc.php');

@@ -94,6 +94,31 @@
 					</tr><tr>
 						<td colspan="2"><img src="../images/abstand.gif" height="10" width="1" border="0"></td>
 					</tr><tr>
+						<td colspan="2"><b>registration settings</b></td>
+					</tr><tr>
+						<td colspan="2"><img src="../images/abstand.gif" height="10" width="1" border="0"></td>
+					</tr><tr>
+						<td>allow user registration:</td>
+						<td width="300"><?php if(isset($allow_registration)) echo $allow_registration; ?></td>
+					</tr><tr>
+						<td>email confirmation:</td>
+						<td width="300"><?php if(isset($registration_email_confirm)) echo $registration_email_confirm; ?></td>
+					</tr><tr>
+						<td>password recovery:</td>
+						<td width="300"><?php if(isset($allow_password_recovery)) echo $allow_password_recovery; ?></td>
+					</tr><tr>
+						<td>secure defaults:</td>
+						<td width="300"><?php if(isset($registration_secure_defaults)) echo $registration_secure_defaults; ?></td>
+					</tr><tr>
+						<td>default access:</td>
+						<td width="300"><?php if(isset($registration_default_access)) echo $registration_default_access; ?></td>
+					</tr><tr>
+						<td colspan="2"><img src="../images/abstand.gif" height="10" width="1" border="0"></td>
+					</tr><tr>
+						<td colspan="2"><IMG SRC="../images/gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></td>
+					</tr><tr>
+						<td colspan="2"><img src="../images/abstand.gif" height="10" width="1" border="0"></td>
+					</tr><tr>
 <form action="<?php if(isset($PHP_SELF)) echo $PHP_SELF; ?>" method="POST" onsubmit="return checkPermissions()">
 <script>
 function checkPermissions() {
@@ -118,6 +143,11 @@ function checkPermissions() {
 <input type="hidden" name="admin_user" value="<?php if(isset($admin_user)) echo $admin_user; ?>">
 <input type="hidden" name="admin_password" value="<?php if(isset($admin_password)) echo $admin_password; ?>">
 <input type="hidden" name="allow_delete" value="<?php if(isset($allow_delete)) echo $allow_delete; ?>">
+<input type="hidden" name="allow_registration" value="<?php if(isset($allow_registration)) echo $allow_registration; ?>">
+<input type="hidden" name="registration_email_confirm" value="<?php if(isset($registration_email_confirm)) echo $registration_email_confirm; ?>">
+<input type="hidden" name="allow_password_recovery" value="<?php if(isset($allow_password_recovery)) echo $allow_password_recovery; ?>">
+<input type="hidden" name="registration_secure_defaults" value="<?php if(isset($registration_secure_defaults)) echo $registration_secure_defaults; ?>">
+<input type="hidden" name="registration_default_access" value="<?php if(isset($registration_default_access)) echo $registration_default_access; ?>">
 						<td colspan="2" align="right">
 							<?php if ($can_write) { ?>
 								<input type="submit" value="finish &gt;&gt;">
