@@ -40,7 +40,7 @@
 			exit;
 		} else {
 			$error_message = $GLOBALS['_PJ_strings']['email_confirm_error'];
-			include("$_PJ_root/templates/error.ihtml");
+			include("$_PJ_root/templates/error.ihtml.php");
 			include_once("$_PJ_include_path/degestiv.inc.php");
 			exit;
 		}
@@ -144,7 +144,7 @@
 		
 		$success_message = 'Registration initiated! Please check your email and click the link to complete your account setup.';
 		$center_template = '';
-		include("$_PJ_root/templates/note.ihtml");
+		include("$_PJ_root/templates/note.ihtml.php");
 		include_once("$_PJ_include_path/degestiv.inc.php");
 		exit;
 	}
@@ -160,7 +160,7 @@
 		
 		if (!$db->next_record()) {
 			$error_message = $GLOBALS['_PJ_strings']['email_confirm_error'];
-			include("$_PJ_root/templates/error.ihtml");
+			include("$_PJ_root/templates/error.ihtml.php");
 			include_once("$_PJ_include_path/degestiv.inc.php");
 			exit;
 		}
@@ -259,7 +259,7 @@
 		
 		$success_message = 'Registration completed successfully! You can now login with your username and password.';
 		$center_template = '';
-		include("$_PJ_root/templates/note.ihtml");
+		include("$_PJ_root/templates/note.ihtml.php");
 		include_once("$_PJ_include_path/degestiv.inc.php");
 		exit;
 	}
@@ -380,7 +380,7 @@
 			$success_message = $GLOBALS['_PJ_strings']['registration_success'];
 		}
 		
-		$center_template = ''; // Use direct message display in note.ihtml
+		$center_template = ''; // Use direct message display in note.ihtml.php
 		include("$_PJ_root/templates/note.ihtml.php");
 		include_once("$_PJ_include_path/degestiv.inc.php");
 		
