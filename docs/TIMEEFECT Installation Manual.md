@@ -330,7 +330,7 @@ The `dev/` directory contains development resources:
 - **[dev/ICON_FIX.md](../dev/ICON_FIX.md)** - Icon-related fixes and documentation
 - **[dev/memories-for-AI.md](../dev/memories-for-AI.md)** - AI context for future development
 - **[dev/plan.md](../dev/plan.md)** - Current development plan for the windsurf A.I. and progress
-- **[dev/generate_env_from_config.php](../dev/generate_env_from_config.php)** - Environment configuration generator
+- **[.env.example](.env.example)** - Environment configuration template
 - `dev/logo/` - Logo assets and branding materials
 
 **Note**: Development tools are excluded from production deployments.

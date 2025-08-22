@@ -63,7 +63,10 @@ if ($logDir === null) {
 // Füge File-Handler hinzu, wenn ein Logging-Verzeichnis verfügbar ist
 if ($logPath !== null) {
     try {
-        $logger->pushHandler(new RotatingFileHandler($logPath, 0, Logger::INFO));
+        $logLevel = isset($_ENV['LOG_LEVEL']) ? 
+            constant('Monolog\Logger::' . strtoupper($_ENV['LOG_LEVEL'])) : 
+            Logger::INFO;
+        $logger->pushHandler(new RotatingFileHandler($logPath, 0, $logLevel));
     } catch (Exception $e) {
         // Ignoriere Fehler bei der Erstellung des Log-Handlers
     }

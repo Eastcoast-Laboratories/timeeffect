@@ -1,5 +1,4 @@
 *~
-/include/config.inc.php
 
 # Composer dependencies
 /vendor/
@@ -10,9 +9,6 @@
 # Backup files
 *.backup
 *.bak
-
-# Install runtime files
-/install/include/config.inc.php
 
 # Logs
 /logs/

@@ -1,151 +1,149 @@
 # TimeEffect Online Deployment Guide
 
-## 🚀 Deployment auf Online-Server (PHP 8.4)
+## 🚀 Deployment on online server (PHP 8.4)
 
-### Schritt 1: Repository aktualisieren
+### Step 1: Update repository
 ```bash
-# Auf dem Online-Server
+# On the online server
 cd /path/to/your/timeeffect
 git pull origin master
 ```
 
-### Schritt 2: Composer Dependencies installieren
+### Step 2: Install Composer dependencies
 ```bash
-# Composer installieren falls nicht vorhanden
+# Install Composer if not available
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 
-# Dependencies installieren
+# Install dependencies
 composer install --no-dev --optimize-autoloader
 ```
 
-### Schritt 3: Environment konfigurieren
+### Step 3: Configure environment
 
-#### Option A: Aus bestehender Konfiguration generieren (EMPFOHLEN)
+#### Option A: Use the installer (for DB setup; does not create `.env`)
 ```bash
-# .env aus bestehender config.inc.php generieren
-php dev/generate_env_from_config.php
+# Run the web installer (database setup and checks)
+# Navigate to: http://your-domain.com/install/
+# Note: The installer does not write `.env`. Create it manually (see Option B).
 
-# Generierte .env prüfen und anpassen
-nano .env
+# After installer: create/edit your .env
+ nano .env
 ```
 
-#### Option B: Manuell erstellen
+#### Option B: Create manually
 ```bash
-# .env Datei erstellen
+# Create .env file
 cp .env.example .env
 
-# .env bearbeiten mit korrekten Datenbankdaten:
+# Edit .env with correct database credentials:
 nano .env
 ```
 
-Beispiel `.env` Konfiguration:
-```env
-# Database Configuration
-DB_HOST=localhost
-DB_DATABASE=your_database_name
-DB_USERNAME=your_db_user
-DB_PASSWORD=your_db_password
-DB_PREFIX=te_
 
-# Application Settings
-APP_ENV=production
-APP_DEBUG=false
-LOG_LEVEL=error
-```
-
-### Schritt 4: PHP-Konfiguration prüfen
+### Step 4: Check PHP configuration
 ```bash
-# PHP Version prüfen (sollte 8.4+ sein)
+# Check PHP version (should be 8.4+)
 php -v
 
-# Benötigte Extensions prüfen
+# Check required extensions
 php -m | grep -E "(mysqli|pdo|json|mbstring)"
 
-# PHP short_open_tag aktivieren (falls nötig)
+# Enable PHP short_open_tag (if needed)
 # In php.ini: short_open_tag = On
 ```
 
-### Schritt 5: Berechtigungen setzen
+### Step 5: Set permissions
 ```bash
-# Schreibrechte für Install-Verzeichnis
-mkdir -p install/include
-chmod 755 install/include
-cp install/config.inc.php-dist install/include/config.inc.php
-chmod 666 install/include/config.inc.php
+# During installation: installer needs read access; write access only if generating .env
+chmod 755 install
 
-# Log-Verzeichnis erstellen
+# After installation: lock down .env
+chmod 600 .env
+
+# Create logs directory (if not present) and set permissions
 mkdir -p logs
 chmod 755 logs
-chown www-data:www-data logs  # oder entsprechender Web-Server-User
+chown www-data:www-data logs  # or the corresponding web server user
 ```
 
-### Schritt 6: Bootstrap in bestehende Dateien einbinden
-Füge am Anfang der Haupt-PHP-Dateien hinzu:
+### Step 6: Include bootstrap in existing files
+Add at the beginning of main PHP files:
 ```php
 <?php
-// Am Anfang von index.php, admin.php, etc.
+// At the beginning of index.php, admin.php, etc.
 require_once __DIR__ . '/bootstrap.php';
 ```
 
-### Schritt 7: Installation durchführen
-1. Besuche: `https://your-domain.com/install/`
-2. Folge dem Installationsassistenten
-3. Die Datenbankverbindung sollte automatisch funktionieren
+### Step 7: Run the installation
+1. Visit: `https://your-domain.com/install/`
+2. Follow the installation wizard
+3. The database connection should work automatically
+
+> Note (legacy upgrade): If you are upgrading from a version using `include/config.inc.php`, migrate config to `.env` BEFORE pulling new code.
+> ```bash
+> git fetch origin
+> git restore -s origin/master -- migrate_config_to_env.php
+> # Alternative (older Git): git checkout origin/master -- migrate_config_to_env.php
+> php migrate_config_to_env.php
+> git pull origin master
+> ```
 
 ## 🔧 Troubleshooting
 
 ### Problem: "mysql_* function not found"
-**Lösung**: Alle mysql_* Funktionen wurden zu mysqli_* migriert. Der Fix ist bereits im Repository.
+**Solution**: All mysql_* functions were migrated to mysqli_*. The fix is already in the repository.
 
-### Problem: "short_open_tag" Fehler
-**Lösung**: 
+### Problem: "short_open_tag" error
+**Solution**:
 ```bash
-# In php.ini aktivieren:
+# Enable in php.ini:
 short_open_tag = On
 
-# Apache/Nginx neu starten
-systemctl restart apache2  # oder nginx
+# Restart Apache/Nginx
+systemctl restart apache2  # or nginx
 ```
 
-### Problem: Composer nicht gefunden
-**Lösung**:
+### Problem: Composer not found
+**Solution**:
 ```bash
-# Composer global installieren
+# Install Composer globally
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 chmod +x /usr/local/bin/composer
 ```
 
-### Problem: Datenbankverbindung fehlschlägt
-**Lösung**:
-1. `.env` Datei prüfen
-2. Datenbankbenutzer und -rechte prüfen
-3. MySQL-Service läuft: `systemctl status mysql`
+### Problem: Database connection fails
+**Solution**:
+1. Check `.env` file
+2. Verify database user and permissions
+3. MySQL service running: `systemctl status mysql`
 
-## 📋 Checkliste für Deployment
+## 📋 Deployment checklist
 
-- [ ] Git Repository aktualisiert (`git pull`)
-- [ ] Composer Dependencies installiert
-- [ ] `.env` Datei konfiguriert
-- [ ] PHP 8.4+ läuft mit mysqli Extension
+- [ ] Git repository updated (`git pull`)
+- [ ] Composer dependencies installed
+- [ ] `.env` file configured
+- [ ] PHP 8.4+ running with mysqli extension
 - [ ] `short_open_tag = On` in php.ini
-- [ ] Berechtigungen für `install/include/` gesetzt
-- [ ] Bootstrap in Haupt-Dateien eingebunden
-- [ ] Installation über Web-Interface durchgeführt
-- [ ] Funktionalität getestet
+- [ ] Installer access set for `install/` (during install only)
+- [ ] `.env` permissions locked down (`chmod 600 .env`)
+- [ ] Bootstrap included in main files
+- [ ] Installation completed via web interface
+- [ ] Functionality tested
 
-## 🎯 Nach dem Deployment
+## 🎯 After deployment
 
-1. **Sicherheit**: Lösche oder schütze das `/install/` Verzeichnis
-2. **Performance**: Aktiviere OPcache in php.ini
-3. **Monitoring**: Prüfe Logs in `/logs/` Verzeichnis
-4. **Backup**: Erstelle regelmäßige Datenbank-Backups
+1. **Security**: Delete or protect the `/install/` directory
+2. **Performance**: Enable OPcache in php.ini
+3. **Monitoring**: Check logs in the `/logs/` directory
+4. **Backup**: Create regular database backups
 
 ## 🆘 Support
 
-Bei Problemen:
-1. Prüfe PHP Error Logs
-2. Prüfe `/logs/app.log` (falls vorhanden)
-3. Teste Datenbankverbindung separat
-4. Prüfe Apache/Nginx Error Logs
+If you run into issues:
+1. Check PHP error logs
+2. Check `/logs/app.log` (if present)
+3. Test the database connection separately
+4. Check Apache/Nginx error logs
+

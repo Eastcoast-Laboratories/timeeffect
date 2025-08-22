@@ -1,21 +1,21 @@
 				<b>TIMEEFFECT Installation - Step <?php if(isset($step)) echo $step; ?></b><br><br>
 				Please check the entered values and press 'finish &gt;&gt;'<br>
 <?php
-	// Check write permissions for config file or directory
-	$config_file = '../include/config.inc.php';
-	$config_dir = '../include/';
+	// Check write permissions for .env file or root directory
+	$env_file = '../.env';
+	$root_dir = '../';
 	$can_write = false;
 	$error_message = '';
 	
-	if(file_exists($config_file)) {
-		$can_write = is_writable($config_file);
+	if(file_exists($env_file)) {
+		$can_write = is_writable($env_file);
 		if (!$can_write) {
-			$error_message = "The file 'include/config.inc.php' is not writable by the web server!";
+			$error_message = "The file '.env' is not writable by the web server!";
 		}
 	} else {
-		$can_write = is_writable($config_dir);
+		$can_write = is_writable($root_dir);
 		if (!$can_write) {
-			$error_message = "The directory 'include/' is not writable by the web server!";
+			$error_message = "The root directory is not writable by the web server!";
 		}
 	}
 	
@@ -123,7 +123,7 @@
 <script>
 function checkPermissions() {
 	<?php if (!$can_write) { ?>
-		alert('ERROR: File permissions not correct! Please fix the permissions for include/config.inc.php before continuing.');
+		alert('ERROR: File permissions not correct! Please fix the permissions for .env file before continuing.');
 		return false;
 	<?php } ?>
 	return true;
