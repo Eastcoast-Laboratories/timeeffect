@@ -1,5 +1,5 @@
 <?php
-    require_once(__DIR__ . "/bootstrap.php"); // Modern PHP 8.4 compatibility
+    require_once(__DIR__ . "/bootstrap.php");
 	
 	// Start output buffering to prevent "headers already sent" errors
 	ob_start();

@@ -1,13 +1,22 @@
 TIMEEFFECT
 ==========
 
-TIMEEFFECT is a PHP based, multi user time tracking system for recording time
+TIMEEFFECT is a PHP/MySQL based, multi user time tracking system for recording time
 employees spent on different projects. It includes facilities to manage agents,
 customers and projects.
 Users may generate reports and statistics as well as accounting reports in CSV 
 and PDF format. This project has been refactored to PHP 8 and has moved to 
 GitHub from Sourceforge, where you can see some sample 
 images: https://sourceforge.net/projects/timeeffect/
+
+The aim of TIMEEFECT is to provide project participants with time recording possibilities.
+
+ - First: project workers are able to track their personal
+   efforts spent on the several projects they are involved.
+ - Second: project managers are able to view statistics about
+   the amount of efforts spent on specific projects/customers.
+ - Third: project accounters are able to extract accounting
+   information about the projects for creation of invoices.
 
 # 1. Dependencies
 To run TIMEEFFECT you need a working MySQL database server (version 3.23 or higher).

@@ -2,8 +2,8 @@
 /**
  * TimeEffect Application Bootstrap
  * 
- * This file initializes the modern infrastructure while maintaining
- * backward compatibility with legacy PEAR code
+ * This file initializes the Modern PHP 8.4 compatibility and Composer autoloading
+ * while maintaining backward compatibility with legacy PEAR code
  */
 
 // Load Composer autoloader

@@ -1,19 +1,8 @@
-# phpMyAdmin MySQL-Dump
-# version 2.5.1
-# http://www.phpmyadmin.net/ (download page)
-#
-# Host: localhost
-# Erstellungszeit: 23. Oktober 2004 um 20:38
-# Server Version: 4.0.15
-# PHP-Version: 4.3.3
 # Datenbank: `timeeffect`
 # --------------------------------------------------------
 
 #
 # Tabellenstruktur fuer Tabelle `auth`
-#
-# Erzeugt am: 23. Oktober 2004 um 20:37
-# Aktualisiert am: 23. Oktober 2004 um 20:37
 #
 
 DROP TABLE IF EXISTS `auth`;
@@ -51,9 +40,6 @@ INSERT INTO `auth` VALUES (1, 'admin,agent', '', 1, '<%admin_user%>', '<%admin_p
 #
 # Tabellenstruktur fuer Tabelle `customer`
 #
-# Erzeugt am: 23. Oktober 2004 um 20:37
-# Aktualisiert am: 23. Oktober 2004 um 20:37
-#
 
 DROP TABLE IF EXISTS `customer`;
 CREATE TABLE `customer` (
@@ -88,9 +74,6 @@ CREATE TABLE `customer` (
 #
 # Tabellenstruktur fuer Tabelle `effort`
 #
-# Erzeugt am: 23. Oktober 2004 um 20:37
-# Aktualisiert am: 23. Oktober 2004 um 20:37
-#
 
 DROP TABLE IF EXISTS `effort`;
 CREATE TABLE `effort` (
@@ -123,9 +106,6 @@ CREATE TABLE `effort` (
 
 #
 # Tabellenstruktur fuer Tabelle `gids`
-#
-# Erzeugt am: 23. Oktober 2004 um 20:37
-# Aktualisiert am: 23. Oktober 2004 um 20:37
 #
 
 DROP TABLE IF EXISTS `gids`;
@@ -169,9 +149,6 @@ INSERT INTO `group` VALUES (3, 4, 'client');
 #
 # Tabellenstruktur fuer Tabelle `project`
 #
-# Erzeugt am: 23. Oktober 2004 um 20:37
-# Aktualisiert am: 23. Oktober 2004 um 20:37
-#
 
 DROP TABLE IF EXISTS `project`;
 CREATE TABLE `project` (
@@ -203,9 +180,6 @@ CREATE TABLE `project` (
 
 #
 # Tabellenstruktur fuer Tabelle `rate`
-#
-# Erzeugt am: 23. Oktober 2004 um 20:37
-# Aktualisiert am: 23. Oktober 2004 um 20:37
 #
 
 DROP TABLE IF EXISTS `rate`;

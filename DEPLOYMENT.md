@@ -24,7 +24,7 @@ composer install --no-dev --optimize-autoloader
 #### Option A: Use the installer (for DB setup; does not create `.env`)
 ```bash
 # Run the web installer (database setup and checks)
-# Navigate to: http://your-domain.com/install/
+# Navigate to: https://your-domain.com/install/
 # Note: The installer does not write `.env`. Create it manually (see Option B).
 
 # After installer: create/edit your .env
@@ -67,18 +67,11 @@ chmod 755 logs
 chown www-data:www-data logs  # or the corresponding web server user
 ```
 
-### Step 6: Include bootstrap in existing files
-Add at the beginning of main PHP files:
-```php
-<?php
-// At the beginning of index.php, admin.php, etc.
-require_once __DIR__ . '/bootstrap.php';
-```
-
-### Step 7: Run the installation
+### Step 6: Run the installation
 1. Visit: `https://your-domain.com/install/`
 2. Follow the installation wizard
 3. The database connection should work automatically
+4. If you see a "TimeEffect Migration Required" banner, click the link to run migrations (`migrate.php`).
 
 > Note (legacy upgrade): If you are upgrading from a version using `include/config.inc.php`, migrate config to `.env` BEFORE pulling new code.
 > ```bash
@@ -123,13 +116,11 @@ chmod +x /usr/local/bin/composer
 
 - [ ] Git repository updated (`git pull`)
 - [ ] Composer dependencies installed
-- [ ] `.env` file configured
 - [ ] PHP 8.4+ running with mysqli extension
 - [ ] `short_open_tag = On` in php.ini
-- [ ] Installer access set for `install/` (during install only)
-- [ ] `.env` permissions locked down (`chmod 600 .env`)
-- [ ] Bootstrap included in main files
+- [ ] `.env` file configured and permissions locked down (`chmod 600 .env`)
 - [ ] Installation completed via web interface
+- [ ] Database migrations executed (automatic or via migrate.php)
 - [ ] Functionality tested
 
 ## 🎯 After deployment

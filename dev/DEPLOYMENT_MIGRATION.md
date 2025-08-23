@@ -68,7 +68,7 @@ chmod 600 .env
 composer install --no-dev --optimize-autoloader
 
 # Test application
-curl -I http://your-domain.com/
+curl -I https://your-domain.com/
 
 # Optional: Remove backup file (after successful test)
 # rm include/config.inc.php.backup-migration-*
