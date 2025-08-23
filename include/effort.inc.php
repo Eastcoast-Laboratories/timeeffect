@@ -379,6 +379,11 @@
 			if(!isset($this->data['rate'])) {
 				$this->data['rate'] = 0;
 			}
+			
+			// Set default hourly rate for unassigned efforts (100€)
+			if((!isset($this->data['project_id']) || $this->data['project_id'] == 0) && $this->data['rate'] == 0) {
+				$this->data['rate'] = 100;
+			}
 
 			$this->data['seconds']	= ($e_time - $b_time);
 			$this->data['minutes']	= round($this->data['seconds']	/ 60, 0);

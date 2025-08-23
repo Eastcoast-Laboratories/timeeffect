@@ -8,8 +8,14 @@
 	$pid = isset($pid) ? $pid : (isset($_REQUEST['pid']) ? $_REQUEST['pid'] : '');
 	$eid = isset($eid) ? $eid : (isset($_REQUEST['eid']) ? $_REQUEST['eid'] : '');
 
-	$customer	= new Customer($cid, $_PJ_auth);
-	$project	= new Project($customer, $_PJ_auth, $pid);
+	// Handle unassigned efforts - create customer/project objects conditionally
+	if(!empty($cid) && $cid !== 'unassigned') {
+		$customer = new Customer($cid, $_PJ_auth);
+		$project = new Project($customer, $_PJ_auth, $pid);
+	} else {
+		$customer = null;
+		$project = null;
+	}
 
 	$center_template	= "statistic/pdf";
 	include("$_PJ_root/templates/statistic/pdf/list.ihtml.php");

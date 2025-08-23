@@ -8,9 +8,9 @@ function tableHead($fields) {
 		if(!empty($table_head)) {
 			$table_head .= ';';
 		}
-		$table_head .= "$field_name";
+		$table_head .= '"' . str_replace('"', '""', $field_name) . '"';
 	}
-	return "$table_head\n";
+	return $table_head . "\n";
 }
 
 $GLOBALS['fields'] = array(
@@ -27,9 +27,11 @@ $GLOBALS['fields'] = array(
 		'price'			=> unhtmlentities($GLOBALS['_PJ_strings']['costs'])
 );
 
+// Detect unassigned efforts
+$show_unassigned = isset($cid) && $cid === 'unassigned';
 
 if(intval(@$year) && intval(@$month)) {
-	$statistic	= new Statistics($_PJ_auth, false, $customer, $project, @$users, $mode);
+	$statistic	= new Statistics($_PJ_auth, false, $customer, $project, @$users, $mode, $show_unassigned);
 	$statistic->loadMonth($year, $month, $mode);
 } elseif(intval($syear) && intval($eyear)) {
 	if(empty($smonth)) {
@@ -44,13 +46,13 @@ if(intval(@$year) && intval(@$month)) {
 	if(empty($eday)) {
 		$eday = date('d');
 	}
-	$statistic	= new Statistics($_PJ_auth, false, $customer, $project, @$users, $mode);
+	$statistic	= new Statistics($_PJ_auth, false, $customer, $project, @$users, $mode, $show_unassigned);
 	$statistic->loadTime("$syear-$smonth-$sday", "$eyear-$emonth-$eday", $mode);
 } else {
-	$statistic	= new Statistics($_PJ_auth, true, $customer, $project, @$users, $mode);
+	$statistic	= new Statistics($_PJ_auth, true, $customer, $project, @$users, $mode, $show_unassigned);
 }
 
-if(!empty($cid)) {
+if(!empty($cid) && $cid !== 'unassigned') {
 	unset($GLOBALS['fields']['customer']);
 } else {
 	unset($GLOBALS['fields']['count']);
@@ -62,67 +64,56 @@ if($mode != 'billed') {
 	unset($GLOBALS['fields']['billed']);
 }
 
-$output = tableHead($GLOBALS['fields']);
-$i = 0;
-while($statistic->nextEffort()) {
-	$i++;
-	$effort = $statistic->giveEffort();
+// Use central data generation function (DRY principle)
+$data = generateStatisticsData($statistic, $cid, $pid, $mode, $_PJ_auth);
+$efforts = $data['efforts'];
+$PROJECT_SUM = $data['project_sum'];
+$CUSTOMER_SUM = $data['customer_sum'];
+$AGENT_PROJECT_SUM = $data['agent_project_sum'];
+$AGENT_SUM = $data['agent_sum'];
 
+$output = tableHead($GLOBALS['fields']);
+
+// Generate CSV rows from processed effort data
+foreach($efforts as $effort_data) {
 	if(empty($cid)) {
-		$output .= str_replace(';', ',', $effort->giveValue('customer_name')) . ";";
+		$output .= '"' . str_replace('"', '""', $effort_data['customer_name']) . '";';
+	} elseif($cid === 'unassigned') {
+		// For unassigned efforts, show customer name instead of count
+		$output .= '"' . str_replace('"', '""', $effort_data['customer_name']) . '";';
 	} else {
-		$output .= $effort->giveValue('id') . ";";
+		$output .= '"' . $effort_data['id'] . '";';
 	}
 
 	if(empty($pid)) {
-		$output .= str_replace(';', ',', $effort->giveValue('project_name')) . ";";
+		$output .= '"' . str_replace('"', '""', $effort_data['project_name']) . '";';
 	}
 
-	$agent = $_PJ_auth->giveUserById($effort->giveValue('user'));
-	$output .= str_replace(';', ',', $agent['firstname'] . ' ' . $agent['lastname']) . ";";
-	$output .= formatDate($effort->giveValue('date'), $GLOBALS['_PJ_format_date']) . ";";
+	$output .= '"' . str_replace('"', '""', $effort_data['agent_name']) . '";';
+	$output .= '"' . formatDate($effort_data['date'], $GLOBALS['_PJ_format_date']) . '";';
 
 	if(!empty($mode) and $mode == 'billed') {
-		if($effort->giveValue('billed')) {
-			$formatted_billed = formatDate($effort->giveValue('billed'), $GLOBALS['_PJ_format_date']);
+		if($effort_data['billed']) {
+			$formatted_billed = formatDate($effort_data['billed'], $GLOBALS['_PJ_format_date']);
 		} else {
 			$formatted_billed = '';
 		}
-		$output .= $formatted_billed . ";";
+		$output .= '"' . $formatted_billed . '";';
 	}
 
-	$output .= formatTime($effort->giveValue('begin'), "H:i") . " - " . formatTime($effort->giveValue('end'), "H:i") . ";";
+	$output .= '"' . formatTime($effort_data['begin'], "H:i") . " - " . formatTime($effort_data['end'], "H:i") . '";';
 
-	$string = preg_replace("/\<br\>/", '', $effort->giveValue('description'));
+	// Clean description for CSV
+	$string = preg_replace("/\<br\>/", '', $effort_data['description']);
 	$string = preg_replace("/\<li\>/", " - ", $string);
 	$string = preg_replace("/<[^>]+>/", '', $string);
 	$string = preg_replace("/<[^>]+>/", '', $string);
 	$string = str_replace("\r", '', $string);
 	$string = str_replace("\n", ' ', $string);
 
-	$output .= str_replace(';', ',', $string) . ";";
-
-	$PROJECT_SUM[$effort->giveValue('project_id')]['customer']	= $effort->giveValue('customer_name');
-	$PROJECT_SUM[$effort->giveValue('project_id')]['project']	= $effort->giveValue('project_name');
-	@$PROJECT_SUM[$effort->giveValue('project_id')]['hours']		+= $effort->giveValue('hours');
-	@$PROJECT_SUM[$effort->giveValue('project_id')]['costs']		+= $effort->giveValue('costs');
-
-	$CUSTOMER_SUM[$effort->giveValue('customer_id')]['customer']	= $effort->giveValue('customer_name');
-	@$CUSTOMER_SUM[$effort->giveValue('customer_id')]['hours']		+= $effort->giveValue('hours');
-	@$CUSTOMER_SUM[$effort->giveValue('customer_id')]['costs']		+= $effort->giveValue('costs');
-
-	$AGENT_PROJECT_SUM[$effort->giveValue('project_id')][$effort->giveValue('user')]['customer']	= $effort->giveValue('customer_name');
-	$AGENT_PROJECT_SUM[$effort->giveValue('project_id')][$effort->giveValue('user')]['project']		= $effort->giveValue('project_name');
-	$AGENT_PROJECT_SUM[$effort->giveValue('project_id')][$effort->giveValue('user')]['agent']		= str_replace(';', ',', $agent['firstname'] . ' ' . $agent['lastname']);
-	@$AGENT_PROJECT_SUM[$effort->giveValue('project_id')][$effort->giveValue('user')]['hours']		+= $effort->giveValue('hours');
-	@$AGENT_PROJECT_SUM[$effort->giveValue('project_id')][$effort->giveValue('user')]['costs']		+= $effort->giveValue('costs');
-
-	$AGENT_SUM[$effort->giveValue('user')]['agent']		= str_replace(';', ',', $agent['firstname'] . ' ' . $agent['lastname']);
-	@$AGENT_SUM[$effort->giveValue('user')]['hours']		+= $effort->giveValue('hours');
-	@$AGENT_SUM[$effort->giveValue('user')]['costs']		+= $effort->giveValue('costs');
-
-	$output .= formatNumber($effort->giveValue('hours'), true) . ";";
-	$output .= formatNumber($effort->giveValue('costs'), true);
+	$output .= '"' . str_replace('"', '""', $string) . '";';
+	$output .= '"' . formatNumber($effort_data['hours'], true) . '";';
+	$output .= '"' . formatNumber($effort_data['costs'], true) . '"';
 	$output .= "\n";
 }
 
@@ -133,9 +124,11 @@ if(isset($HTTP_ENV_VARS['HTTP_USER_AGENT']) and strpos($HTTP_ENV_VARS['HTTP_USER
 	Header('Content-Type: application/dummy');
 } else {
 	Header('Content-Type: application/octet-stream');
-	if($project->giveValue('project_name')) {
-		$file_name = str_replace(' ', '_', $customer->giveValue('customer_name') . "-" . $project->giveValue('project_name') . '.csv');
-	} else if($customer->giveValue('customer_name')){
+	// Guard against null objects when exporting unassigned efforts
+	if (is_object($project) && $project->giveValue('project_name')) {
+		$customer_name = is_object($customer) ? $customer->giveValue('customer_name') : 'unassigned';
+		$file_name = str_replace(' ', '_', $customer_name . "-" . $project->giveValue('project_name') . '.csv');
+	} elseif (is_object($customer) && $customer->giveValue('customer_name')) {
 		$file_name = str_replace(' ', '_', $customer->giveValue('customer_name') . '.csv');
 	} else {
 		$file_name = "effort.csv";
@@ -154,7 +147,7 @@ $GLOBALS['fields'] = array(
 		'effort'		=> unhtmlentities($GLOBALS['_PJ_strings']['hours_short']),
 		'price'			=> unhtmlentities($GLOBALS['_PJ_strings']['costs'])
 );
-if(!empty($cid)) {
+if(!empty($cid) && $cid !== 'unassigned') {
 	unset($GLOBALS['fields']['customer']);
 }
 if(!empty($pid)) {
@@ -162,12 +155,12 @@ if(!empty($pid)) {
 }
 $output = tableHead($GLOBALS['fields']);
 foreach($PROJECT_SUM as $project_id => $project_values) {
-	if(empty($cid)) {
-		$output .= str_replace(';', ',', $project_values['customer']) . ';';
+	if(empty($cid) || $cid === 'unassigned') {
+		$output .= '"' . str_replace('"', '""', $project_values['customer']) . '";';
 	}
-	$output .= str_replace(';', ',', $project_values['project']) . ';';
-	$output .= formatNumber($project_values['hours'], true) . ';';
-	$output .= formatNumber($project_values['costs'], true) . ';';
+	$output .= '"' . str_replace('"', '""', $project_values['project']) . '";';
+	$output .= '"' . formatNumber($project_values['hours'], true) . '";';
+	$output .= '"' . formatNumber($project_values['costs'], true) . '"';
 	$output .= "\n";
 }
 print $output;
@@ -180,17 +173,17 @@ if(empty($pid)) {
 			'effort'		=> unhtmlentities($GLOBALS['_PJ_strings']['hours_short']),
 			'price'			=> unhtmlentities($GLOBALS['_PJ_strings']['costs'])
 	);
-	if(!empty($cid)) {
+	if(!empty($cid) && $cid !== 'unassigned') {
 		unset($GLOBALS['fields']['customer']);
 	}
 	
 	$output = tableHead($GLOBALS['fields']);
 	foreach($CUSTOMER_SUM as $customer_id => $customer_values) {
-		if(empty($cid)) {
-			$output .= str_replace(';', ',', $customer_values['customer']) . ';';
+		if(empty($cid) || $cid === 'unassigned') {
+			$output .= '"' . str_replace('"', '""', $customer_values['customer']) . '";';
 		}
-		$output .= formatNumber($customer_values['hours'], true) . ';';
-		$output .= formatNumber($customer_values['costs'], true) . ';';
+		$output .= '"' . formatNumber($customer_values['hours'], true) . '";';
+		$output .= '"' . formatNumber($customer_values['costs'], true) . '"';
 		$output .= "\n";
 	}
 	
@@ -205,7 +198,7 @@ $GLOBALS['fields'] = array(
 		'effort'		=> unhtmlentities($GLOBALS['_PJ_strings']['hours_short']),
 		'price'			=> unhtmlentities($GLOBALS['_PJ_strings']['costs'])
 );
-if(!empty($cid)) {
+if(!empty($cid) && $cid !== 'unassigned') {
 	unset($GLOBALS['fields']['customer']);
 }
 if(!empty($pid)) {
@@ -215,15 +208,15 @@ if(!empty($pid)) {
 $output = tableHead($GLOBALS['fields']);
 foreach($AGENT_PROJECT_SUM as $project_id => $project_values) {
 	foreach($project_values as $agent_id => $agent_values) {
-		if(empty($cid)) {
-			$output .= str_replace(';', ',', $agent_values['customer']) . ';';
+		if(empty($cid) || $cid === 'unassigned') {
+			$output .= '"' . str_replace('"', '""', $agent_values['customer']) . '";';
 		}
 		if(empty($pid)) {
-			$output .= str_replace(';', ',', $agent_values['project']) . ';';
+			$output .= '"' . str_replace('"', '""', $agent_values['project']) . '";';
 		}
-		$output .= $agent_values['agent'] . ';';
-		$output .= formatNumber($agent_values['hours'], true) . ';';
-		$output .= formatNumber($agent_values['costs'], true) . ';';
+		$output .= '"' . str_replace('"', '""', $agent_values['agent']) . '";';
+		$output .= '"' . formatNumber($agent_values['hours'], true) . '";';
+		$output .= '"' . formatNumber($agent_values['costs'], true) . '"';
 		$output .= "\n";
 	}
 }
@@ -238,9 +231,9 @@ $GLOBALS['fields'] = array(
 );
 $output = tableHead($GLOBALS['fields']);
 foreach($AGENT_SUM as $agent_id => $agent_values) {
-	$output .= $agent_values['agent'] . ';';
-	$output .= formatNumber($agent_values['hours'], true) . ';';
-	$output .= formatNumber($agent_values['costs'], true) . ';';
+	$output .= '"' . str_replace('"', '""', $agent_values['agent']) . '";';
+	$output .= '"' . formatNumber($agent_values['hours'], true) . '";';
+	$output .= '"' . formatNumber($agent_values['costs'], true) . '"';
 	$output .= "\n";
 }
 

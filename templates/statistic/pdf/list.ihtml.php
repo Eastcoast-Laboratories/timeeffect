@@ -31,7 +31,7 @@ function documentHead() {
 	$pdf->Cell($GLOBALS['_PJ_pdf_head_right'], $GLOBALS['_PJ_pdf_header_font_size']+2, $head, 0, 1, 'L', 0);
 	$pdf->SetFont($GLOBALS['_PJ_pdf_font_face'],'',$GLOBALS['_PJ_pdf_header_font_size']);
 
-	if($customer->giveValue("customer_name")) {
+	if($customer && $customer->giveValue("customer_name")) {
 		$pdf->SetFont($GLOBALS['_PJ_pdf_font_face'],'B',$GLOBALS['_PJ_pdf_header_font_size']);
 		$y_line = $pdf->GetY();
 		$pdf->SetX($GLOBALS['_PJ_pdf_left_margin']-3);
@@ -41,7 +41,7 @@ function documentHead() {
 		$pdf->Cell($pdf->GetStringWidth($customer->giveValue("customer_name")), $GLOBALS['_PJ_pdf_header_font_size']+2, $customer->giveValue("customer_name"), 0, 1, 'L', 0);
 	}
 
-	if($project->giveValue("project_name")) {
+	if($project && $project->giveValue("project_name")) {
 		$pdf->SetX($GLOBALS['_PJ_pdf_left_margin']-3);
 		$head = unhtmlentities($GLOBALS['_PJ_strings']['project']) . ": ";
 		$pdf->SetFont($GLOBALS['_PJ_pdf_font_face'],'B',$GLOBALS['_PJ_pdf_header_font_size']);
@@ -51,7 +51,7 @@ function documentHead() {
 		$x_align = $pdf->GetX();
 		$pdf->Cell($GLOBALS['_PJ_pdf_head_right'], $GLOBALS['_PJ_pdf_header_font_size']+2, $project->giveValue("project_name"), '', 1, 'L', 0);
 		$pdf->SetX($x_align);
-		if($project->giveValue("project_desc")) {
+		if($project && $project->giveValue("project_desc")) {
 			$pdf->SetFont($GLOBALS['_PJ_pdf_font_face'],'',$GLOBALS['_PJ_pdf_small_font_size']-1);
 			// Fix: Use GetPageWidth() method instead of protected property $w
 			$pdf->MultiCell($pdf->GetPageWidth() - $GLOBALS['_PJ_pdf_left_margin'] - $GLOBALS['_PJ_pdf_right_margin'], $GLOBALS['_PJ_pdf_header_font_size']+2, "(" . $project->giveValue("project_desc") . ")", 0, "LT", 0);
@@ -120,8 +120,11 @@ $GLOBALS['field_aligns'] = $GLOBALS['_PJ_pdf_field_aligns'];
 $rates		= new Rates();
 
 $r_count	= $rates->giveCount();
+// Detect unassigned efforts
+$show_unassigned = isset($cid) && $cid === 'unassigned';
+
 if(intval($year) && intval($month)) {
-	$statistic	= new Statistics($_PJ_auth, false, $customer, $project, $users, $mode);
+	$statistic	= new Statistics($_PJ_auth, false, $customer, $project, $users, $mode, $show_unassigned);
 	$statistic->loadMonth($year, $month, $mode);
 } elseif(intval($syear) && intval($eyear)) {
 	if(empty($smonth)) {
@@ -136,10 +139,10 @@ if(intval($year) && intval($month)) {
 	if(empty($eday)) {
 		$eday = date('d');
 	}
-	$statistic	= new Statistics($_PJ_auth, false, $customer, $project, $users, $mode);
+	$statistic	= new Statistics($_PJ_auth, false, $customer, $project, $users, $mode, $show_unassigned);
 	$statistic->loadTime("$syear-$smonth-$sday", "$eyear-$emonth-$eday", $mode);
 } else {
-	$statistic	= new Statistics($_PJ_auth, true, $customer, $project, $users, $mode);
+	$statistic	= new Statistics($_PJ_auth, true, $customer, $project, $users, $mode, $show_unassigned);
 }
 $menge		= $statistic->effortCount();
 
@@ -164,28 +167,35 @@ documentHead();
 $GLOBALS['_PJ_pdf_table_top'] = $pdf->GetY();
 tableHead();
 
+// Use central data processing function
+$data = generateStatisticsData($statistic, $cid, $pid, $mode, $_PJ_auth);
+$efforts = $data['efforts'];
+$e_count = $data['effort_count'];
+
 $i = 0;
 $note_count = 0;
-$e_count = $statistic->count(($mode == 'billed'));
-if(($mode == 'billed')) {
-	$e_count += $statistic->count(true);
-}
-for($Fiii = 0; $Fiii < 1; $Fiii++) {
-$statistic->reset();
-while($statistic->nextEffort()) {
+foreach($efforts as $effort_data) {
 	$i++;
-	$effort = $statistic->giveEffort();
+	
+	// Handle footnotes for notes - need to get original effort object for notes
+	$statistic->reset();
 	$foot_note_nmb = '';
-	if(($effort->giveValue('note') != '')) {
-		$foot_note_nmb = ++$note_count;
-		$string = $effort->giveValue('note');
-		$string = preg_replace("/<br>/", "", $string);
-		$string = preg_replace("/<li>/", " - ", $string);
-		$string = preg_replace("/\r/", "", $string);
-		$string = preg_replace("/<[^>]+>\n/", "", $string);
-		$string = preg_replace("/<[^>]+>/", "", $string);
-		$foot_note .= "$foot_note_nmb) " . $string . "\n";
-		$foot_notes[$foot_note_nmb] = $string;
+	while($statistic->nextEffort()) {
+		$effort_obj = $statistic->giveEffort();
+		if($effort_obj->giveValue('id') == $effort_data['id']) {
+			if($effort_obj->giveValue('note') != '') {
+				$foot_note_nmb = ++$note_count;
+				$string = $effort_obj->giveValue('note');
+				$string = preg_replace("/<br>/", "", $string);
+				$string = preg_replace("/<li>/", " - ", $string);
+				$string = preg_replace("/\r/", "", $string);
+				$string = preg_replace("/<[^>]+>\n/", "", $string);
+				$string = preg_replace("/<[^>]+>/", "", $string);
+				$foot_note .= "$foot_note_nmb) " . $string . "\n";
+				$foot_notes[$foot_note_nmb] = $string;
+			}
+			break;
+		}
 	}
 
 	if(!empty($filled)) {
@@ -200,7 +210,7 @@ while($statistic->nextEffort()) {
 	$pdf->SetFont($GLOBALS['_PJ_pdf_font_face'],'',$GLOBALS['_PJ_pdf_small_font_size']);
 	$y_line = $pdf->GetY();
 		
-	$string = preg_replace("/<br>/", "", $effort->giveValue('description'));
+	$string = preg_replace("/<br>/", "", $effort_data['description']);
 	$string = preg_replace("/<li>/", " - ", $string);
 	$string = preg_replace("/<[^>]+>/", " - ", $string);
 	if(!empty($foot_note_nmb)) {
@@ -213,38 +223,37 @@ while($statistic->nextEffort()) {
 
 	if(empty($cid)) {
 		$pdf->SetX($GLOBALS['field_lefts']['customer']);
-		$pdf->Cell($GLOBALS['field_widths']['customer'], ($y_next_line-$y_line), $effort->giveValue('customer_name'), 0, 0, $GLOBALS['field_aligns']['customer'], 1);
+		$pdf->Cell($GLOBALS['field_widths']['customer'], ($y_next_line-$y_line), $effort_data['customer_name'], 0, 0, $GLOBALS['field_aligns']['customer'], 1);
 		$pdf->SetY($y_line);
 	}
 
 	if($GLOBALS['field_widths']['count']) {
 		$pdf->SetX($GLOBALS['field_lefts']['count']);
-		$pdf->Cell($GLOBALS['field_widths']['count'], ($y_next_line-$y_line), $effort->giveValue('id'), 0, 0, $GLOBALS['field_aligns']['count'], 1);
+		$pdf->Cell($GLOBALS['field_widths']['count'], ($y_next_line-$y_line), $effort_data['id'], 0, 0, $GLOBALS['field_aligns']['count'], 1);
 		$pdf->SetY($y_line);
 	}
 
 	if(empty($pid)) {
 		$pdf->SetX($GLOBALS['field_lefts']['project']);
-		$pdf->Cell($GLOBALS['field_widths']['project'], ($y_next_line-$y_line), $effort->giveValue('project_name'), 0, 0, $GLOBALS['field_aligns']['project'], 1);
+		$pdf->Cell($GLOBALS['field_widths']['project'], ($y_next_line-$y_line), $effort_data['project_name'], 0, 0, $GLOBALS['field_aligns']['project'], 1);
 		$pdf->SetY($y_line);
 	}
 
 	$pdf->SetX($GLOBALS['field_lefts']['agent']);
-	$agent = $_PJ_auth->giveUserById($effort->giveValue('user'));
-	$pdf->Cell($GLOBALS['field_widths']['agent'], ($y_next_line-$y_line), trim($agent['firstname'] . ' ' . $agent['lastname']), 0, 0, $GLOBALS['field_aligns']['agent'], 1);
+	$pdf->Cell($GLOBALS['field_widths']['agent'], ($y_next_line-$y_line), trim($effort_data['agent_name']), 0, 0, $GLOBALS['field_aligns']['agent'], 1);
 	$pdf->SetY($y_line);
 
 	$pdf->SetX($GLOBALS['field_lefts']['date']);
-	$pdf->Cell($GLOBALS['field_widths']['date'], ($y_next_line-$y_line), formatDate($effort->giveValue('date'), $GLOBALS['_PJ_format_date']), 0, 0, $GLOBALS['field_aligns']['date'], 1);
+	$pdf->Cell($GLOBALS['field_widths']['date'], ($y_next_line-$y_line), formatDate($effort_data['date'], $GLOBALS['_PJ_format_date']), 0, 0, $GLOBALS['field_aligns']['date'], 1);
 	$pdf->SetY($y_line);
 
 	$pdf->SetX($GLOBALS['field_lefts']['time']);
-	$pdf->Cell($GLOBALS['field_widths']['time'], ($y_next_line-$y_line), formatTime($effort->giveValue('begin'), "H:i") . " - " . formatTime($effort->giveValue('end'), "H:i"), 0, 0, $GLOBALS['field_aligns']['time'], 1);
+	$pdf->Cell($GLOBALS['field_widths']['time'], ($y_next_line-$y_line), formatTime($effort_data['begin'], "H:i") . " - " . formatTime($effort_data['end'], "H:i"), 0, 0, $GLOBALS['field_aligns']['time'], 1);
 	$pdf->SetY($y_line);
 
 	if(!empty($mode) and $mode == 'billed') {
-		if($effort->giveValue('billed')) {
-			$formatted_billed = formatDate($effort->giveValue('billed'), $GLOBALS['_PJ_format_date']);
+		if($effort_data['billed']) {
+			$formatted_billed = formatDate($effort_data['billed'], $GLOBALS['_PJ_format_date']);
 		} else {
 			$formatted_billed = '';
 		}
@@ -254,12 +263,12 @@ while($statistic->nextEffort()) {
 	}
 
 	$pdf->SetX($GLOBALS['field_lefts']['effort']);
-	$pdf->Cell($GLOBALS['field_widths']['effort'], ($y_next_line-$y_line), formatNumber($effort->giveValue('hours'), true), 0, 0, $GLOBALS['field_aligns']['effort'], 1);
-	$effort_sum += $effort->giveValue('hours');
+	$pdf->Cell($GLOBALS['field_widths']['effort'], ($y_next_line-$y_line), formatNumber($effort_data['hours'], true), 0, 0, $GLOBALS['field_aligns']['effort'], 1);
+	$effort_sum += $effort_data['hours'];
 	$pdf->SetY($y_line);
 
 	$pdf->SetX($GLOBALS['field_lefts']['price']);
-	$price = $effort->giveValue("costs");
+	$price = $effort_data['costs'];
 	$price_sum += $price;
 	$pdf->Cell($GLOBALS['field_widths']['price'], ($y_next_line-$y_line), formatNumber($price, true) . " " . $GLOBALS['_PJ_currency'], 0, 0, $GLOBALS['field_aligns']['price'], 1);
 
@@ -277,7 +286,6 @@ while($statistic->nextEffort()) {
 		// restart with initial filling
 		$filled = false;
 	}
-}
 }
 $pdf->SetTextColor($GLOBALS['_PJ_pdf_table_sum_fg_r'], $GLOBALS['_PJ_pdf_table_sum_fg_g'], $GLOBALS['_PJ_pdf_table_sum_fg_b']);
 $y_line = $pdf->GetY();
@@ -317,9 +325,9 @@ if(is_array($foot_notes) && count($foot_notes)) {
 	}
 }
 
-if($project->giveValue('project_name')) {
-	$pdf->Output('I', str_replace(' ', '_', $customer->giveValue('customer_name') . "-" . $project->giveValue('project_name') . ".pdf"));
-} else if($customer->giveValue('customer_name')){
+if($project && $project->giveValue('project_name')) {
+	$pdf->Output('I', str_replace(' ', '_', ($customer ? $customer->giveValue('customer_name') : 'Unassigned') . "-" . $project->giveValue('project_name') . ".pdf"));
+} else if($customer && $customer->giveValue('customer_name')){
 	$pdf->Output('I', str_replace(' ', '_', $customer->giveValue('customer_name') . ".pdf"));
 } else {
 	$pdf->Output('I', "effort.pdf");

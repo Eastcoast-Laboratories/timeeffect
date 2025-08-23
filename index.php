@@ -146,10 +146,15 @@
 			<div style="margin: 3rem 0;">
 				<h3 style="font-size: 1.5rem; margin: 0 0 1rem 0;">Features</h3>
 				<ul style="list-style: none; padding: 0; margin: 0;">
+					<?php // Accurate time tracking functionality — related files: inventory/efforts.php, include/effort.inc.php ?>
 					<li style="padding: 0.5rem 0; display: flex; align-items: center;"><span style="color: var(--success-color); margin-right: 0.5rem;">✓</span> Increase productivity with accurate time tracking</li>
+					<?php // Project profitability analysis — related files: include/statistics.inc.php, report/index.php ?>
 					<li style="padding: 0.5rem 0; display: flex; align-items: center;"><span style="color: var(--success-color); margin-right: 0.5rem;">✓</span> Improve project profitability analysis</li>
+					<?php // Client billing & invoicing — related files: statistic/pdf.php, templates/statistic/pdf/ ?>
 					<li style="padding: 0.5rem 0; display: flex; align-items: center;"><span style="color: var(--success-color); margin-right: 0.5rem;">✓</span> Streamline client billing and invoicing</li>
+					<?php // Team performance insights — related files: templates/report/, report/index.php ?>
 					<li style="padding: 0.5rem 0; display: flex; align-items: center;"><span style="color: var(--success-color); margin-right: 0.5rem;">✓</span> Gain insights into team performance</li>
+					<?php // Labor regulations compliance — related files: include/acl_query.inc.php, include/auth.inc.php ?>
 					<li style="padding: 0.5rem 0; display: flex; align-items: center;"><span style="color: var(--success-color); margin-right: 0.5rem;">✓</span> Ensure compliance with labor regulations</li>
 				</ul>
 			</div>

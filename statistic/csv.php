@@ -11,8 +11,22 @@
 	$pid = isset($pid) ? $pid : (isset($_REQUEST['pid']) ? $_REQUEST['pid'] : '');
 	$eid = isset($eid) ? $eid : (isset($_REQUEST['eid']) ? $_REQUEST['eid'] : '');
 
-	$customer	= new Customer($cid, $_PJ_auth);
-	$project	= new Project($customer, $_PJ_auth, $pid);
+	// Additional parameters needed by CSV template
+	$year   = $_REQUEST['year']   ?? null;
+	$month  = $_REQUEST['month']  ?? null;
+	$syear  = $_REQUEST['syear']  ?? null;
+	$smonth = $_REQUEST['smonth'] ?? null;
+	$sday   = $_REQUEST['sday']   ?? null;
+	$eyear  = $_REQUEST['eyear']  ?? null;
+	$emonth = $_REQUEST['emonth'] ?? null;
+	$eday   = $_REQUEST['eday']   ?? null;
+	$mode   = $_REQUEST['mode']   ?? null;
+	$users  = $_REQUEST['users']  ?? null;
+
+	// Create customer object only for valid cid and not for special 'unassigned'
+	$customer	= ($cid && $cid !== 'unassigned') ? new Customer($_PJ_auth, $cid) : null;
+	// Create project object only if customer object exists and project id provided
+	$project	= ($customer && $pid) ? new Project($customer, $_PJ_auth, $pid) : null;
 
 	$center_template	= "statistic/csv";
 	include("$_PJ_root/templates/statistic/csv/list.ihtml.php");

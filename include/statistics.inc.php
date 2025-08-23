@@ -79,18 +79,31 @@ class Statistics extends EffortList {
             }
         }
 
-        $query = "SELECT " . $GLOBALS['_PJ_effort_table'] . ".*, " .
-                    $GLOBALS['_PJ_customer_table'] . ".customer_name, " .
-                    $GLOBALS['_PJ_project_table'] . ".customer_id, " .
-                    $GLOBALS['_PJ_project_table'] . ".project_name " .
-                    " FROM " .
-                    $GLOBALS['_PJ_effort_table'] . ", " .
-                    $GLOBALS['_PJ_customer_table'] . ", " .
-                    $GLOBALS['_PJ_project_table'] .
-                    " WHERE " .
-                    $GLOBALS['_PJ_effort_table'] . ".project_id=" . $GLOBALS['_PJ_project_table'] . ".id " . 
-                    " AND " .
-                    $GLOBALS['_PJ_project_table'] . ".customer_id=" . $GLOBALS['_PJ_customer_table'] . ".id";
+        // Handle unassigned efforts: use LEFT JOIN to include efforts without valid customer/project
+        if ($this->show_unassigned) {
+            $query = "SELECT " . $GLOBALS['_PJ_effort_table'] . ".*, " .
+                        "COALESCE(" . $GLOBALS['_PJ_customer_table'] . ".customer_name, 'Unassigned') as customer_name, " .
+                        $GLOBALS['_PJ_project_table'] . ".customer_id, " .
+                        "COALESCE(" . $GLOBALS['_PJ_project_table'] . ".project_name, 'Unassigned') as project_name " .
+                        " FROM " .
+                        $GLOBALS['_PJ_effort_table'] . 
+                        " LEFT JOIN " . $GLOBALS['_PJ_project_table'] . " ON " . $GLOBALS['_PJ_effort_table'] . ".project_id=" . $GLOBALS['_PJ_project_table'] . ".id " .
+                        " LEFT JOIN " . $GLOBALS['_PJ_customer_table'] . " ON " . $GLOBALS['_PJ_project_table'] . ".customer_id=" . $GLOBALS['_PJ_customer_table'] . ".id " .
+                        " WHERE 1=1";
+        } else {
+            $query = "SELECT " . $GLOBALS['_PJ_effort_table'] . ".*, " .
+                        $GLOBALS['_PJ_customer_table'] . ".customer_name, " .
+                        $GLOBALS['_PJ_project_table'] . ".customer_id, " .
+                        $GLOBALS['_PJ_project_table'] . ".project_name " .
+                        " FROM " .
+                        $GLOBALS['_PJ_effort_table'] . ", " .
+                        $GLOBALS['_PJ_customer_table'] . ", " .
+                        $GLOBALS['_PJ_project_table'] .
+                        " WHERE " .
+                        $GLOBALS['_PJ_effort_table'] . ".project_id=" . $GLOBALS['_PJ_project_table'] . ".id " . 
+                        " AND " .
+                        $GLOBALS['_PJ_project_table'] . ".customer_id=" . $GLOBALS['_PJ_customer_table'] . ".id";
+        }
         if(is_object($this->customer) && $this->customer->giveValue('id')) {
             $query .= " AND " .
                         $GLOBALS['_PJ_project_table'] . ".customer_id='" . $this->customer->giveValue('id') . "'";
@@ -137,7 +150,14 @@ class Statistics extends EffortList {
         $this->data['minutes']            = round(($this->data['seconds']    / 60), 2);
         $this->data['hours']            = round(($this->data['minutes']    / 60), 2);
         $this->data['days']                = round(($this->data['minutes']    / 60 / 8), 2);
-        $this->data['customer_id']        = $this->project->giveValue('id');
+        // Guard: project may be null when exporting unassigned efforts
+        if (is_object($this->project)) {
+            $this->data['customer_id'] = $this->project->giveValue('id');
+        } elseif (is_object($this->customer)) {
+            $this->data['customer_id'] = $this->customer->giveValue('id');
+        } else {
+            $this->data['customer_id'] = null;
+        }
     }
 
     function loadMonth($year, $month) {
@@ -206,7 +226,7 @@ class Statistics extends EffortList {
         }
         if(is_object($this->project) && $this->project->giveValue('id')) {
             $query .= " AND " .
-                        $GLOBALS['_PJ_effort_table'] . ".project_id='" . $this->prjoect->giveValue('id') . "'";
+                        $GLOBALS['_PJ_effort_table'] . ".project_id='" . $this->project->giveValue('id') . "'";
         }
         if(is_array($this->users) && count($this->users)) {
             $query .= " AND " .
