@@ -23,7 +23,14 @@
 if($_PJ_auth->checkPermission('accountant')) {
 	if(!$effort->giveValue('billed')) {
 ?>
-						<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>"><input name="charge[<?= $effort->giveValue('id') ?>]" type="checkbox" checked></TD>
+						<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>">
+							<table>
+								<tr>
+									<td><input name="charge[<?= $effort->giveValue('id') ?>]" type="checkbox" checked></td>
+									<td><a href="<?= $GLOBALS['_PJ_efforts_inventory_script'] . '?edit=1&eid=' . $effort->giveValue('id') ?>">[ID: <?= $effort->giveValue('id') ?>]</a></td>
+								</tr>
+							</table>
+						</TD>
 <?php
 	} else {
 ?>
@@ -39,7 +46,9 @@ if($_PJ_auth->checkPermission('accountant')) {
 				
 						<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/project.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;<?= $effort->giveValue('project_name') ?></TD>
 <?php } ?>
-						<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/effort<?php if(!($effort->giveValue('billed') == '' || $effort->giveValue('billed') == '0000-00-00')) print 'b' ?>.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;<?= $effort->giveValue('description') ?></TD>
+						<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>">
+							<IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/effort<?php if(!($effort->giveValue('billed') == '' || $effort->giveValue('billed') == '0000-00-00')) print 'b' ?>.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp<a href="<?= $GLOBALS['_PJ_efforts_inventory_script'] . '?edit=1&eid=' . $effort->giveValue('id') ?>"><?= $effort->giveValue('description') ?></a>
+						</TD>
 						<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>"><?= $agent['firstname'] . ' ' . $agent['lastname']; ?></TD>
 						<TD CLASS="listDetailNumeric<?php if(isset($rowclass)) echo $rowclass; ?>"><?= $effort->formatDate($effort->giveValue('date')); ?></TD>
 						<TD CLASS="listDetailNumeric<?php if(isset($rowclass)) echo $rowclass; ?>"><?= $effort->formatTime($effort->giveValue('begin'), "H:i"); ?> - <?= $effort->formatTime($effort->giveValue('end'), "H:i"); ?></TD>

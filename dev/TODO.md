@@ -5,7 +5,8 @@
  - invoice management: users can generate invoices for customers/projects in PDF format.
 
 # TODO
-
-- Reports index list should add links to each reports in target _blank, so you can check details before billing
+1.
 - reports von unzugeordneten projekten zeig in der liste z. b. nur einen effort an, in dem export sind dann aber viel mehr, anscheinend zeigt die vorauswahl zum auswählen welche man exprotieren will nicht alle an. analysiere: Woher können die extra efforts kommen koommen?
-- index: " Improve project profitability analysis" analysiere wo das umgesetzt ist, und ob, wenn ja, dann ergänze in der index seite komments im code, die darauf hinweisen, welcher bereich gemeint ist bei jedem Punkt
+
+2.
+- index.php: " Improve project profitability analysis" analysiere wo das umgesetzt ist, und ob, wenn ja, dann ergänze in der index seite komments im code, die darauf hinweisen, welcher bereich gemeint ist bei jedem Punkt
