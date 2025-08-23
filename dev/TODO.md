@@ -7,7 +7,5 @@
 # TODO
 
 - Reports index list should add links to each reports in target _blank, so you can check details before billing
-- pdf report: 
-Warning: Undefined variable $foot_notes in /var/www/html/templates/statistic/pdf/list.ihtml.php on line 298
-
-Fatal error: Uncaught Exception: FPDF error: Incorrect output destination: 1 in /var/www/html/include/fpdf.inc.php:271 Stack trace: #0 /var/www/html/include/fpdf.inc.php(1028): FPDF->Error('Incorrect outpu...') #1 /var/www/html/templates/statistic/pdf/list.ihtml.php(317): FPDF->Output(true, '-project4.pdf') #2 /var/www/html/statistic/pdf.php(15): include('/var/www/html/t...') #3 {main} thrown in /var/www/html/include/fpdf.inc.php on line 271
+- reports von unzugeordneten projekten zeig in der liste z. b. nur einen effort an, in dem export sind dann aber viel mehr, anscheinend zeigt die vorauswahl zum auswählen welche man exprotieren will nicht alle an. analysiere: Woher können die extra efforts kommen koommen?
+- index: " Improve project profitability analysis" analysiere wo das umgesetzt ist, und ob, wenn ja, dann ergänze in der index seite komments im code, die darauf hinweisen, welcher bereich gemeint ist bei jedem Punkt

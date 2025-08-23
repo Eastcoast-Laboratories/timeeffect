@@ -170,7 +170,7 @@
 	$GLOBALS['_PJ_strings']['no_name']					= 'No Name';
 	$GLOBALS['_PJ_strings']['not_implemented']			= 'not yet implemented';
 	$GLOBALS['_PJ_strings']['note']						= 'Note';
-	$GLOBALS['_PJ_strings']['numbershort']				= 'No.';
+	$GLOBALS['_PJ_strings']['numbershort']				= 'ID';
 	$GLOBALS['_PJ_strings']['of']						= 'of';
 	$GLOBALS['_PJ_strings']['ok']						= 'Ok';
 	$GLOBALS['_PJ_strings']['open_efforts']				= 'in progress';

@@ -71,7 +71,7 @@ while($statistic->nextEffort()) {
 	if(empty($cid)) {
 		$output .= str_replace(';', ',', $effort->giveValue('customer_name')) . ";";
 	} else {
-		$output .= $i . ";";
+		$output .= $effort->giveValue('id') . ";";
 	}
 
 	if(empty($pid)) {

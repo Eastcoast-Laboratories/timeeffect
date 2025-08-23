@@ -219,7 +219,7 @@ while($statistic->nextEffort()) {
 
 	if($GLOBALS['field_widths']['count']) {
 		$pdf->SetX($GLOBALS['field_lefts']['count']);
-		$pdf->Cell($GLOBALS['field_widths']['count'], ($y_next_line-$y_line), "$i.", 0, 0, $GLOBALS['field_aligns']['count'], 1);
+		$pdf->Cell($GLOBALS['field_widths']['count'], ($y_next_line-$y_line), $effort->giveValue('id'), 0, 0, $GLOBALS['field_aligns']['count'], 1);
 		$pdf->SetY($y_line);
 	}
 
@@ -308,7 +308,7 @@ if(is_array($foot_notes) && count($foot_notes)) {
 	$pdf->Ln();
 	$pdf->SetFont($GLOBALS['_PJ_pdf_font_face'],'',$GLOBALS['_PJ_pdf_mini_font_size']);
 	foreach($foot_notes as $foot_note_nmb => $foot_note) {
-		if($pdf->GetY() >= ($pdf->h - $GLOBALS['_PJ_pdf_bottom_margin'] - ($GLOBALS['_PJ_pdf_small_font_size']+2)*2)) {
+		if($pdf->GetY() >= ($pdf->GetPageHeight() - $GLOBALS['_PJ_pdf_bottom_margin'] - ($GLOBALS['_PJ_pdf_small_font_size']+2)*2)) {
 			$pdf->AddPage();
 			$pdf->SetY($GLOBALS['_PJ_pdf_top_margin']);
 		}
