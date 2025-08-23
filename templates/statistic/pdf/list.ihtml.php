@@ -13,6 +13,10 @@ $users = isset($users) ? $users : '';
 // Fix: Initialize sum variables to prevent undefined variable warnings
 $effort_sum = 0;
 $price_sum = 0;
+// Initialize arrays and flags to prevent undefined variable warnings
+$foot_notes = array();
+$foot_note = '';
+$filled = false;
 
 function documentHead() {
 	global $pdf, $customer, $project, $year, $month, $_PJ_auth;
@@ -314,10 +318,10 @@ if(is_array($foot_notes) && count($foot_notes)) {
 }
 
 if($project->giveValue('project_name')) {
-	$pdf->Output(str_replace(' ', '_', $customer->giveValue('customer_name') . "-" . $project->giveValue('project_name') . ".pdf"), true);
+	$pdf->Output('I', str_replace(' ', '_', $customer->giveValue('customer_name') . "-" . $project->giveValue('project_name') . ".pdf"));
 } else if($customer->giveValue('customer_name')){
-	$pdf->Output(str_replace(' ', '_', $customer->giveValue('customer_name') . ".pdf"), true);
+	$pdf->Output('I', str_replace(' ', '_', $customer->giveValue('customer_name') . ".pdf"));
 } else {
-	$pdf->Output("effort.pdf", true);
+	$pdf->Output('I', "effort.pdf");
 }
 ?>
