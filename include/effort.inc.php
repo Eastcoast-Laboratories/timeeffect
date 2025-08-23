@@ -83,7 +83,7 @@
 	class EffortList {
 		var $db;
 		var $data;
-		var $efforts;
+		var $efforts = array();
 		var $show_billed = false;
 		var $effort_count	= 0;
 		var $effort_cursor	= -1;
@@ -244,24 +244,39 @@
 
 		function getTotalHours() {
 			$total_hours = 0;
-			foreach($this->efforts as $effort) {
-				$total_hours += $effort->giveValue('hours');
+			if(!is_array($this->efforts)) {
+				$GLOBALS['_PJ_debug'] = true;
+				debugLog('LOG_EFFORT_TOTALS', 'Efforts list was empty');
+			}else{
+				foreach((array)$this->efforts as $effort) {
+					$total_hours += $effort->giveValue('hours');
+				}
 			}
 			return $total_hours;
 		}
 
 		function getTotalCosts() {
 			$total_costs = 0;
-			foreach($this->efforts as $effort) {
-				$total_costs += $effort->giveValue('costs');
+			if(!is_array($this->efforts)) {
+				$GLOBALS['_PJ_debug'] = true;
+				debugLog('LOG_EFFORT_TOTALS', 'Efforts list was empty');
+			}else{
+				foreach((array)$this->efforts as $effort) {
+					$total_costs += $effort->giveValue('costs');
+				}
 			}
 			return $total_costs;
 		}
 
 		function getTotalDays() {
 			$total_days = 0;
-			foreach($this->efforts as $effort) {
-				$total_days += $effort->giveValue('days');
+			if(!is_array($this->efforts)) {
+				$GLOBALS['_PJ_debug'] = true;
+				debugLog('LOG_EFFORT_TOTALS', 'Efforts list was empty');
+			}else{
+				foreach((array)$this->efforts as $effort) {
+					$total_days += $effort->giveValue('days');
+				}
 			}
 			return $total_days;
 		}
@@ -623,9 +638,7 @@
 			$__effort->data['begin']	= date('H:i:00');
 			$__effort->data['end']		= $__effort->data['begin'];
 			$__effort->data['billed']	= '';
-
 			return $__effort;
 		}
 
 	}
-?>
