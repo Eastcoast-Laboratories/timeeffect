@@ -375,14 +375,17 @@
 				$this->data['billed_hours']		= round($this->data['billed_seconds']	/ 3600, 2);
 				$this->data['billed_days']		= round($this->data['billed_seconds']	/ 28800, 2);
 			}
-			// Sicherstellen, dass der 'rate' Schlüssel existiert
+			// Ensure 'rate' key exists and is numeric
 			if(!isset($this->data['rate'])) {
 				$this->data['rate'] = 0;
 			}
 			
+			// Convert rate to float to prevent string multiplication errors
+			$this->data['rate'] = (float)$this->data['rate'];
+			
 			// Set default hourly rate for unassigned efforts (100€)
 			if((!isset($this->data['project_id']) || $this->data['project_id'] == 0) && $this->data['rate'] == 0) {
-				$this->data['rate'] = 100;
+				$this->data['rate'] = 100.0;
 			}
 
 			$this->data['seconds']	= ($e_time - $b_time);

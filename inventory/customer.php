@@ -33,6 +33,8 @@
 	$cancel = $_REQUEST['cancel'] ?? null;
 	$confirm = $_REQUEST['confirm'] ?? null;
 	$name = $_REQUEST['name'] ?? [];
+	$price = $_REQUEST['price'] ?? [];
+	$currency = $_REQUEST['currency'] ?? [];
 	$customer_logo = $_REQUEST['customer_logo'] ?? '';
 	
 	// Fix: Initialize customer data variables from request
@@ -96,12 +98,18 @@
 						if(!empty($id) and $id == 'new') {
 							$id = '';
 						}
-						if($id != '' || $name[$r_keys[$i]] != '') {
+						if($id != '' || (isset($name[$r_keys[$i]]) && $name[$r_keys[$i]] != '')) {
 							$data[$i]['id']			= $id;
 							$data[$i]['cid']		= $cid;
-							$data[$i]['name']		= $name[$r_keys[$i]];
-							$data[$i]['price']		= str_replace($GLOBALS['_PJ_decimal_point'], '.', $price[$r_keys[$i]]);
-							$data[$i]['currency']	= $currency[$r_keys[$i]];
+							$data[$i]['name']		= isset($name[$r_keys[$i]]) ? $name[$r_keys[$i]] : '';
+							$price_value = isset($price[$r_keys[$i]]) ? $price[$r_keys[$i]] : '';
+							// Only process price if it's not empty
+							if($price_value !== '') {
+								$data[$i]['price'] = str_replace($GLOBALS['_PJ_decimal_point'], '.', $price_value);
+							} else {
+								$data[$i]['price'] = '0.00'; // Default to 0.00 for empty prices
+							}
+							$data[$i]['currency']	= isset($currency[$r_keys[$i]]) ? $currency[$r_keys[$i]] : $GLOBALS['_PJ_currency'];
 						}
 					}
 					$rates = new Rates($data);

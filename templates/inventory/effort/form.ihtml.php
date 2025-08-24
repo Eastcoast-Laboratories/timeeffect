@@ -434,7 +434,7 @@ if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
 				</TR><TR class="advanced-field" style="display: none;">
 					<TD CLASS="FormFieldName"><?php if(!empty($GLOBALS['_PJ_strings']['rate'])) echo $GLOBALS['_PJ_strings']['rate'] ?>:</TD>
 					<TD CLASS="FormField">
-					<SELECT CLASS="FormField" NAME="rate">
+					<SELECT CLASS="FormField" NAME="rate" ID="rate-select">
 					<?php
 						$a_rate = $rate;
 						$rates->resetList();
@@ -445,20 +445,48 @@ if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
 								print " SELECTED";
 								$rate_found = true;
 							}
-							printf(' VALUE="%s">%s (%s %s)' . "\n" , $data['price'], $data['name'], $GLOBALS['_PJ_currency'], formatNumber($data['price'], true));
+							printf(' VALUE="%s" data-customer-id="%s">%s (%s %s)' . "\n" , $data['price'], $data['cid'], $data['name'], $GLOBALS['_PJ_currency'], formatNumber($data['price'], true));
 						}
 						if($rate != '' && !$rate_found) {
 							printf('<OPTION VALUE="%s" SELECTED>%s %s' , $rate, $GLOBALS['_PJ_currency'], formatNumber($rate));
 						}
+						
+						// Generate all rates for JavaScript filtering
+						$all_customers = new CustomerList($_PJ_auth);
+						while($all_customers->nextCustomer()) {
+							$customer_for_rates = $all_customers->giveCustomer();
+							$customer_id_for_rates = $customer_for_rates->giveValue('id');
+							$rates_for_all = new Rates($customer_id_for_rates);
+							while($data_for_all = $rates_for_all->giveNext()) {
+								// Only add if not already added above
+								if($customer_id_for_rates != $customer_id) {
+									printf('<OPTION VALUE="%s" data-customer-id="%s" style="display:none;">%s (%s %s)' . "\n" , 
+										$data_for_all['price'], $customer_id_for_rates, $data_for_all['name'], 
+										$GLOBALS['_PJ_currency'], formatNumber($data_for_all['price'], true));
+								}
+							}
+						}
 					?>
 					</SELECT>
+					<small style="margin-left: 10px;" id="rate-management-link">
+						<?php if($customer_id > 0): ?>
+						<a href="<?= $GLOBALS['_PJ_customer_inventory_script'] . "?edit=1&rates=1&cid=" . $customer_id ?>" target="_blank" title="Stundensätze verwalten">⚙️ Tarife bearbeiten</a>
+						<?php else: ?>
+						<span style="color: #999;">⚙️ Tarife bearbeiten (Kunde wählen)</span>
+						<?php endif; ?>
+					</small>
 					</TD>
 <?php
 if($_PJ_auth->checkPermission('accountant')) {
 ?>
 				</TR><TR class="advanced-field" style="display: none;">
-					<TD CLASS="FormFieldName"><?php if(!empty($GLOBALS['_PJ_strings']['billed'])) echo $GLOBALS['_PJ_strings']['billed'] ?>:</TD>
+					<TD CLASS="FormFieldName">Berechnet am:</TD>
 					<TD CLASS="FormField">
+					<input type="checkbox" id="billed-checkbox" name="billed_status" value="1" 
+						   <?php echo (!empty($billed) && $billed != '0000-00-00') ? 'checked' : ''; ?>
+						   onchange="toggleBilledDate()" style="margin-right: 10px;">
+					<label for="billed-checkbox" style="margin-right: 15px;">Berechnet</label>
+					<div id="billed-date-fields" style="<?php echo (!empty($billed) && $billed != '0000-00-00') ? '' : 'display: none;'; ?>">
 					<SELECT CLASS="FormSelect date-field date-day" NAME="billing_day" title="<?php if(!empty($GLOBALS['_PJ_strings']['day'])) echo $GLOBALS['_PJ_strings']['day'] ?>">
 						<OPTION VALUE="">
 					<?php
@@ -502,6 +530,7 @@ if($_PJ_auth->checkPermission('accountant')) {
 						}
 					?>
 					</SELECT>
+					</div>
 					</TD>
 <?php
 }
@@ -679,19 +708,97 @@ function updateProjectList() {
 		// Log for debugging
 		console.log('LOG_PROJECT_FILTER: Customer ID:', customerId, 'Found projects:', projectOptions.length);
 	}
+	
+	// Update rate management link when customer changes
+	updateRateManagementLink(customerId);
+	
+	// Update rate dropdown when customer changes
+	updateRateDropdown(customerId);
 }
 
-// Toggle advanced fields visibility
+// Update rate management link based on selected customer
+function updateRateManagementLink(customerId) {
+	var rateLinkContainer = document.getElementById('rate-management-link');
+	if (!rateLinkContainer) return;
+	
+	if (customerId && customerId !== '') {
+		// Show active link for selected customer
+		rateLinkContainer.innerHTML = '<a href="' + 
+			'<?= $GLOBALS["_PJ_customer_inventory_script"] ?>' + 
+			'?edit=1&rates=1&cid=' + customerId + 
+			'" target="_blank" title="Stundensätze verwalten">⚙️ Tarife bearbeiten</a>';
+	} else {
+		// Show disabled text when no customer selected
+		rateLinkContainer.innerHTML = '<span style="color: #999;">⚙️ Tarife bearbeiten (Kunde wählen)</span>';
+	}
+}
+
+// Update rate dropdown based on selected customer
+function updateRateDropdown(customerId) {
+	var rateSelect = document.getElementById('rate-select');
+	if (!rateSelect) return;
+	
+	// Hide all rate options first
+	var allRateOptions = rateSelect.querySelectorAll('option');
+	for (var i = 0; i < allRateOptions.length; i++) {
+		if (allRateOptions[i].getAttribute('data-customer-id')) {
+			allRateOptions[i].style.display = 'none';
+		}
+	}
+	
+	// Reset selection
+	rateSelect.selectedIndex = 0;
+	
+	if (customerId && customerId !== '') {
+		// Show only rates for the selected customer
+		var customerRateOptions = rateSelect.querySelectorAll('option[data-customer-id="' + customerId + '"]');
+		for (var j = 0; j < customerRateOptions.length; j++) {
+			customerRateOptions[j].style.display = 'block';
+		}
+		
+		// Log for debugging
+		console.log('LOG_RATE_FILTER: Customer ID:', customerId, 'Found rates:', customerRateOptions.length);
+	}
+}
+
+// Show advanced fields and hide button (no toggle)
 function toggleAdvancedFields() {
 	var advancedFields = document.querySelectorAll('.advanced-field');
 	var toggleBtn = document.getElementById('toggle-advanced-btn');
-	var isVisible = advancedFields[0].style.display !== 'none';
 	
 	for (var i = 0; i < advancedFields.length; i++) {
-		advancedFields[i].style.display = isVisible ? 'none' : 'table-row';
+		advancedFields[i].style.display = 'table-row';
 	}
 	
-	toggleBtn.innerHTML = isVisible ? '⚙️ Erweitert' : '⚙️ Erweitert (ausblenden)';
+	// Hide the button after expanding
+	toggleBtn.style.display = 'none';
+}
+
+// Toggle billed date fields based on checkbox
+function toggleBilledDate() {
+	var checkbox = document.getElementById('billed-checkbox');
+	var dateFields = document.getElementById('billed-date-fields');
+	
+	if (checkbox.checked) {
+		dateFields.style.display = '';
+		// Set current date if any field is empty
+		var dayField = document.getElementsByName('billing_day')[0];
+		var monthField = document.getElementsByName('billing_month')[0];
+		var yearField = document.getElementsByName('billing_year')[0];
+		
+		if (!dayField.value || !monthField.value || !yearField.value) {
+			var today = new Date();
+			dayField.value = String(today.getDate()).padStart(2, '0');
+			monthField.value = String(today.getMonth() + 1).padStart(2, '0');
+			yearField.value = today.getFullYear();
+		}
+	} else {
+		dateFields.style.display = 'none';
+		// Clear date fields when unchecked
+		document.getElementsByName('billing_day')[0].value = '';
+		document.getElementsByName('billing_month')[0].value = '';
+		document.getElementsByName('billing_year')[0].value = '';
+	}
 }
 
 // Toggle note field visibility
@@ -701,14 +808,16 @@ function toggleNoteField() {
 	var isVisible = noteRow.style.display !== 'none';
 	
 	noteRow.style.display = isVisible ? 'none' : 'table-row';
-	toggleBtn.innerHTML = isVisible ? '📝 Notiz einfügen' : '📝 Notiz (ausblenden)';
 	
-	// Focus on note textarea when showing
+	// Hide button when note is shown
 	if (!isVisible) {
+		toggleBtn.style.display = 'none';
 		var noteTextarea = noteRow.querySelector('textarea[name="note"]');
 		if (noteTextarea) {
 			noteTextarea.focus();
 		}
+	} else {
+		toggleBtn.innerHTML = '📝 Notiz einfügen';
 	}
 }
 
@@ -726,10 +835,29 @@ function setupDescriptionAutoSelect() {
 document.addEventListener('DOMContentLoaded', function() {
 	setupDescriptionAutoSelect();
 	
-	// Show note field if it has content
+	// Auto-expand advanced fields for existing efforts (not new entries)
+	<?php if (!empty($eid) && $eid > 0): ?>
+	var advancedFields = document.querySelectorAll('.advanced-field');
+	var toggleBtn = document.getElementById('toggle-advanced-btn');
+	if (advancedFields.length > 0 && toggleBtn) {
+		for (var i = 0; i < advancedFields.length; i++) {
+			advancedFields[i].style.display = 'table-row';
+		}
+		toggleBtn.style.display = 'none';
+	}
+	<?php endif; ?>
+	
+	// Auto-expand note field if it has content or hide button if note exists
 	var noteTextarea = document.querySelector('textarea[name="note"]');
+	var toggleNoteBtn = document.getElementById('toggle-note-btn');
 	if (noteTextarea && noteTextarea.value.trim() !== '') {
-		toggleNoteField();
+		var noteRow = document.getElementById('note-row');
+		if (noteRow) {
+			noteRow.style.display = 'table-row';
+		}
+		if (toggleNoteBtn) {
+			toggleNoteBtn.style.display = 'none';
+		}
 	}
 });
 

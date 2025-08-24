@@ -13,6 +13,9 @@
 					<a class="modern-tab" href="<?= $GLOBALS['_PJ_customer_inventory_script'] . "?list=1&cid=$cid&pid=$pid"?>"><?= $GLOBALS['_PJ_strings']['customers']?></a>
 					<a class="modern-tab active" href="<?= $GLOBALS['_PJ_projects_inventory_script'] . "?list=1&cid=$cid&pid=$pid"?>"><?= $GLOBALS['_PJ_strings']['projects']?></a>
 					<a class="modern-tab" href="<?= $GLOBALS['_PJ_efforts_inventory_script'] . "?list=1&cid=$cid&pid=$pid"?>"><?= $GLOBALS['_PJ_strings']['efforts']?></a>
+					<?php if($cid): ?>
+					<a class="modern-tab" href="<?= $GLOBALS['_PJ_customer_inventory_script'] . "?edit=1&rates=1&cid=$cid" ?>"><?= $GLOBALS['_PJ_strings']['customer_rates_data'] ?? 'Stundensätze' ?></a>
+					<?php endif; ?>
 				</div>
 			</TD>
 			</TR>

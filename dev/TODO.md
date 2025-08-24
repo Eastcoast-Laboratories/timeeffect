@@ -5,14 +5,21 @@
  - invoice management: users can generate invoices for customers/projects in PDF format.
 
 # TODO
-1. das pdf generierte report muss die gleiche funktioinalität bekommen, wie die csv. am besten eine zentrale funktion für beide zum generieren der daten die in beiden benutzt wird und dann nur anders umgesetzt wird (DRY) 
+1. dev/BULK_EDIT_EFFORTS.md
 
-2.
-- index.php: "Improve project profitability analysis"  ist vielleicht noch irreführend
+2. In der Bearbeitungsansicht eines efforts
+ -  soll die option "Berechnet" umbenannt werden in "Berechnet am" und links neben dem Datum eine Checkbox "Berechnet" angezeigt werden, die den Wert "Berechnet" in der Tabelle "effort" anzeigt bzw entfernt, wenn man den haken entfernt.
+ - der bereich "erweitert" soll automatisch aufgeklappt sein, wenn es kein neuer Eintrag mehr ist.
+ - Die Notiz soll automatisch aufgeklappt sein, wenn eine Notiz vorhanden ist.
+ - der "Notiz einfügen" Button soll verschwinden, wenn man draufdrückt oder wenn schon eine Notiz vorhanden ist
+ - autofokus auf das notiz textarea, wenn man den button klickt
 
+3. @setup.sh#L34-35 dies und wahrscheinlich noch einiges muss angepasst werden, seit der umstellung auf die .env als main config (siehe git history)
 
-- statistic/customer.php?list=1&cid=&pid=
+4. index.php: "Improve project profitability analysis"  ist vielleicht noch irreführend
+
+5. statistic/customer.php?list=1&cid=&pid=
  - die einzelnen efforts sollen verlinkt werden, so dass man die details sehen kann
- - in jedem effort in der spalte "kosten" die eizelne summe angeben in z.b. EURO (je nach einstellung), 
+ - in jedem effort in der spalte "kosten" die kosten angeben in z.b. EURO (je nach einstellung), falls unassigned oder noch kein tarif ausgewählt ist fr den effort, dann "kein Tarif" angeben
  - der trennstrich über jedem projekt doppelte dicke
  - bevor ein zeile mit einem neuen projekt oder kunden beginnt eine leerzeile einfügen mit den summierten beträgen des darüberliegenden projekts in der spalte Kosten
