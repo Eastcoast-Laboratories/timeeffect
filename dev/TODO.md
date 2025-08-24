@@ -7,13 +7,6 @@
 # TODO
 1. dev/BULK_EDIT_EFFORTS.md
 
-2. In der Bearbeitungsansicht eines efforts
- -  soll die option "Berechnet" umbenannt werden in "Berechnet am" und links neben dem Datum eine Checkbox "Berechnet" angezeigt werden, die den Wert "Berechnet" in der Tabelle "effort" anzeigt bzw entfernt, wenn man den haken entfernt.
- - der bereich "erweitert" soll automatisch aufgeklappt sein, wenn es kein neuer Eintrag mehr ist.
- - Die Notiz soll automatisch aufgeklappt sein, wenn eine Notiz vorhanden ist.
- - der "Notiz einfügen" Button soll verschwinden, wenn man draufdrückt oder wenn schon eine Notiz vorhanden ist
- - autofokus auf das notiz textarea, wenn man den button klickt
-
 3. @setup.sh#L34-35 dies und wahrscheinlich noch einiges muss angepasst werden, seit der umstellung auf die .env als main config (siehe git history)
 
 4. index.php: "Improve project profitability analysis"  ist vielleicht noch irreführend

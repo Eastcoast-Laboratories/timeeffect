@@ -73,6 +73,7 @@
 	$billing_day = $_REQUEST['billing_day'] ?? null;
 	$billing_month = $_REQUEST['billing_month'] ?? null;
 	$billing_year = $_REQUEST['billing_year'] ?? null;
+	$billed_status = $_REQUEST['billed_status'] ?? null;
 	$hours = $_REQUEST['hours'] ?? null;
 	$minutes = $_REQUEST['minutes'] ?? null;
 	$detail = $_REQUEST['detail'] ?? null;
@@ -390,6 +391,13 @@
 			$data['user']			= $user;
 			$data['gid']			= $gid;
 			$data['access']			= $access_owner . $access_group . $access_world;
+			
+			// Handle billed status based on checkbox and date fields
+			if($billed_status == '1' && date("Y", strtotime("$billing_day/$billing_month/$billing_year")) > 1970) {
+				$data['billed']			= "$billing_year-$billing_month-$billing_day";
+			} else {
+				$data['billed']			= '';
+			}
 			// LOG_EFFORT_SAVE: Set defaults for empty fields
 			if($data['user'] == '') {
 				if ($effort && $effort->giveValue('user')) {
@@ -427,7 +435,8 @@
 					debugLog("LOG_EFFORT_SAVE", "Using default access for new effort: " . $data['access']);
 				}
 			}
-			if(date("Y", strtotime("$billing_day/$billing_month/$billing_year")) > 1970) {
+			// Handle billed status based on checkbox and date fields
+			if($billed_status == '1' && date("Y", strtotime("$billing_day/$billing_month/$billing_year")) > 1970) {
 				$data['billed']			= "'$billing_year-$billing_month-$billing_day'";
 			} else {
 				$data['billed']			= "NULL";
