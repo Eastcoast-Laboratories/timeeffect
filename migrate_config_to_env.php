@@ -62,7 +62,7 @@ $config = array(
     'decimal_point' => '.',
     'thousands_seperator' => ',',
     'currency' => 'EUR',
-    'session_length' => '3600',
+    'session_length' => '36000',
     'allow_delete' => '1',
     'allow_registration' => 'false',
     'registration_email_confirm' => 'false',
@@ -312,7 +312,7 @@ $_PJ_db_password = $_ENV['DB_PASSWORD'];
 $_PJ_table_prefix = $_ENV['DB_PREFIX'];
 
 // Session configuration
-$_PJ_session_length = (int)($_ENV['SESSION_LIFETIME'] ?? 3600);
+$_PJ_session_length = (int)($_ENV['SESSION_LIFETIME'] ?? 36000);
 
 // Permission settings
 $_PJ_agents_allow_delete = ($_ENV['ALLOW_DELETE'] ?? 'true') === 'true' ? 1 : 0;

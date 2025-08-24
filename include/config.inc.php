@@ -47,7 +47,7 @@ $_PJ_db_password = $_ENV['DB_PASSWORD'];
 $_PJ_table_prefix = $_ENV['DB_PREFIX'];
 
 // Session configuration
-$_PJ_session_length = (int)($_ENV['SESSION_LIFETIME'] ?? 3600);
+$_PJ_session_length = (int)($_ENV['SESSION_LIFETIME'] ?? 36000);
 
 // Permission settings
 $_PJ_agents_allow_delete = ($_ENV['ALLOW_DELETE'] ?? 'true') === 'true' ? 1 : 0;

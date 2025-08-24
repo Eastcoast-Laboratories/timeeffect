@@ -17,7 +17,7 @@ if($thousands_seperator == '') {
 	}
 }
 if(!isset($session_length)) {
-	$session_length = 3600;
+	$session_length = 36000;
 }
 if(!isset($admin_user)) {
 	$admin_user = 'admin';

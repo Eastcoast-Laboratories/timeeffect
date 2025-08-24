@@ -381,7 +381,7 @@ $_PJ_debug = ($_ENV['APP_DEBUG'] ?? 'false') === 'true';
 $_PJ_allow_registration = ($_ENV['ALLOW_REGISTRATION'] ?? 'false') === 'true';
 
 // Numeric configuration with defaults
-$_PJ_session_length = (int)($_ENV['SESSION_LIFETIME'] ?? 3600);
+$_PJ_session_length = (int)($_ENV['SESSION_LIFETIME'] ?? 36000);
 $_PJ_max_efforts_total = (int)($_ENV['MAX_EFFORTS_TOTAL'] ?? 1000);
 
 // String configuration with fallbacks

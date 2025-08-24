@@ -41,11 +41,11 @@ if (!function_exists('ensure_session_compatibility')) {
             ini_set('session.use_strict_mode', 1);
             ini_set('session.use_cookies', 1);
             ini_set('session.use_only_cookies', 1);
-            ini_set('session.gc_maxlifetime', $GLOBALS['_PJ_session_length'] ?? 3600);
+            ini_set('session.gc_maxlifetime', $GLOBALS['_PJ_session_length'] ?? 36000);
             
             // Session-Cookie-Parameter setzen
             $cookie_params = [
-                'lifetime' => $GLOBALS['_PJ_session_length'] ?? 3600,
+                'lifetime' => $GLOBALS['_PJ_session_length'] ?? 36000,
                 'path' => '/',
                 'domain' => '',
                 'secure' => isset($_SERVER['HTTPS']),

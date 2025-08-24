@@ -26,7 +26,7 @@ if($step > 1) {
 	$interface_language = $_POST['interface_language'] ?? 'de';
 	$decimal_point = $_POST['decimal_point'] ?? ',';
 	$thousands_seperator = $_POST['thousands_seperator'] ?? '.';
-	$session_length = $_POST['session_length'] ?? '3600';
+	$session_length = $_POST['session_length'] ?? '36000';
 	$allow_delete = $_POST['allow_delete'] ?? '1';
 	$db->Halt_On_Error = 'no';
 	$db->Database	= $db_name;
