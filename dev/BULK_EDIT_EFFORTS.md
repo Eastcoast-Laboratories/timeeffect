@@ -44,15 +44,19 @@ Add JavaScript functions for:
 
 **Editable Fields:**
 - **Access Rights (ACP):** Owner, Group, World permissions
-- **Billed Status:** Mark as billed/unbilled with date
+- **Billed Status:** Mark as unbilled/billed with new date
 - **Project Assignment:** Move efforts to different project
+- **Customer Assignment:** Move efforts to different customer
 - **User Assignment:** Reassign efforts to different user
+- **Group Assignment:** Move efforts to different group
 - **Rate Override:** Apply new hourly rate to selected efforts
+For each Field:
+- show all distinct different values in a list ( e.g. "Bisherige Werte: [value1, value2]" )
+- add the option to change all efforts to the new value or keep existing values
+
 
 #### 2.3 Validation & Security
 - Verify user has edit permissions for all selected efforts
-- Validate that all selected efforts exist and are accessible
-- Log all bulk edit operations for audit trail
 
 ### Phase 3: User Interface Enhancements
 
@@ -190,9 +194,6 @@ if (isset($_REQUEST['bulk_update']) && $_REQUEST['bulk_update'] == '1') {
         }
     }
     
-    // Log bulk edit operation
-    debugLog("BULK_EDIT", "Updated " . count($effort_ids) . " efforts: " . implode(',', $effort_ids));
-    
     // Redirect back to effort list
     header("Location: " . $_SERVER['HTTP_REFERER'] . "&success=bulk_updated");
     exit;
@@ -204,15 +205,13 @@ if (isset($_REQUEST['bulk_update']) && $_REQUEST['bulk_update'] == '1') {
 ### Permission Checks
 - Verify user has 'w' (write) permission for each selected effort
 - Only show efforts the user has access to in the selection
-- Log all bulk operations for audit trail
 
 ### Input Validation
 - Sanitize all form inputs
-- Validate effort IDs exist and are numeric
 - Prevent SQL injection through proper escaping
 
 ### Rate Limiting
-- Limit number of efforts that can be bulk edited at once (e.g., max 100)
+- don't limit number of efforts that can be bulk edited at once
 - Add confirmation dialog for large bulk operations
 
 ## Database Schema Considerations
@@ -231,28 +230,6 @@ No database schema changes required. The existing effort table structure support
 - Test with different user permission levels
 - Test error handling and edge cases
 
-### User Acceptance Tests
-- Test usability of selection interface
-- Test bulk edit form functionality
-- Test performance with large effort lists
-
-## Rollout Plan
-
-### Phase 1: Core Implementation (Week 1)
-- Implement checkbox column in effort lists
-- Add JavaScript selection functionality
-- Create basic bulk edit form
-
-### Phase 2: Advanced Features (Week 2)
-- Add all bulk edit options (ACP, billing, etc.)
-- Implement security and validation
-- Add logging and audit trail
-
-### Phase 3: Testing & Polish (Week 3)
-- Comprehensive testing
-- UI/UX improvements
-- Performance optimization
-
 ## Files to Modify
 
 ### Templates
@@ -266,7 +243,8 @@ No database schema changes required. The existing effort table structure support
 - Add bulk edit functions to existing JS files or create new dedicated file
 
 ### CSS
-- Add styling for bulk edit controls and selection indicators
+- css/modern.css
+- Add styling for bulk edit controls and selection indicators, use the same style as for the single effort edit and make sure dark mode is supported
 
 ## Success Metrics
 
@@ -278,8 +256,4 @@ No database schema changes required. The existing effort table structure support
 
 ## Future Enhancements
 
-- Bulk delete functionality
-- Bulk export of selected efforts
-- Saved selection sets for repeated operations
 - Bulk time adjustment capabilities
-- Integration with project management workflows
