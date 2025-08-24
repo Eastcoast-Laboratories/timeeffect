@@ -1,0 +1,125 @@
+{
+  "name": "timeeffect",
+  "description": "TimeEffect - Modern PHP Time Tracking Application",
+  "version": "3.0.0",
+  
+  "directories": {
+    "source": [
+      "include/",
+      "inventory/", 
+      "user/",
+      "admin/",
+      "report/",
+      "statistic/",
+      "groups/"
+    ],
+    "templates": "templates/",
+    "assets": [
+      "css/",
+      "js/",
+      "images/",
+      "icons/"
+    ],
+    "config": [
+      ".env",
+      "include/config.inc.php"
+    ],
+    "docs": "docs/",
+    "tests": "tests/"
+  },
+  
+  "entryPoints": [
+    "index.php",
+    "bootstrap.php",
+    "inventory/customer.php",
+    "inventory/projects.php", 
+    "inventory/efforts.php",
+    "user/index.php",
+    "report/index.php"
+  ],
+  
+  "technologies": {
+    "backend": {
+      "language": "PHP",
+      "version": "8.4+",
+      "framework": "Custom with modern components",
+      "database": "MySQL/MariaDB",
+      "dependencies": [
+        "doctrine/dbal",
+        "monolog/monolog",
+        "vlucas/phpdotenv",
+        "symfony/http-foundation"
+      ]
+    },
+    "frontend": {
+      "languages": ["HTML", "CSS", "JavaScript"],
+      "frameworks": "Vanilla JS with modern CSS",
+      "preprocessors": "None",
+      "bundlers": "None"
+    },
+    "tools": {
+      "dependency_manager": "Composer",
+      "testing": "PHPUnit",
+      "containerization": "Docker",
+      "logging": "Monolog"
+    }
+  },
+  
+  "patterns": {
+    "naming_conventions": {
+      "global_vars": "$_PJ_*",
+      "database_tables": "{prefix}table_name",
+      "css_classes": "kebab-case",
+      "file_names": "snake_case.php"
+    },
+    "code_organization": {
+      "legacy_compatibility": "PEAR DB → Doctrine DBAL bridge",
+      "modern_features": "Composer autoloading, PSR-4 namespaces",
+      "template_system": "Include-based with .ihtml extension",
+      "configuration": "Environment variables via .env"
+    }
+  },
+  
+  "key_concepts": {
+    "time_tracking": {
+      "efforts": "Time entries with start/end times",
+      "projects": "Work containers with customer relationships", 
+      "customers": "Client organizations with billing info"
+    },
+    "user_management": {
+      "authentication": "Session-based with brute force protection",
+      "authorization": "Role-based permissions (rwx format)",
+      "groups": "Team organization with shared permissions"
+    },
+    "reporting": {
+      "formats": ["CSV", "PDF"],
+      "types": ["Time reports", "Billing reports", "Statistics"],
+      "customization": "Flexible date ranges and filters"
+    }
+  },
+  
+  "development_guidelines": {
+    "backward_compatibility": "Maintain legacy PEAR compatibility",
+    "modern_practices": "Use Composer dependencies for new features",
+    "security": "Input validation, SQL injection prevention, XSS protection",
+    "testing": "PHPUnit tests for new functionality",
+    "documentation": "Inline comments and comprehensive .md files"
+  },
+  
+  "common_tasks": {
+    "adding_features": "Follow existing module patterns in inventory/",
+    "database_changes": "Use migration system in include/migrations.inc.php",
+    "ui_updates": "Modify templates/ and css/ following responsive design",
+    "configuration": "Add new options to .env and include/config.inc.php",
+    "debugging": "Check logs/ directory and enable APP_DEBUG"
+  },
+  
+  "file_references": {
+    "architecture": "ARCHITECTURE.md",
+    "deployment": "DEPLOYMENT.md", 
+    "installation": "docs/TIMEEFECT Installation Manual.md",
+    "database": "docs/DATABASE_MIGRATIONS.md",
+    "development_context": "dev/memories-for-AI.md",
+    "project_history": "NOTES.md"
+  }
+}

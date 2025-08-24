@@ -1,5 +1,7 @@
 # TimeEffect Online Deployment Guide
 
+> **📋 For comprehensive application architecture and code structure information, see [ARCHITECTURE.md](ARCHITECTURE.md)**
+
 ## 🚀 Deployment on online server (PHP 8.4)
 
 ### Step 1: Update repository

@@ -51,6 +51,15 @@ which is located in the root directory.
 
 -----
 
+## Documentation
+
+For developers and system administrators:
+
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Comprehensive application architecture and code structure guide
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Production deployment instructions
+- **[docs/TIMEEFECT Installation Manual.md](docs/TIMEEFECT%20Installation%20Manual.md)** - Complete installation guide
+- **[docs/DATABASE_MIGRATIONS.md](docs/DATABASE_MIGRATIONS.md)** - Database migration system documentation
+
 ## History of this project
 Imported from https://sourceforge.net/projects/timeeffect/ with this script https://gist.github.com/rubo77/8f22193cf940837d000a996c7132dae0
 initially 
