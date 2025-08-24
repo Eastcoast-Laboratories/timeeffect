@@ -26,6 +26,19 @@ if($pid && $project && $project->checkUserAccess('new')) {
 					</TR><TR>
 						<TD>&nbsp;</TD>
 					</TR><TR>
+						<TD ALIGN="center">
+							<div id="bulk-edit-controls" style="margin: 10px 0; display: none;">
+								<button type="button" id="bulk-edit-btn" onclick="bulkEditSelected()" disabled style="background-color: #007cba; color: white; border: 1px solid #005a87; padding: 5px 10px; cursor: pointer;">
+									Edit Selected Efforts (<span id="selected-count">0</span>)
+								</button>
+								<button type="button" onclick="clearSelection()" style="background-color: #666; color: white; border: 1px solid #333; padding: 5px 10px; cursor: pointer; margin-left: 5px;">
+									Clear Selection
+								</button>
+							</div>
+						</TD>
+					</TR><TR>
+						<TD>&nbsp;</TD>
+					</TR><TR>
 						<TD COLSPAN="3" BGCOLOR="#DDDDDD"><IMG src="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" HEIGHT="1" WIDTH="1" BORDER="0"></TD>
 					</TR><TR>
 						<TD>&nbsp;</TD>
@@ -34,6 +47,10 @@ if($pid && $project && $project->checkUserAccess('new')) {
 			</TR><TR>
 				<TD ALIGN="center"><TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="90%">
 					<TR>
+						<TH CLASS="list" WIDTH="60">
+							<input type="checkbox" id="select-all-efforts" onchange="toggleAllEfforts()">
+							Select All
+						</TH>
 						<TH CLASS="list" WIDTH="30%"><?php if(!empty($GLOBALS['_PJ_strings']['description'])) echo $GLOBALS['_PJ_strings']['description'] ?></TH>
 						<?php if(empty($cid)) { ?><TH CLASS="list"><?php if(!empty($GLOBALS['_PJ_strings']['customer'])) echo $GLOBALS['_PJ_strings']['customer']; ?></TH><?php } ?>
 						<?php if(empty($pid)) { ?><TH CLASS="list"><?php if(!empty($GLOBALS['_PJ_strings']['project'])) echo $GLOBALS['_PJ_strings']['project']; ?></TH><?php } ?>
@@ -59,7 +76,7 @@ if($pid && $project && $project->checkUserAccess('new')) {
 	}
 ?>
 					<TR>
-						<TD COLSPAN="<?php echo (empty($cid) ? 1 : 0) + (empty($pid) ? 1 : 0) + 8; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
+						<TD COLSPAN="<?php echo (empty($cid) ? 1 : 0) + (empty($pid) ? 1 : 0) + 9; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
 					</TR>
 <?php
 	// Calculate and display totals
@@ -69,9 +86,10 @@ if($pid && $project && $project->checkUserAccess('new')) {
 	if($total_hours > 0 || $total_costs > 0) {
 ?>
 					<TR>
-						<TD COLSPAN="<?php echo (empty($cid) ? 1 : 0) + (empty($pid) ? 1 : 0) + 8; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="2" BORDER="0"></TD>
+						<TD COLSPAN="<?php echo (empty($cid) ? 1 : 0) + (empty($pid) ? 1 : 0) + 9; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="2" BORDER="0"></TD>
 					</TR>
 					<TR HEIGHT="25">
+						<TD CLASS="listSum">&nbsp;</TD>
 						<TD CLASS="listSum" WIDTH="35%">&nbsp;<B><?= $GLOBALS['_PJ_strings']['sum'] ?>:</B></TD>
 						<TD CLASS="listSum">&nbsp;</TD>
 						<TD CLASS="listSumNumeric">&nbsp;<B><?= formatNumber($total_days, true) ?> <?= $GLOBALS['_PJ_strings']['workingdays'] ?> (<?= formatNumber($total_hours, true) ?> h)</B>&nbsp;</TD>
@@ -83,7 +101,7 @@ if($pid && $project && $project->checkUserAccess('new')) {
 	}
 ?>
 					<TR>
-						<TD COLSPAN="<?php echo (empty($cid) ? 1 : 0) + (empty($pid) ? 1 : 0) + 8; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
+						<TD COLSPAN="<?php echo (empty($cid) ? 1 : 0) + (empty($pid) ? 1 : 0) + 9; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
 					</TR>
 				</TABLE></TD>
 			</TR><TR>
@@ -110,4 +128,57 @@ if(empty($shown['be'])) {
 		</TABLE></TD>
 	</TR>
 </TABLE>
+<script>
+function toggleAllEfforts() {
+    const selectAll = document.getElementById('select-all-efforts');
+    const checkboxes = document.querySelectorAll('.effort-checkbox');
+    
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = selectAll.checked;
+    });
+    
+    updateBulkEditButton();
+}
+
+function updateBulkEditButton() {
+    const selected = document.querySelectorAll('.effort-checkbox:checked');
+    const bulkEditBtn = document.getElementById('bulk-edit-btn');
+    const countSpan = document.getElementById('selected-count');
+    const controlsDiv = document.getElementById('bulk-edit-controls');
+    
+    if (countSpan) countSpan.textContent = selected.length;
+    if (bulkEditBtn) bulkEditBtn.disabled = selected.length === 0;
+    
+    // Show/hide bulk edit controls based on selection
+    if (controlsDiv) {
+        controlsDiv.style.display = selected.length > 0 ? 'block' : 'none';
+    }
+}
+
+function bulkEditSelected() {
+    const selected = document.querySelectorAll('.effort-checkbox:checked');
+    const effortIds = Array.from(selected).map(cb => cb.value);
+    
+    if (effortIds.length === 0) {
+        alert('Please select at least one effort to edit.');
+        return;
+    }
+    
+    // Build URL with selected effort IDs
+    const params = effortIds.map(id => 'effort_ids[]=' + encodeURIComponent(id)).join('&');
+    window.location.href = '<?= $GLOBALS['_PJ_efforts_inventory_script'] ?>?bulk_edit=1&' + params;
+}
+
+function clearSelection() {
+    const checkboxes = document.querySelectorAll('.effort-checkbox');
+    const selectAll = document.getElementById('select-all-efforts');
+    
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    
+    if (selectAll) selectAll.checked = false;
+    updateBulkEditButton();
+}
+</script>
 <!-- inventory/effort/list.ihtml - END -->

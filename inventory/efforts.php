@@ -90,6 +90,134 @@
 
 	// AJAX endpoint removed - now using client-side filtering of pre-generated project options
 
+	// Handle bulk edit requests
+	if (isset($_REQUEST['bulk_edit']) && $_REQUEST['bulk_edit'] == '1') {
+		$effort_ids = $_REQUEST['effort_ids'] ?? [];
+		
+		if (empty($effort_ids)) {
+			// Redirect with error
+			$error_message = 'No efforts selected for bulk edit.';
+			$center_title = $GLOBALS['_PJ_strings']['error'];
+			include("$_PJ_root/templates/error.ihtml.php");
+			include_once("$_PJ_include_path/degestiv.inc.php");
+			exit;
+		}
+		
+		// Validate permissions for all selected efforts
+		$accessible_efforts = [];
+		foreach ($effort_ids as $eid) {
+			if (is_numeric($eid)) {
+				$effort = new Effort($eid, $_PJ_auth);
+				if ($effort->checkUserAccess('write')) {
+					$accessible_efforts[] = $eid;
+				}
+			}
+		}
+		
+		if (empty($accessible_efforts)) {
+			$error_message = 'You do not have permission to edit any of the selected efforts.';
+			$center_title = $GLOBALS['_PJ_strings']['error'];
+			include("$_PJ_root/templates/error.ihtml.php");
+			include_once("$_PJ_include_path/degestiv.inc.php");
+			exit;
+		}
+		
+		// Show bulk edit form
+		$center_title = 'Bulk Edit Efforts';
+		include($GLOBALS['_PJ_root'] . '/templates/inventory/effort/bulk_edit_form.ihtml.php');
+		include_once("$_PJ_include_path/degestiv.inc.php");
+		exit;
+	}
+
+	// Handle bulk update processing
+	if (isset($_REQUEST['bulk_update']) && $_REQUEST['bulk_update'] == '1') {
+		$effort_ids = $_REQUEST['effort_ids'] ?? [];
+		$updates_applied = 0;
+		
+		if (empty($effort_ids)) {
+			$error_message = 'No efforts specified for bulk update.';
+			$center_title = $GLOBALS['_PJ_strings']['error'];
+			include("$_PJ_root/templates/error.ihtml.php");
+			include_once("$_PJ_include_path/degestiv.inc.php");
+			exit;
+		}
+		
+		// Process each effort
+		foreach ($effort_ids as $eid) {
+			if (!is_numeric($eid)) continue;
+			
+			$effort = new Effort($eid, $_PJ_auth);
+			if (!$effort->checkUserAccess('write')) continue;
+			
+			$updated = false;
+			
+			// Update access rights
+			if (!empty($_REQUEST['update_access'])) {
+				$owner = $_REQUEST['bulk_access_owner'] ?? 'rw';
+				$group = $_REQUEST['bulk_access_group'] ?? 'r-';
+				$world = $_REQUEST['bulk_access_world'] ?? '--';
+				$access = $owner . '-' . $group . '-' . $world;
+				$effort->setValue('access', $access);
+				$updated = true;
+			}
+			
+			// Update billing status
+			if (!empty($_REQUEST['update_billed'])) {
+				$action = $_REQUEST['bulk_billed_action'] ?? 'mark_billed';
+				if ($action === 'mark_billed' && !empty($_REQUEST['bulk_billed_date'])) {
+					$effort->setValue('billed', $_REQUEST['bulk_billed_date']);
+				} else if ($action === 'mark_unbilled') {
+					$effort->setValue('billed', null);
+				}
+				$updated = true;
+			}
+			
+			// Update project assignment
+			if (!empty($_REQUEST['update_project']) && !empty($_REQUEST['bulk_project_id'])) {
+				$new_project = new Project(null, $_PJ_auth, $_REQUEST['bulk_project_id']);
+				if ($new_project->checkUserAccess('new')) {
+					$effort->setValue('project_id', $_REQUEST['bulk_project_id']);
+					$updated = true;
+				}
+			}
+			
+			// Update user assignment
+			if (!empty($_REQUEST['update_user']) && !empty($_REQUEST['bulk_user_id'])) {
+				$effort->setValue('user', $_REQUEST['bulk_user_id']);
+				$updated = true;
+			}
+			
+			// Update rate and recalculate costs
+			if (!empty($_REQUEST['update_rate']) && is_numeric($_REQUEST['bulk_rate'])) {
+				$new_rate = floatval($_REQUEST['bulk_rate']);
+				$effort->setValue('rate', $new_rate);
+				// Recalculate costs based on hours and new rate
+				$hours = floatval($effort->giveValue('hours'));
+				$new_costs = $hours * $new_rate;
+				$effort->setValue('costs', $new_costs);
+				$updated = true;
+			}
+			
+			if ($updated) {
+				$effort->save();
+				$updates_applied++;
+			}
+		}
+		
+		// Log bulk edit operation
+		debugLog("BULK_EDIT", "Updated $updates_applied efforts: " . implode(',', $effort_ids) . " by user " . $_PJ_auth->giveValue('id'));
+		
+		// Redirect back to effort list with success message
+		$redirect_params = [];
+		if ($cid) $redirect_params['cid'] = $cid;
+		if ($pid) $redirect_params['pid'] = $pid;
+		$redirect_params['bulk_success'] = $updates_applied;
+		
+		$redirect_url = $GLOBALS['_PJ_efforts_inventory_script'] . '?' . http_build_query($redirect_params);
+		header("Location: $redirect_url");
+		exit;
+	}
+
 	// Only create Effort object if valid eid is provided
 	$effort = $eid ? new Effort($eid, $_PJ_auth) : null;
 	if(!empty($stop)) {
@@ -609,6 +737,17 @@
 		$success_message = urldecode($_GET['message']);
 		echo '<div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; margin: 20px; border-radius: 5px; text-align: center;">';
 		echo $success_message;
+		echo '</div>';
+	}
+	
+	// Display bulk edit success message
+	if(isset($_GET['bulk_success']) && is_numeric($_GET['bulk_success'])) {
+		$count = intval($_GET['bulk_success']);
+		$message = $count === 1 ? 
+			"Successfully updated 1 effort." : 
+			"Successfully updated $count efforts.";
+		echo '<div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; margin: 20px; border-radius: 5px; text-align: center;">';
+		echo $message;
 		echo '</div>';
 	}
 	
