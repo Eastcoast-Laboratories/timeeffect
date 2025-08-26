@@ -28,12 +28,18 @@
 	$users			= $_PJ_auth->listUsers();
 	
 	// LOG_EFFORT_FORM: Check customer and project objects before accessing giveValue
-	if ($customer && $customer->giveValue('id')) {
+	// For editing efforts, prioritize customer_id from cid parameter
+	if (isset($cid) && $cid > 0) {
+		$customer_id = $cid;
+		$rates = new Rates($cid);
+		debugLog("LOG_EFFORT_FORM", "Using customer from cid parameter: $cid");
+	} elseif ($customer && $customer->giveValue('id')) {
 		$rates = new Rates($customer->giveValue("id"));
 		$customer_id = $customer->giveValue('id');
+		debugLog("LOG_EFFORT_FORM", "Using customer from customer object: " . $customer_id);
 	} else {
-		debugLog("LOG_EFFORT_FORM", "No customer object available, using default rates");
-		$rates = new Rates(0); // Default rates
+		debugLog("LOG_EFFORT_FORM", "No customer object available, no rates for new efforts");
+		$rates = new Rates(array()); // Empty rates for new efforts without customer/project
 		$customer_id = 0;
 	}
 	$r_count = $rates->giveCount();
@@ -435,6 +441,7 @@ if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
 					<TD CLASS="FormFieldName"><?php if(!empty($GLOBALS['_PJ_strings']['rate'])) echo $GLOBALS['_PJ_strings']['rate'] ?>:</TD>
 					<TD CLASS="FormField">
 					<SELECT CLASS="FormField" NAME="rate" ID="rate-select">
+						<OPTION VALUE="">Kein Tarif</OPTION>
 					<?php
 						$a_rate = $rate;
 						$rates->resetList();
@@ -445,10 +452,10 @@ if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
 								print " SELECTED";
 								$rate_found = true;
 							}
-							printf(' VALUE="%s" data-customer-id="%s">%s (%s %s)' . "\n" , $data['price'], $data['cid'], $data['name'], $GLOBALS['_PJ_currency'], formatNumber($data['price'], true));
+							printf(' VALUE="%s" data-customer-id="%s">%s (%s %s)' . "\n" , $data['price'], $customer_id, $data['name'], $GLOBALS['_PJ_currency'], formatNumber($data['price'], true));
 						}
-						if($rate != '' && !$rate_found) {
-							printf('<OPTION VALUE="%s" SELECTED>%s %s' , $rate, $GLOBALS['_PJ_currency'], formatNumber($rate));
+						if($rate != '' && $rate != 0 && !$rate_found) {
+							printf('<OPTION VALUE="%s" SELECTED>Individueller Tarif: %s %s' , $rate, $GLOBALS['_PJ_currency'], formatNumber($rate));
 						}
 						
 						// Generate all rates for JavaScript filtering
@@ -469,11 +476,8 @@ if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
 					?>
 					</SELECT>
 					<small style="margin-left: 10px;" id="rate-management-link">
-						<?php if($customer_id > 0): ?>
-						<a href="<?= $GLOBALS['_PJ_customer_inventory_script'] . "?edit=1&rates=1&cid=" . $customer_id ?>" target="_blank" title="Stundensätze verwalten">⚙️ Tarife bearbeiten</a>
-						<?php else: ?>
-						<span style="color: #999;">⚙️ Tarife bearbeiten (Kunde wählen)</span>
-						<?php endif; ?>
+						<!-- Initial PHP link will be replaced by JavaScript -->
+						<span style="color: #999;">⚙️ <?php echo $GLOBALS['_PJ_strings']['edit_rates'] ?? 'Tarife bearbeiten'; ?> (<?php echo $GLOBALS['_PJ_strings']['select_customer'] ?? 'Kunde wählen'; ?>)</span>
 					</small>
 					</TD>
 <?php
@@ -605,7 +609,7 @@ if($_PJ_auth->checkPermission('admin') || (!$effort || !$effort->giveValue('id')
 					<TD>&nbsp;</TD>
 					<TD>&nbsp;</TD>
 				</TR><TR>
-					<TD COLSPAN="2"><INPUT CLASS="FormSubmit" TYPE="SUBMIT" VALUE="<?php if(!empty($GLOBALS['_PJ_strings']['save'])) echo $GLOBALS['_PJ_strings']['save'] ?> >>"></TD>
+					<TD COLSPAN="2"><INPUT CLASS="FormSubmit" TYPE="SUBMIT" VALUE="<?php if(!empty($GLOBALS['_PJ_strings']['save'])) echo $GLOBALS['_PJ_strings']['save'] ?> >>" onclick="saveLastUsedRate()"></TD>
 				</TR>
 			</TABLE>
 			</TD>
@@ -713,7 +717,7 @@ function updateProjectList() {
 	updateRateManagementLink(customerId);
 	
 	// Update rate dropdown when customer changes
-	updateRateDropdown(customerId);
+	updateRateDropdownForCustomer();
 }
 
 // Update rate management link based on selected customer
@@ -724,7 +728,7 @@ function updateRateManagementLink(customerId) {
 	if (customerId && customerId !== '') {
 		// Show active link for selected customer
 		rateLinkContainer.innerHTML = '<a href="' + 
-			'<?= $GLOBALS["_PJ_customer_inventory_script"] ?>' + 
+			'/inventory/customer.php' + 
 			'?edit=1&rates=1&cid=' + customerId + 
 			'" target="_blank" title="Stundensätze verwalten">⚙️ Tarife bearbeiten</a>';
 	} else {
@@ -733,10 +737,19 @@ function updateRateManagementLink(customerId) {
 	}
 }
 
-// Update rate dropdown based on selected customer
+// Update rate dropdown based on selected customer (legacy function)
 function updateRateDropdown(customerId) {
+	// This function is kept for backward compatibility but now delegates to customer-based filtering
+	updateRateDropdownForCustomer();
+}
+
+// Update rate dropdown based on selected customer (rates are customer-based, not project-based)
+function updateRateDropdownForCustomer() {
 	var rateSelect = document.getElementById('rate-select');
-	if (!rateSelect) return;
+	var customerSelect = document.getElementById('customer-select');
+	if (!rateSelect || !customerSelect) return;
+	
+	var selectedCustomerId = customerSelect.value;
 	
 	// Hide all rate options first
 	var allRateOptions = rateSelect.querySelectorAll('option');
@@ -749,16 +762,24 @@ function updateRateDropdown(customerId) {
 	// Reset selection
 	rateSelect.selectedIndex = 0;
 	
-	if (customerId && customerId !== '') {
-		// Show only rates for the selected customer
-		var customerRateOptions = rateSelect.querySelectorAll('option[data-customer-id="' + customerId + '"]');
+	if (selectedCustomerId && selectedCustomerId !== '') {
+		// Show rates for the selected customer
+		var customerRateOptions = rateSelect.querySelectorAll('option[data-customer-id="' + selectedCustomerId + '"]');
 		for (var j = 0; j < customerRateOptions.length; j++) {
 			customerRateOptions[j].style.display = 'block';
 		}
 		
 		// Log for debugging
-		console.log('LOG_RATE_FILTER: Customer ID:', customerId, 'Found rates:', customerRateOptions.length);
+		console.log('LOG_RATE_FILTER: Customer ID:', selectedCustomerId, 'Found customer rates:', customerRateOptions.length);
+	} else {
+		// No customer selected - show no rates
+		console.log('LOG_RATE_FILTER: No customer selected, hiding all rates');
 	}
+}
+
+// Legacy function for project changes - now delegates to customer-based filtering
+function updateRateDropdownForProject() {
+	updateRateDropdownForCustomer();
 }
 
 // Show advanced fields and hide button (no toggle)
@@ -845,6 +866,12 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 		toggleBtn.style.display = 'none';
 	}
+	
+	// Update rate management link with correct customer ID for existing efforts
+	var customerSelect = document.getElementById('customer-select');
+	if (customerSelect && customerSelect.value) {
+		updateRateManagementLink(customerSelect.value);
+	}
 	<?php endif; ?>
 	
 	// Auto-expand note field if it has content or hide button if note exists
@@ -859,7 +886,35 @@ document.addEventListener('DOMContentLoaded', function() {
 			toggleNoteBtn.style.display = 'none';
 		}
 	}
+	
+	// For new efforts (new=1), trigger rate filtering and restore last used rate
+	<?php if (isset($_GET['new']) && $_GET['new'] == 1): ?>
+	// Trigger rate filtering for new efforts
+	updateRateDropdownForCustomer();
+	
+	// Try to restore last used rate for this project
+	var projectSelect = document.getElementById('project-select');
+	var rateSelect = document.getElementById('rate-select');
+	if (projectSelect && rateSelect && projectSelect.value) {
+		var lastRate = localStorage.getItem('lastRate_project_' + projectSelect.value);
+		if (lastRate && rateSelect.querySelector('option[value="' + lastRate + '"]')) {
+			rateSelect.value = lastRate;
+			console.log('LOG_RATE_RESTORE: Restored last rate for project', projectSelect.value, ':', lastRate);
+		}
+	}
+	<?php endif; ?>
 });
+
+// Save last used rate to localStorage when form is submitted
+function saveLastUsedRate() {
+	var projectSelect = document.getElementById('project-select');
+	var rateSelect = document.getElementById('rate-select');
+	
+	if (projectSelect && rateSelect && projectSelect.value && rateSelect.value) {
+		localStorage.setItem('lastRate_project_' + projectSelect.value, rateSelect.value);
+		console.log('LOG_RATE_SAVE: Saved last rate for project', projectSelect.value, ':', rateSelect.value);
+	}
+}
 
 // Toggle help section visibility
 function toggleHelpSection() {
