@@ -34,6 +34,7 @@ if($customer->count()) {
 				<TD ALIGN="center"><TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="90%">
 					<TR>
 						<TH CLASS="list"><?php if(!empty($GLOBALS['_PJ_strings']['name'])) echo $GLOBALS['_PJ_strings']['name'] ?></TH>
+						<TH CLASS="listNumeric"><?php if(!empty($GLOBALS['_PJ_strings']['customer'])) echo $GLOBALS['_PJ_strings']['customer'] ?></TH>
 						<TH CLASS="listNumeric"><?php if(!empty($GLOBALS['_PJ_strings']['agent'])) echo $GLOBALS['_PJ_strings']['agent'] ?></TH>
 						<TH CLASS="listNumeric"><?php if(!empty($GLOBALS['_PJ_strings']['workingdays'])) echo $GLOBALS['_PJ_strings']['workingdays'] ?></TH>
 						<TH CLASS="listNumeric"><?php if(!empty($GLOBALS['_PJ_strings']['costs'])) echo $GLOBALS['_PJ_strings']['costs'] ?></TH>
@@ -58,6 +59,7 @@ if($customer->count()) {
 					</TR><TR>
 						<TD COLSPAN="10"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="1" HEIGHT="20" BORDER="0"></TD>
 					</TR><TR HEIGHT="25">
+						<TD>&nbsp;</TD>
 						<TD>&nbsp;</TD>
 						<TD CLASS="listSum" ALIGN="right"><?php if(!empty($GLOBALS['_PJ_strings']['sum'])) echo $GLOBALS['_PJ_strings']['sum'] ?>:</TD>
 						<TD CLASS="listSumNumeric"><?php if(!empty($sum_project_days)) print formatNumber($sum_project_days, true); ?></TD>
