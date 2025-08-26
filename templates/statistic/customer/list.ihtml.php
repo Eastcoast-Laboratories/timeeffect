@@ -52,6 +52,15 @@
 	// Add unassigned efforts as special customer/project
 	$unassigned_efforts = new Statistics($_PJ_auth, true, null, null, null, null, true); // show_unassigned = true
 	if($unassigned_efforts->effort_count > 0) {
+		// Check if unassigned section should be expanded
+		$unassigned_expanded = false;
+		if(isset($expanded['cid']['all']) || 
+		   (isset($expanded['cid'][0]) && $expanded['cid'][0])) {
+			$unassigned_expanded = true;
+		} else if(!isset($expanded['cid']) || empty($expanded['cid'])) {
+			// Default state: expand when no specific customers are expanded
+			$unassigned_expanded = true;
+		}
 		// Create virtual customer for unassigned efforts
 		$virtual_customer = new stdClass();
 		$virtual_customer->customer_name = 'nicht zugeordnet';
@@ -75,13 +84,20 @@
 		<TR>
 			<TD COLSPAN="10"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="2" BORDER="0" ALIGN="absmiddle"></TD>
 		</TR><TR HEIGHT="25">
-			<TD CLASS="list">&nbsp;<IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/customer.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;nicht zugeordnet</TD>
+			<TD CLASS="list"><?php
+			if($unassigned_expanded) {
+				?><A CLASS="list" HREF="<?= $GLOBALS['_PJ_customer_statistics_script'] . "?cid=".@$cid.'&pid='.@$pid.'&eid='.@$eid."&coc=0" ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/triangle-d.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle"></A><?php
+			} else {
+				?><A CLASS="list" HREF="<?= $GLOBALS['_PJ_customer_statistics_script'] . "?cid=".@$cid.'&pid='.@$pid.'&eid='.@$eid."&exc=0" ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/triangle-l.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle"></A><?php
+			}
+			?>&nbsp;<IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/customer.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;nicht zugeordnet</TD>
 			<TD CLASS="listDetail">&nbsp;</TD>
 			<TD CLASS="listDetailNumeric"><?php if(!empty($unassigned_days)) print formatNumber($unassigned_days, true); ?></TD>
 			<TD CLASS="listDetailNumeric"><?php if(!empty($unassigned_costs)) print formatNumber($unassigned_costs, true) . '&nbsp;' . $GLOBALS['_PJ_currency']; ?></TD>
 			<TD CLASS="listDetailNumeric">&nbsp;</TD>
 			<TD CLASS="listDetailNumeric">&nbsp;</TD>
 		</TR>
+		<?php if($unassigned_expanded) { ?>
 		<!-- Project row for unassigned efforts -->
 		<TR>
 			<TD COLSPAN="11"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/light-gray.gif" WIDTH="100%" HEIGHT="2" BORDER="0" ALIGN="absmiddle"></TD>
@@ -120,6 +136,7 @@
 			</TR>
 			<?php
 		}
+		} // End if($unassigned_expanded)
 	}
 ?>
 					<TR>

@@ -243,6 +243,12 @@
 				$updated = true;
 			}
 			
+			// Update description
+			if (!empty($_REQUEST['update_description']) && isset($_REQUEST['bulk_description'])) {
+				$effort->data['description'] = $_REQUEST['bulk_description'];
+				$updated = true;
+			}
+			
 			// Update rate and recalculate costs
 			if (!empty($_REQUEST['update_rate']) && is_numeric($_REQUEST['bulk_rate'])) {
 				$new_rate = floatval($_REQUEST['bulk_rate']);

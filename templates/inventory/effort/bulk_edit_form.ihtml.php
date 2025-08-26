@@ -3,7 +3,7 @@
 // Show form for editing multiple selected efforts
 ?>
 <!-- inventory/effort/bulk_edit_form.ihtml - START -->
-<TABLE	WIDTH="100%"
+<TABLE ID="bulk_edit_form_table" WIDTH="100%"
 		BORDER="<?php print($_PJ_inner_frame_border); ?>"
 		CELLPADDING="<?php print($_PJ_inner_frame_cellpadding); ?>"
 		CELLSPACING="<?php print($_PJ_inner_frame_cellspacing ); ?>">
@@ -18,8 +18,8 @@
 			<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
 				<TR>
 					<TD COLSPAN="2">
-						<H2>Bulk Edit Efforts</H2>
-						<p>Editing <?= count($accessible_efforts) ?> effort(s). Only selected fields will be updated.</p>
+						<H2><?= $_PJ_strings['bulk_edit_efforts'] ?></H2>
+						<p><?= $_PJ_strings['bulk_edit_editing'] ?> <?= count($accessible_efforts) ?> <?= $_PJ_strings['bulk_edit_efforts_count'] ?>. <?= $_PJ_strings['bulk_edit_only_selected'] ?></p>
 						<?php
 						// Collect current values for display
 						$current_values = [
@@ -28,7 +28,8 @@
 							'project_id' => [],
 							'user' => [],
 							'gid' => [],
-							'rate' => []
+							'rate' => [],
+							'description' => []
 						];
 						
 						foreach($accessible_efforts as $eid) {
@@ -39,6 +40,7 @@
 							$current_values['user'][] = $effort->giveValue('user');
 							$current_values['gid'][] = $effort->giveValue('gid');
 							$current_values['rate'][] = $effort->giveValue('rate');
+							$current_values['description'][] = $effort->giveValue('description');
 						}
 						
 						// Remove duplicates and format for display
@@ -54,40 +56,40 @@
 				
 				<!-- Access Rights Section -->
 				<TR>
-					<TD CLASS="FormFieldName" WIDTH="200">Access Rights:</TD>
+					<TD CLASS="FormFieldName" WIDTH="200"><?= $_PJ_strings['access_rights'] ?>:</TD>
 					<TD CLASS="FormField">
 						<input type="checkbox" name="update_access" value="1" onchange="toggleField('access_fields', this.checked)">
-						Update access permissions
-						<br><span style="font-size: 14px;"><strong>Current values:</strong> <?= implode(', ', $current_values['access']) ?></span>
+						<?= $_PJ_strings['update_access_permissions'] ?>
+						<br><span class="FormFieldCurrentValues"><strong><?= $_PJ_strings['current_values'] ?>:</strong> <?= implode(', ', $current_values['access']) ?></span>
 						<div id="access_fields" style="display: none; margin-top: 10px; padding-left: 20px;">
 							<table>
 								<tr>
-									<td>Owner:</td>
+									<td><?= $_PJ_strings['owner'] ?>:</td>
 									<td>
 										<select name="bulk_access_owner">
-											<option value="rw">Read/Write</option>
-											<option value="r-">Read Only</option>
-											<option value="--">No Access</option>
+											<option value="rw"><?= $_PJ_strings['read_write'] ?></option>
+											<option value="r-"><?= $_PJ_strings['read_only'] ?></option>
+											<option value="--"><?= $_PJ_strings['no_access'] ?></option>
 										</select>
 									</td>
 								</tr>
 								<tr>
-									<td>Group:</td>
+									<td><?= $_PJ_strings['group'] ?>:</td>
 									<td>
 										<select name="bulk_access_group">
-											<option value="rw">Read/Write</option>
-											<option value="r-">Read Only</option>
-											<option value="--">No Access</option>
+											<option value="rw"><?= $_PJ_strings['read_write'] ?></option>
+											<option value="r-"><?= $_PJ_strings['read_only'] ?></option>
+											<option value="--"><?= $_PJ_strings['no_access'] ?></option>
 										</select>
 									</td>
 								</tr>
 								<tr>
-									<td>World:</td>
+									<td><?= $_PJ_strings['access_world'] ?>:</td>
 									<td>
 										<select name="bulk_access_world">
-											<option value="rw">Read/Write</option>
-											<option value="r-">Read Only</option>
-											<option value="--">No Access</option>
+											<option value="rw"><?= $_PJ_strings['read_write'] ?></option>
+											<option value="r-"><?= $_PJ_strings['read_only'] ?></option>
+											<option value="--"><?= $_PJ_strings['no_access'] ?></option>
 										</select>
 									</td>
 								</tr>
@@ -98,21 +100,21 @@
 				
 				<!-- Billing Status Section -->
 				<TR>
-					<TD CLASS="FormFieldName">Billing Status:</TD>
+					<TD CLASS="FormFieldName"><?= $_PJ_strings['billing_status'] ?>:</TD>
 					<TD CLASS="FormField">
 						<input type="checkbox" name="update_billed" value="1" onchange="toggleField('billing_fields', this.checked)">
-						Update billing status
-						<br><span style="font-size: 14px;"><strong>Current values:</strong> <?= implode(', ', $current_values['billed']) ?></span>
+						<?= $_PJ_strings['update_billing_status'] ?>
+						<br><span class="FormFieldCurrentValues"><strong><?= $_PJ_strings['current_values'] ?>:</strong> <?= implode(', ', $current_values['billed']) ?></span>
 						<div id="billing_fields" style="display: none; margin-top: 10px; padding-left: 20px;">
 							<label>
 								<input type="radio" name="bulk_billed_action" value="mark_billed" checked>
-								Mark as billed on date:
+								<?= $_PJ_strings['mark_as_billed'] ?>:
 							</label>
 							<input type="date" name="bulk_billed_date" value="<?= date('Y-m-d') ?>">
 							<br><br>
 							<label>
 								<input type="radio" name="bulk_billed_action" value="mark_unbilled">
-								Mark as unbilled (clear billing date)
+								<?= $_PJ_strings['mark_as_unbilled'] ?>
 							</label>
 						</div>
 					</TD>
@@ -120,11 +122,11 @@
 				
 				<!-- Project Assignment Section -->
 				<TR>
-					<TD CLASS="FormFieldName">Project Assignment:</TD>
+					<TD CLASS="FormFieldName"><?= $_PJ_strings['project_assignment'] ?>:</TD>
 					<TD CLASS="FormField">
 						<input type="checkbox" name="update_project" value="1" onchange="toggleField('project_fields', this.checked)">
-						Change project assignment
-						<br><span style="font-size: 14px;"><strong>Current values:</strong> 
+						<?= $_PJ_strings['change_project_assignment'] ?>
+						<br><span class="FormFieldCurrentValues"><strong><?= $_PJ_strings['current_values'] ?>:</strong> 
 						<?php 
 						$project_names = [];
 						foreach($current_values['project_id'] as $pid) {
@@ -134,7 +136,7 @@
 									// Get customer name from project's customer relationship
 									$project_customer = $project->customer;
 									if($project_customer && $project_customer->giveValue('id')) {
-										$customer_name = $project_customer->giveValue('customer_name') ?: 'No Customer';
+										$customer_name = $project_customer->giveValue('customer_name') ?: $_PJ_strings['no_customer'];
 									} else {
 										// Fallback: get customer name via database query
 										$db = new Database();
@@ -144,18 +146,18 @@
 													LEFT JOIN {$safeCustomerTable} c ON p.customer_id = c.id 
 													WHERE p.id = " . intval($pid));
 										if($db->next_record()) {
-											$customer_name = $db->f('customer_name') ?: 'No Customer';
+											$customer_name = $db->f('customer_name') ?: $_PJ_strings['no_customer'];
 										} else {
-											$customer_name = 'No Customer';
+											$customer_name = $_PJ_strings['no_customer'];
 										}
 									}
-									$project_name = $project->giveValue('project_name') ?: 'Unnamed Project';
+									$project_name = $project->giveValue('project_name') ?: $_PJ_strings['unnamed_project'];
 									$project_names[] = $customer_name . ' - ' . $project_name;
 								} else {
-									$project_names[] = 'Invalid Project';
+									$project_names[] = $_PJ_strings['invalid_project'];
 								}
 							} else {
-								$project_names[] = 'Unassigned';
+								$project_names[] = $_PJ_strings['unassigned'];
 							}
 						}
 						echo implode(', ', array_unique($project_names));
@@ -163,7 +165,7 @@
 						</span>
 						<div id="project_fields" style="display: none; margin-top: 10px; padding-left: 20px;">
 							<select name="bulk_project_id">
-								<option value="">-- Select Project --</option>
+								<option value=""><?= $_PJ_strings['select_project'] ?></option>
 								<?php
 								// Show all accessible projects with customers
 								$db = new Database();
@@ -183,8 +185,8 @@
 								$db->query($query);
 								$project_count = 0;
 								while($db->next_record()) {
-									$customer_name = $db->f('customer_name') ?: 'No Customer';
-									$project_name = $db->f('project_name') ?: 'Unnamed Project';
+									$customer_name = $db->f('customer_name') ?: $_PJ_strings['no_customer'];
+									$project_name = $db->f('project_name') ?: $_PJ_strings['unnamed_project'];
 									$display_name = $customer_name . ' - ' . $project_name;
 									$project_id = $db->f('id');
 									
@@ -209,11 +211,11 @@
 				
 				<!-- User Assignment Section -->
 				<TR>
-					<TD CLASS="FormFieldName">User Assignment:</TD>
+					<TD CLASS="FormFieldName"><?= $_PJ_strings['user_assignment'] ?>:</TD>
 					<TD CLASS="FormField">
 						<input type="checkbox" name="update_user" value="1" onchange="toggleField('user_fields', this.checked)">
-						Change user assignment
-						<br><span style="font-size: 14px;"><strong>Current values:</strong> 
+						<?= $_PJ_strings['change_user_assignment'] ?>
+						<br><span class="FormFieldCurrentValues"><strong><?= $_PJ_strings['current_values'] ?>:</strong> 
 						<?php 
 						$user_names = [];
 						foreach($current_values['user'] as $uid) {
@@ -224,7 +226,7 @@
 								$display_name = trim($firstname . ' ' . $lastname) ?: "User $uid";
 								$user_names[] = $display_name;
 							} else {
-								$user_names[] = 'Unassigned';
+								$user_names[] = $_PJ_strings['unassigned'];
 							}
 						}
 						echo implode(', ', $user_names);
@@ -232,7 +234,7 @@
 						</span>
 						<div id="user_fields" style="display: none; margin-top: 10px; padding-left: 20px;">
 							<select name="bulk_user_id">
-								<option value="">-- Select User --</option>
+								<option value=""><?= $_PJ_strings['select_user'] ?></option>
 								<?php
 								// Get all active users for user assignment dropdown
 								$db = new Database();
@@ -264,11 +266,11 @@
 				
 				<!-- Group Assignment Section -->
 				<TR>
-					<TD CLASS="FormFieldName">Group Assignment:</TD>
+					<TD CLASS="FormFieldName"><?= $_PJ_strings['group_assignment'] ?>:</TD>
 					<TD CLASS="FormField">
 						<input type="checkbox" name="update_group" value="1" onchange="toggleField('group_fields', this.checked)">
-						Change group assignment
-						<br><span style="font-size: 14px;"><strong>Current values:</strong> 
+						<?= $_PJ_strings['change_group_assignment'] ?>
+						<br><span class="FormFieldCurrentValues"><strong><?= $_PJ_strings['current_values'] ?>:</strong> 
 						<?php 
 						$group_names = [];
 						foreach(($current_values['gid'] ?? []) as $gid) {
@@ -284,7 +286,7 @@
 									$group_names[] = "Group $gid";
 								}
 							} else {
-								$group_names[] = 'No Group';
+								$group_names[] = $_PJ_strings['no_group'];
 							}
 						}
 						echo implode(', ', $group_names);
@@ -292,8 +294,8 @@
 						</span>
 						<div id="group_fields" style="display: none; margin-top: 10px; padding-left: 20px;">
 							<select name="bulk_group_id">
-								<option value="">-- Select Group --</option>
-								<option value="0">No Group</option>
+								<option value=""><?= $_PJ_strings['select_group'] ?></option>
+								<option value="0"><?= $_PJ_strings['no_group'] ?></option>
 								<?php
 								// Show user groups (gids) instead of global groups
 								$db = new Database();
@@ -320,13 +322,52 @@
 					</TD>
 				</TR>
 				
+				<!-- Description Section -->
+				<TR>
+					<TD CLASS="FormFieldName"><?= $_PJ_strings['description'] ?>:</TD>
+					<TD CLASS="FormField">
+						<input type="checkbox" name="update_description" value="1" onchange="toggleField('description_fields', this.checked)">
+						<?= $_PJ_strings['update_description'] ?>
+						<br><span class="FormFieldCurrentValues"><strong><?= $_PJ_strings['current_values'] ?>:</strong> 
+						<?php 
+						$description_display = [];
+						foreach($current_values['description'] as $desc) {
+							if($desc) {
+								$description_display[] = strlen($desc) > 50 ? substr($desc, 0, 50) . '...' : $desc;
+							} else {
+								$description_display[] = $_PJ_strings['empty'];
+							}
+						}
+						echo implode(', ', array_unique($description_display));
+						?>
+						</span>
+						<div id="description_fields" style="display: none; margin-top: 10px; padding-left: 20px;">
+							<textarea name="bulk_description" rows="3" cols="50" placeholder="<?= $_PJ_strings['description_placeholder'] ?>"><?php
+								// Auto-fill with newest description (most recent effort)
+								$newest_description = '';
+								$newest_date = '';
+								foreach($accessible_efforts as $eid) {
+									$effort = new Effort($eid, $_PJ_auth);
+									$effort_date = $effort->giveValue('date');
+									if($effort_date > $newest_date) {
+										$newest_date = $effort_date;
+										$newest_description = $effort->giveValue('description');
+									}
+								}
+								echo htmlspecialchars($newest_description);
+							?></textarea>
+							<br><small><?= $_PJ_strings['description_replace_note'] ?></small>
+						</div>
+					</TD>
+				</TR>
+				
 				<!-- Rate Override Section -->
 				<TR>
-					<TD CLASS="FormFieldName">Rate Override:</TD>
+					<TD CLASS="FormFieldName"><?= $_PJ_strings['rate_override'] ?>:</TD>
 					<TD CLASS="FormField">
 						<input type="checkbox" name="update_rate" value="1" onchange="toggleField('rate_fields', this.checked)">
-						Apply new hourly rate
-						<br><span style="font-size: 14px;"><strong>Current values:</strong> 
+						<?= $_PJ_strings['apply_new_hourly_rate'] ?>
+						<br><span class="FormFieldCurrentValues"><strong><?= $_PJ_strings['current_values'] ?>:</strong> 
 						<?php 
 						$rate_display = [];
 						foreach($current_values['rate'] as $rate) {
@@ -337,7 +378,7 @@
 						</span>
 						<div id="rate_fields" style="display: none; margin-top: 10px; padding-left: 20px;">
 							<select name="bulk_rate">
-								<option value="">-- Select Rate --</option>
+								<option value=""><?= $_PJ_strings['select_rate'] ?></option>
 								<?php
 								// Get all unique project rates from selected efforts
 								$project_rates = [];
@@ -345,8 +386,8 @@
 									if($pid) {
 										$project = new Project($customer, $_PJ_auth, $pid);
 										$rate = $project->giveValue('rate') ?: '0.00';
-										$project_name = $project->giveValue('project_name') ?: 'Unnamed Project';
-										$customer_name = $project->customer ? $project->customer->giveValue('customer_name') : 'No Customer';
+										$project_name = $project->giveValue('project_name') ?: $_PJ_strings['unnamed_project'];
+										$customer_name = $project->customer ? $project->customer->giveValue('customer_name') : $_PJ_strings['no_customer'];
 										$display_name = $customer_name . ' - ' . $project_name . ' (' . $rate . ' ' . $GLOBALS['_PJ_currency'] . ')';
 										$project_rates[$rate] = $display_name;
 									}
@@ -376,7 +417,7 @@
 								}
 								?>
 							</select>
-							<br><small>This will recalculate costs for all selected efforts</small>
+							<br><small><?= $_PJ_strings['rate_recalculate_note'] ?></small>
 						</div>
 					</TD>
 				</TR>
@@ -388,9 +429,9 @@
 				<!-- Submit Buttons -->
 				<TR>
 					<TD COLSPAN="2" ALIGN="center">
-						<input type="submit" value="Update Selected Efforts" class="FormSubmit" style="background-color: #007cba; color: white; padding: 10px 20px; font-size: 14px;">
+						<input type="submit" value="<?= $_PJ_strings['update_selected_efforts'] ?>" class="FormSubmit" style="background-color: #007cba; color: white; padding: 10px 20px; font-size: 14px;">
 						&nbsp;&nbsp;
-						<input type="button" value="Cancel" onclick="history.back()" class="FormSubmit" style="background-color: #666; color: white; padding: 10px 20px; font-size: 14px;">
+						<input type="button" value="<?= $_PJ_strings['cancel'] ?>" onclick="history.back()" class="FormSubmit" style="background-color: #666; color: white; padding: 10px 20px; font-size: 14px;">
 					</TD>
 				</TR>
 			</TABLE>

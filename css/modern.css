@@ -1810,6 +1810,20 @@ html[data-theme="dark"] .recent-effort-btn:hover {
     background: #4b5563;
 }
 
+#bulk_edit_form_table .FormFieldName {
+    vertical-align: top;
+    padding-top: 2px;
+}
+
+#bulk_edit_form_table .FormFieldCurrentValues {
+    font-size: 12px;
+    padding-left: 3px;
+}
+
+#bulk_edit_form_table .FormField {
+    font-size: 14px;
+}
+
 #selected-count {
     font-weight: 600;
     color: var(--primary-light);

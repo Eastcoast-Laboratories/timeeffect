@@ -50,6 +50,8 @@ Add JavaScript functions for:
 - ✅ **User Assignment:** Reassign efforts to different user
 - ✅ **Group Assignment:** Move efforts to different group
 - ✅ **Rate Override:** Apply new hourly rate to selected efforts
+- **Description:** Set a new description for all selected efforts
+
 For each Field:
 - ✅ show all distinct different values in a list ( e.g. "Current values: [value1, value2]" )
 - ✅ add the option to change all efforts to the new value or keep existing values
@@ -59,10 +61,8 @@ For each Field:
 - ✅ Access Rights
 - ✅ Billed status  
 - ✅ Project Assignment (shows "Customer - Project" format with fallback database query)
- - still empty dropdown
 - ✅ User Assignment (shows "Firstname Lastname" format)
-- Group Assignment (shows user group names from gids table with debug logging)
- - missing: show current values and preselect the current value if there is only one
+- ✅ Group Assignment (shows user group names from gids table with debug logging)
 - ✅ Rate Override (dropdown with actual project rates and common rates, showing project context)
 
 3. ✅ Project Assignment dropdown now shows customers with projects:
@@ -76,6 +76,7 @@ For each Field:
 - ✅ User Assignment: auto-selects if only one unique user
 - ✅ Group Assignment: auto-selects if only one unique group
 - ✅ Rate Override: auto-selects if only one unique rate
+- Description: auto-fill the textarea with the newest description
 
 #### 2.3 Validation & Security ✅
 - ✅ Verify user has edit permissions for all selected efforts
