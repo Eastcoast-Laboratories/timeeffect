@@ -48,6 +48,79 @@
 		include("$_PJ_root/templates/statistic/customer/row.ihtml.php");
 	}
 	if(isset($expanded['cid']['all'])) unset($expanded['cid']['all']);
+
+	// Add unassigned efforts as special customer/project
+	$unassigned_efforts = new Statistics($_PJ_auth, true, null, null, null, null, true); // show_unassigned = true
+	if($unassigned_efforts->effort_count > 0) {
+		// Create virtual customer for unassigned efforts
+		$virtual_customer = new stdClass();
+		$virtual_customer->customer_name = 'nicht zugeordnet';
+		$virtual_customer->id = 0;
+		$virtual_customer->active = 'yes';
+		
+		// Calculate totals for unassigned efforts
+		$unassigned_costs = 0;
+		$unassigned_days = 0;
+		$unassigned_efforts->reset();
+		while($unassigned_efforts->nextEffort()) {
+			$effort = $unassigned_efforts->giveEffort();
+			$unassigned_costs += $effort->giveValue('costs');
+			$unassigned_days += $effort->giveValue('days');
+		}
+		
+		// Add to totals
+		@$sum_customer_costs += (float)$unassigned_costs;
+		@$sum_customer_days += (float)$unassigned_days;
+		?>
+		<TR>
+			<TD COLSPAN="10"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="2" BORDER="0" ALIGN="absmiddle"></TD>
+		</TR><TR HEIGHT="25">
+			<TD CLASS="list">&nbsp;<IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/customer.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;nicht zugeordnet</TD>
+			<TD CLASS="listDetail">&nbsp;</TD>
+			<TD CLASS="listDetailNumeric"><?php if(!empty($unassigned_days)) print formatNumber($unassigned_days, true); ?></TD>
+			<TD CLASS="listDetailNumeric"><?php if(!empty($unassigned_costs)) print formatNumber($unassigned_costs, true) . '&nbsp;' . $GLOBALS['_PJ_currency']; ?></TD>
+			<TD CLASS="listDetailNumeric">&nbsp;</TD>
+			<TD CLASS="listDetailNumeric">&nbsp;</TD>
+		</TR>
+		<!-- Project row for unassigned efforts -->
+		<TR>
+			<TD COLSPAN="11"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/light-gray.gif" WIDTH="100%" HEIGHT="2" BORDER="0" ALIGN="absmiddle"></TD>
+		</TR><TR HEIGHT="25">
+			<TD CLASS="list">&nbsp;<IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;<IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/project.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;nicht zugeordnet</TD>
+			<TD CLASS="listDetail">&nbsp;</TD>
+			<TD CLASS="listDetailNumeric"><?php if(!empty($unassigned_days)) print formatNumber($unassigned_days, true); ?></TD>
+			<TD CLASS="listDetailNumeric"><?php if(!empty($unassigned_costs)) print formatNumber($unassigned_costs, true) . '&nbsp;' . $GLOBALS['_PJ_currency']; ?></TD>
+			<TD CLASS="listDetailNumeric">&nbsp;</TD>
+			<TD CLASS="listDetailNumeric">&nbsp;</TD>
+		</TR>
+		<?php
+		// Show individual unassigned efforts
+		$unassigned_efforts->reset();
+		while($unassigned_efforts->nextEffort()) {
+			$effort = $unassigned_efforts->giveEffort();
+			$agent = $_PJ_auth->giveUserById($effort->giveValue('user'));
+			?>
+			<TR>
+				<TD CLASS="list"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
+				<TD COLSPAN="10"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/light-gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
+			</TR><TR HEIGHT="25">
+				<TD CLASS="list"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;<IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;<IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;<IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/effort<?php if(!($effort->giveValue('billed') == '' || $effort->giveValue('billed') == '0000-00-00')) print 'b' ?>.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;<A CLASS="list" HREF="<?= $GLOBALS['_PJ_efforts_inventory_script'] . '?eid=' . $effort->giveValue('id') ?>"><?= $effort->giveValue('description') ?></A></TD>
+				<TD CLASS="listDetailNumeric"><?= $agent['firstname'] . ' ' . $agent['lastname']; ?></TD>
+				<TD CLASS="listDetailNumeric"><?= formatNumber($effort->giveValue('days'), true); ?></TD>
+				<TD CLASS="listDetailNumeric"><?php 
+					$costs = $effort->giveValue('costs');
+					$rate = $effort->giveValue('rate');
+					if($costs && $rate > 0) {
+						print formatNumber($costs, true) . '&nbsp;' . $GLOBALS['_PJ_currency'];
+					} else {
+						print 'kein Tarif';
+					}
+				?></TD>
+				<TD CLASS="listSubDetailNumeric" COLSPAN="2"><?= $effort->formatDate($effort->giveValue('date')); ?>, <?= $effort->formatTime($effort->giveValue('begin'), "H:i"); ?> - <?= $effort->formatTime($effort->giveValue('end'), "H:i"); ?></TD>
+			</TR>
+			<?php
+		}
+	}
 ?>
 					<TR>
 						<TD COLSPAN="10"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>

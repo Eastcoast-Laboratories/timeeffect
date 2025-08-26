@@ -17,7 +17,7 @@
 		@$sum_customer_remaining_budget	+= (float)$remaining_budget;
 ?>
 	<TR>
-		<TD COLSPAN="10"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0" ALIGN="absmiddle"></TD>
+		<TD COLSPAN="10"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="2" BORDER="0" ALIGN="absmiddle"></TD>
 	</TR><TR HEIGHT="25">
 		<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>"><?php
 		if($customer->count() && $customer->checkUserAccess('read')) {

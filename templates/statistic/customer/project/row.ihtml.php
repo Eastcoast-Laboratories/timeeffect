@@ -1,7 +1,6 @@
 <!-- statistic/customer/project/row.ihtml - START -->
 	<TR>
-		<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="100%" HEIGHT="1" BORDER="0" ALIGN="absmiddle"></TD>
-		<TD COLSPAN="10"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/light-gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0" ALIGN="absmiddle"></TD>
+		<TD COLSPAN="11"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/light-gray.gif" WIDTH="100%" HEIGHT="2" BORDER="0" ALIGN="absmiddle"></TD>
 	</TR><TR HEIGHT="25">
 		<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;<?php
 		if($project->count(@$GLOBALS['shown']['be']) && $project->checkUserAccess('read')) {
@@ -24,10 +23,23 @@
 		// Fix: Check if 'be' key exists to prevent undefined array key warning
 		$be_filter = isset($GLOBALS['shown']['be']) ? $GLOBALS['shown']['be'] : '';
 		$efforts	= new EffortList($customer, $project, $project->user, $be_filter);
+		$project_total_costs = 0;
 		while($efforts->nextEffort()) {
 			$effort = $efforts->giveEffort();
 			$row_class = !$row_class;
+			$project_total_costs += $effort->giveValue('costs');
 			include("$_PJ_root/templates/statistic/customer/project/effort/row.ihtml.php");
+		}
+		// Add project summary row with total costs
+		if($project_total_costs > 0) {
+			?>
+			<TR>
+				<TD CLASS="listDetail" COLSPAN="3">&nbsp;</TD>
+				<TD CLASS="listDetailNumeric" style="font-weight: bold; border-top: 1px solid #ccc;">Projekt Summe: <?= formatNumber($project_total_costs, true) . '&nbsp;' . $GLOBALS['_PJ_currency']; ?></TD>
+				<TD CLASS="listDetail" COLSPAN="2">&nbsp;</TD>
+			</TR>
+			<TR><TD COLSPAN="6" style="height: 10px;">&nbsp;</TD></TR>
+			<?php
 		}
 	}
 	?>
