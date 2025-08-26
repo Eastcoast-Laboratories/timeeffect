@@ -172,10 +172,10 @@
 								$access_query = buildProjectAclQuery($_PJ_auth, 'p');
 								
 								$query = "SELECT p.id, p.project_name, c.customer_name 
-										 FROM {$safeProjectTable} p 
-										 LEFT JOIN {$safeCustomerTable} c ON p.customer_id = c.id 
-										 WHERE p.closed = 0 {$access_query}
-										 ORDER BY c.customer_name, p.project_name";
+									 FROM {$safeProjectTable} p 
+									 LEFT JOIN {$safeCustomerTable} c ON p.customer_id = c.id 
+									 WHERE p.closed = 'No' {$access_query}
+									 ORDER BY c.customer_name, p.project_name";
 								
 								debugLog('BULK_EDIT_DEBUG', 'Project dropdown query: ' . $query);
 								$db->query($query);
