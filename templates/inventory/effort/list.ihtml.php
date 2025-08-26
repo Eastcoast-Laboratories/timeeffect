@@ -28,11 +28,11 @@ if($pid && $project && $project->checkUserAccess('new')) {
 					</TR><TR>
 						<TD ALIGN="center">
 							<div id="bulk-edit-controls" style="margin: 10px 0; display: none;">
-								<button type="button" id="bulk-edit-btn" onclick="bulkEditSelected()" disabled style="background-color: #007cba; color: white; border: 1px solid #005a87; padding: 5px 10px; cursor: pointer;">
-									Edit Selected Efforts (<span id="selected-count">0</span>)
+								<button type="button" id="bulk-edit-btn" onclick="bulkEditSelected()" disabled>
+									<?php echo $GLOBALS['_PJ_strings']['bulk_edit_selected']; ?> (<span id="selected-count">0</span>)
 								</button>
-								<button type="button" onclick="clearSelection()" style="background-color: #666; color: white; border: 1px solid #333; padding: 5px 10px; cursor: pointer; margin-left: 5px;">
-									Clear Selection
+								<button type="button" onclick="clearSelection()">
+									<?php echo $GLOBALS['_PJ_strings']['bulk_edit_clear']; ?>
 								</button>
 							</div>
 						</TD>
@@ -49,7 +49,7 @@ if($pid && $project && $project->checkUserAccess('new')) {
 					<TR>
 						<TH CLASS="list" WIDTH="60">
 							<input type="checkbox" id="select-all-efforts" onchange="toggleAllEfforts()">
-							Select All
+							<?php echo $GLOBALS['_PJ_strings']['bulk_edit_select_all']; ?>
 						</TH>
 						<TH CLASS="list" WIDTH="30%"><?php if(!empty($GLOBALS['_PJ_strings']['description'])) echo $GLOBALS['_PJ_strings']['description'] ?></TH>
 						<?php if(empty($cid)) { ?><TH CLASS="list"><?php if(!empty($GLOBALS['_PJ_strings']['customer'])) echo $GLOBALS['_PJ_strings']['customer']; ?></TH><?php } ?>
@@ -160,7 +160,7 @@ function bulkEditSelected() {
     const effortIds = Array.from(selected).map(cb => cb.value);
     
     if (effortIds.length === 0) {
-        alert('Please select at least one effort to edit.');
+        alert('<?php echo $GLOBALS['_PJ_strings']['bulk_edit_no_selection']; ?>');
         return;
     }
     

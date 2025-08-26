@@ -122,10 +122,36 @@
 			exit;
 		}
 		
-		// Show bulk edit form
+		// Prepare current values for display
+		$current_values = [
+			'access' => [],
+			'billed' => [],
+			'project_id' => [],
+			'user' => [],
+			'gid' => [],
+			'rate' => []
+		];
+		
+		foreach ($accessible_efforts as $eid) {
+			$effort = new Effort($eid, $_PJ_auth);
+			$current_values['access'][] = $effort->giveValue('access') ?: 'rw-r-----';
+			$current_values['billed'][] = $effort->giveValue('billed') ? 'Billed: ' . $effort->giveValue('billed') : 'Not billed';
+			$current_values['project_id'][] = $effort->giveValue('project_id') ?: 0;
+			$current_values['user'][] = $effort->giveValue('user') ?: 0;
+			$current_values['gid'][] = $effort->giveValue('gid') ?: 0;
+			$current_values['rate'][] = number_format($effort->giveValue('rate') ?: 0, 2);
+		}
+		
+		// Remove duplicates for cleaner display
+		foreach ($current_values as $key => $values) {
+			$current_values[$key] = array_unique($values);
+		}
+		
+		// Show bulk edit form with proper template structure
 		$center_title = 'Bulk Edit Efforts';
-		include($GLOBALS['_PJ_root'] . '/templates/inventory/effort/bulk_edit_form.ihtml.php');
-		include_once("$_PJ_include_path/degestiv.inc.php");
+		$center_template = 'inventory/effort';
+		$center_content = 'bulk_edit_form';
+		include("$_PJ_root/templates/edit.ihtml.php");
 		exit;
 	}
 
@@ -157,7 +183,7 @@
 				$group = $_REQUEST['bulk_access_group'] ?? 'r-';
 				$world = $_REQUEST['bulk_access_world'] ?? '--';
 				$access = $owner . '-' . $group . '-' . $world;
-				$effort->setValue('access', $access);
+				$effort->data['access'] = $access;
 				$updated = true;
 			}
 			
@@ -165,9 +191,9 @@
 			if (!empty($_REQUEST['update_billed'])) {
 				$action = $_REQUEST['bulk_billed_action'] ?? 'mark_billed';
 				if ($action === 'mark_billed' && !empty($_REQUEST['bulk_billed_date'])) {
-					$effort->setValue('billed', $_REQUEST['bulk_billed_date']);
+					$effort->data['billed'] = $_REQUEST['bulk_billed_date'];
 				} else if ($action === 'mark_unbilled') {
-					$effort->setValue('billed', null);
+					$effort->data['billed'] = null;
 				}
 				$updated = true;
 			}
@@ -176,25 +202,31 @@
 			if (!empty($_REQUEST['update_project']) && !empty($_REQUEST['bulk_project_id'])) {
 				$new_project = new Project(null, $_PJ_auth, $_REQUEST['bulk_project_id']);
 				if ($new_project->checkUserAccess('new')) {
-					$effort->setValue('project_id', $_REQUEST['bulk_project_id']);
+					$effort->data['project_id'] = $_REQUEST['bulk_project_id'];
 					$updated = true;
 				}
 			}
 			
 			// Update user assignment
 			if (!empty($_REQUEST['update_user']) && !empty($_REQUEST['bulk_user_id'])) {
-				$effort->setValue('user', $_REQUEST['bulk_user_id']);
+				$effort->data['user'] = $_REQUEST['bulk_user_id'];
+				$updated = true;
+			}
+			
+			// Update group assignment
+			if (!empty($_REQUEST['update_group']) && isset($_REQUEST['bulk_group_id'])) {
+				$effort->data['gid'] = $_REQUEST['bulk_group_id'] === '0' ? null : $_REQUEST['bulk_group_id'];
 				$updated = true;
 			}
 			
 			// Update rate and recalculate costs
 			if (!empty($_REQUEST['update_rate']) && is_numeric($_REQUEST['bulk_rate'])) {
 				$new_rate = floatval($_REQUEST['bulk_rate']);
-				$effort->setValue('rate', $new_rate);
+				$effort->data['rate'] = $new_rate;
 				// Recalculate costs based on hours and new rate
 				$hours = floatval($effort->giveValue('hours'));
 				$new_costs = $hours * $new_rate;
-				$effort->setValue('costs', $new_costs);
+				$effort->data['costs'] = $new_costs;
 				$updated = true;
 			}
 			

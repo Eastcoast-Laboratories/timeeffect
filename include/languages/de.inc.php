@@ -48,6 +48,10 @@
 	$GLOBALS['_PJ_strings']['customer_list']			= 'Kundenliste';
 	$GLOBALS['_PJ_strings']['customer_rates_data']		= 'Tarife';
 	$GLOBALS['_PJ_strings']['customers']				= 'Kunden';
+	$GLOBALS['_PJ_strings']['bulk_edit_select_all']		= 'Alle auswählen';
+	$GLOBALS['_PJ_strings']['bulk_edit_selected']		= 'Ausgewählte bearbeiten';
+	$GLOBALS['_PJ_strings']['bulk_edit_clear']			= 'Auswahl löschen';
+	$GLOBALS['_PJ_strings']['bulk_edit_no_selection']	= 'Bitte wählen Sie mindestens einen Aufwand zum Bearbeiten aus.';
 	$GLOBALS['_PJ_strings']['data']						= 'Daten';
 	$GLOBALS['_PJ_strings']['no_efforts_found']		= 'Keine Aufwände gefunden';
 	$GLOBALS['_PJ_strings']['date']						= 'Datum';

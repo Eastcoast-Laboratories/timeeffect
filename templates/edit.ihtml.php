@@ -18,7 +18,11 @@ include_once(__DIR__ . '/shared/header.ihtml.php');
 				<TD VALIGN="top">
 <?php
 	if($center_template != '') {
-		include("$_PJ_root/templates/$center_template/form.ihtml.php");
+		if(isset($center_content) && $center_content != '') {
+			include("$_PJ_root/templates/$center_template/$center_content.ihtml.php");
+		} else {
+			include("$_PJ_root/templates/$center_template/form.ihtml.php");
+		}
 	}
 ?>
 				</TD>

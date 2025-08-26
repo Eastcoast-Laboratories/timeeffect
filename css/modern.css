@@ -1763,3 +1763,162 @@ html[data-theme="dark"] .recent-effort-btn:hover {
         color: var(--text-primary);
     }
 }
+
+/* Bulk Edit Controls Styling */
+#bulk-edit-controls {
+    background: var(--surface-gradient);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-normal);
+}
+
+#bulk-edit-controls button {
+    background: var(--primary-color);
+    color: white;
+    border: 1px solid var(--primary-hover);
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    margin-right: 8px;
+}
+
+#bulk-edit-controls button:hover:not(:disabled) {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+#bulk-edit-controls button:disabled {
+    background: var(--text-secondary);
+    border-color: var(--border-color);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+#bulk-edit-controls button:last-child {
+    background: #6b7280;
+    border-color: #4b5563;
+    margin-right: 0;
+}
+
+#bulk-edit-controls button:last-child:hover {
+    background: #4b5563;
+}
+
+#selected-count {
+    font-weight: 600;
+    color: var(--primary-light);
+}
+
+/* Bulk Edit Checkbox Styling */
+.effort-checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.effort-checkbox:hover {
+    transform: scale(1.1);
+}
+
+#select-all-efforts {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+/* Dark mode support for bulk edit controls */
+[data-theme="dark"] #bulk-edit-controls {
+    background: var(--surface-color);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] #bulk-edit-controls button {
+    background: var(--primary-light);
+    color: var(--surface-color);
+    border-color: var(--primary-color);
+}
+
+[data-theme="dark"] #bulk-edit-controls button:hover:not(:disabled) {
+    background: var(--primary-color);
+    box-shadow: var(--shadow-glow);
+}
+
+[data-theme="dark"] #bulk-edit-controls button:disabled {
+    background: var(--border-color);
+    color: var(--text-secondary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] #bulk-edit-controls button:last-child {
+    background: var(--text-secondary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] #bulk-edit-controls button:last-child:hover {
+    background: var(--text-primary);
+}
+
+[data-theme="dark"] #selected-count {
+    color: var(--primary-color);
+}
+
+/* Responsive bulk edit controls */
+@media (max-width: 768px) {
+    #bulk-edit-controls {
+        padding: 8px 12px;
+        text-align: center;
+    }
+    
+    #bulk-edit-controls button {
+        padding: 6px 12px;
+        font-size: 13px;
+        margin: 2px 4px;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) #bulk-edit-controls {
+        background: var(--surface-color);
+        border-color: var(--border-color);
+    }
+    
+    :root:not([data-theme="light"]) #bulk-edit-controls button {
+        background: var(--primary-light);
+        color: var(--surface-color);
+        border-color: var(--primary-color);
+    }
+    
+    :root:not([data-theme="light"]) #bulk-edit-controls button:hover:not(:disabled) {
+        background: var(--primary-color);
+        box-shadow: var(--shadow-glow);
+    }
+    
+    :root:not([data-theme="light"]) #bulk-edit-controls button:disabled {
+        background: var(--border-color);
+        color: var(--text-secondary);
+        border-color: var(--border-color);
+    }
+    
+    :root:not([data-theme="light"]) #bulk-edit-controls button:last-child {
+        background: var(--text-secondary);
+        border-color: var(--border-color);
+    }
+    
+    :root:not([data-theme="light"]) #bulk-edit-controls button:last-child:hover {
+        background: var(--text-primary);
+    }
+    
+    :root:not([data-theme="light"]) #selected-count {
+        color: var(--primary-color);
+    }
+}

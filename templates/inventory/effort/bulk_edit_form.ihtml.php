@@ -20,6 +20,30 @@
 					<TD COLSPAN="2">
 						<H2>Bulk Edit Efforts</H2>
 						<p>Editing <?= count($accessible_efforts) ?> effort(s). Only selected fields will be updated.</p>
+						<?php
+						// Collect current values for display
+						$current_values = [
+							'access' => [],
+							'billed' => [],
+							'project_id' => [],
+							'user' => [],
+							'rate' => []
+						];
+						
+						foreach($accessible_efforts as $eid) {
+							$effort = new Effort($eid, $_PJ_auth);
+							$current_values['access'][] = $effort->giveValue('access');
+							$current_values['billed'][] = $effort->giveValue('billed') ?: 'unbilled';
+							$current_values['project_id'][] = $effort->giveValue('project_id');
+							$current_values['user'][] = $effort->giveValue('user');
+							$current_values['rate'][] = $effort->giveValue('rate');
+						}
+						
+						// Remove duplicates and format for display
+						foreach($current_values as $key => $values) {
+							$current_values[$key] = array_unique(array_filter($values));
+						}
+						?>
 					</TD>
 				</TR>
 				<TR>
@@ -32,6 +56,7 @@
 					<TD CLASS="FormField">
 						<input type="checkbox" name="update_access" value="1" onchange="toggleField('access_fields', this.checked)">
 						Update access permissions
+						<br><span style="font-size: 14px;"><strong>Current values:</strong> <?= implode(', ', $current_values['access']) ?></span>
 						<div id="access_fields" style="display: none; margin-top: 10px; padding-left: 20px;">
 							<table>
 								<tr>
@@ -75,6 +100,7 @@
 					<TD CLASS="FormField">
 						<input type="checkbox" name="update_billed" value="1" onchange="toggleField('billing_fields', this.checked)">
 						Update billing status
+						<br><span style="font-size: 14px;"><strong>Current values:</strong> <?= implode(', ', $current_values['billed']) ?></span>
 						<div id="billing_fields" style="display: none; margin-top: 10px; padding-left: 20px;">
 							<label>
 								<input type="radio" name="bulk_billed_action" value="mark_billed" checked>
@@ -96,18 +122,32 @@
 					<TD CLASS="FormField">
 						<input type="checkbox" name="update_project" value="1" onchange="toggleField('project_fields', this.checked)">
 						Change project assignment
+						<br><span style="font-size: 14px;"><strong>Current values:</strong> 
+						<?php 
+						$project_names = [];
+						foreach($current_values['project_id'] as $pid) {
+							if($pid) {
+								$project = new Project($customer, $_PJ_auth, $pid);
+								$project_names[] = $project->giveValue('name');
+							} else {
+								$project_names[] = 'Unassigned';
+							}
+						}
+						echo implode(', ', $project_names);
+						?>
+						</span>
 						<div id="project_fields" style="display: none; margin-top: 10px; padding-left: 20px;">
 							<select name="bulk_project_id">
 								<option value="">-- Select Project --</option>
 								<?php
 								// Show projects where user has 'new' permission
-								$projects = new ProjectList($_PJ_auth);
+								$projects = new ProjectList($customer, $_PJ_auth);
 								$projects->reset();
 								while($projects->nextProject()) {
 									$project = $projects->giveProject();
 									if($project->checkUserAccess('new')) {
 										echo '<option value="' . $project->giveValue('id') . '">' . 
-											 htmlspecialchars($project->giveValue('name')) . '</option>';
+											 htmlspecialchars($project->giveValue('name') ?: '') . '</option>';
 									}
 								}
 								?>
@@ -122,17 +162,78 @@
 					<TD CLASS="FormField">
 						<input type="checkbox" name="update_user" value="1" onchange="toggleField('user_fields', this.checked)">
 						Change user assignment
+						<br><span style="font-size: 14px;"><strong>Current values:</strong> 
+						<?php 
+						$user_names = [];
+						foreach($current_values['user'] as $uid) {
+							if($uid) {
+								$user = new User($uid, $_PJ_auth);
+								$user_names[] = $user->giveValue('name');
+							} else {
+								$user_names[] = 'Unassigned';
+							}
+						}
+						echo implode(', ', $user_names);
+						?>
+						</span>
 						<div id="user_fields" style="display: none; margin-top: 10px; padding-left: 20px;">
 							<select name="bulk_user_id">
 								<option value="">-- Select User --</option>
 								<?php
 								// Show all active users
-								$users = $_PJ_auth->giveUsers();
+								$users = $_PJ_auth->listUsers();
 								foreach($users as $user) {
-									if($user['active'] == 1) {
+									if(isset($user['active']) && $user['active'] == 1) {
 										echo '<option value="' . $user['id'] . '">' . 
-											 htmlspecialchars($user['firstname'] . ' ' . $user['lastname']) . '</option>';
+											 htmlspecialchars(($user['firstname'] ?: '') . ' ' . ($user['lastname'] ?: '')) . '</option>';
 									}
+								}
+								?>
+							</select>
+						</div>
+					</TD>
+				</TR>
+				
+				<!-- Group Assignment Section -->
+				<TR>
+					<TD CLASS="FormFieldName">Group Assignment:</TD>
+					<TD CLASS="FormField">
+						<input type="checkbox" name="update_group" value="1" onchange="toggleField('group_fields', this.checked)">
+						Change group assignment
+						<br><span style="font-size: 14px;"><strong>Current values:</strong> 
+						<?php 
+						$group_names = [];
+						foreach(($current_values['gid'] ?? []) as $gid) {
+							if($gid) {
+								// Get group name from database
+								$db = new Database();
+								$safeGid = DatabaseSecurity::escapeInt($gid);
+								$safeGroupTable = DatabaseSecurity::sanitizeColumnName($GLOBALS['_PJ_group_table']);
+								$db->query("SELECT name FROM {$safeGroupTable} WHERE id = {$safeGid}");
+								if($db->next_record()) {
+									$group_names[] = $db->f('name');
+								} else {
+									$group_names[] = "Group $gid";
+								}
+							} else {
+								$group_names[] = 'No Group';
+							}
+						}
+						echo implode(', ', $group_names);
+						?>
+						</span>
+						<div id="group_fields" style="display: none; margin-top: 10px; padding-left: 20px;">
+							<select name="bulk_group_id">
+								<option value="">-- Select Group --</option>
+								<option value="0">No Group</option>
+								<?php
+								// Show all available groups
+								$db = new Database();
+								$safeGroupTable = DatabaseSecurity::sanitizeColumnName($GLOBALS['_PJ_group_table']);
+								$db->query("SELECT id, name FROM {$safeGroupTable} ORDER BY name");
+								while($db->next_record()) {
+									echo '<option value="' . $db->f('id') . '">' . 
+										 htmlspecialchars($db->f('name') ?: '') . '</option>';
 								}
 								?>
 							</select>
@@ -146,6 +247,7 @@
 					<TD CLASS="FormField">
 						<input type="checkbox" name="update_rate" value="1" onchange="toggleField('rate_fields', this.checked)">
 						Apply new hourly rate
+						<br><span style="font-size: 14px;"><strong>Current values:</strong> <?= implode(', ', array_map(function($rate) { return $rate . ' ' . $GLOBALS['_PJ_currency']; }, $current_values['rate'])) ?></span>
 						<div id="rate_fields" style="display: none; margin-top: 10px; padding-left: 20px;">
 							<input type="number" name="bulk_rate" step="0.01" min="0" placeholder="0.00">
 							<?= $GLOBALS['_PJ_currency'] ?> per hour

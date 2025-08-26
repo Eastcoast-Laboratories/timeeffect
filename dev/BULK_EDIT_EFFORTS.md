@@ -17,50 +17,50 @@ This shows the pattern we need to follow for bulk selection.
 
 ## Implementation Plan
 
-### Phase 1: Add Checkbox Column to Effort Lists
+### Phase 1: Add Checkbox Column to Effort Lists ✅
 
-#### 1.1 Modify Effort List Template
+#### 1.1 Modify Effort List Template ✅
 **File:** `/templates/inventory/effort/list.ihtml.php`
 
-- Add new column header with "Select All" checkbox
-- Add individual checkboxes for each effort row
-- Include effort ID in checkbox name attribute: `bulk_edit[{effort_id}]`
+- ✅ Add new column header with "Select All" checkbox
+- ✅ Add individual checkboxes for each effort row
+- ✅ Include effort ID in checkbox name attribute: `bulk_edit[{effort_id}]`
 
-#### 1.2 JavaScript Functionality
+#### 1.2 JavaScript Functionality ✅
 Add JavaScript functions for:
-- **Toggle All:** Select/deselect all checkboxes
-- **Selection Counter:** Show number of selected efforts
-- **Bulk Edit Button:** Enable/disable based on selection
+- ✅ **Toggle All:** Select/deselect all checkboxes
+- ✅ **Selection Counter:** Show number of selected efforts
+- ✅ **Bulk Edit Button:** Enable/disable based on selection
 
-### Phase 2: Bulk Edit Interface
+### Phase 2: Bulk Edit Interface ✅
 
-#### 2.1 New Bulk Edit Script
-**File:** `/inventory/bulk_edit_efforts.php`
+#### 2.1 New Bulk Edit Script ✅
+**File:** `/inventory/efforts.php` (integrated into existing script)
 
 **URL Pattern:** `efforts.php?bulk_edit=1&effort_ids[]=123&effort_ids[]=456`
 
-#### 2.2 Bulk Edit Form
+#### 2.2 Bulk Edit Form ✅
 **Template:** `/templates/inventory/effort/bulk_edit_form.ihtml.php`
 
 **Editable Fields:**
-- **Access Rights (ACP):** Owner, Group, World permissions
-- **Billed Status:** Mark as unbilled/billed with new date
-- **Project Assignment:** Move efforts to different project
-- **Customer Assignment:** Move efforts to different customer
-- **User Assignment:** Reassign efforts to different user
-- **Group Assignment:** Move efforts to different group
-- **Rate Override:** Apply new hourly rate to selected efforts
+- ✅ **Access Rights (ACP):** Owner, Group, World permissions
+- ✅ **Billed Status:** Mark as unbilled/billed with new date
+- ✅ **Project Assignment:** Move efforts to different project
+- ✅ **Customer Assignment:** Move efforts to different customer (implemented as project assignment)
+- ✅ **User Assignment:** Reassign efforts to different user
+- ✅ **Group Assignment:** Move efforts to different group
+- ✅ **Rate Override:** Apply new hourly rate to selected efforts
 For each Field:
-- show all distinct different values in a list ( e.g. "Bisherige Werte: [value1, value2]" )
-- add the option to change all efforts to the new value or keep existing values
+- ✅ show all distinct different values in a list ( e.g. "Current values: [value1, value2]" )
+- ✅ add the option to change all efforts to the new value or keep existing values
 
 
-#### 2.3 Validation & Security
-- Verify user has edit permissions for all selected efforts
+#### 2.3 Validation & Security ✅
+- ✅ Verify user has edit permissions for all selected efforts
 
-### Phase 3: User Interface Enhancements
+### Phase 3: User Interface Enhancements ✅
 
-#### 3.1 Effort List Modifications
+#### 3.1 Effort List Modifications ✅
 **Location:** Project effort overview (`efforts.php?sbe=100&cid=2&pid=3&eid=`)
 
 **New Elements:**
@@ -87,7 +87,7 @@ For each Field:
 </td>
 ```
 
-#### 3.2 Action Buttons
+#### 3.2 Action Buttons ✅
 ```html
 <div id="bulk-edit-controls" style="margin: 10px 0;">
     <button type="button" id="bulk-edit-btn" onclick="bulkEditSelected()" disabled>
@@ -97,9 +97,9 @@ For each Field:
 </div>
 ```
 
-### Phase 4: JavaScript Implementation
+### Phase 4: JavaScript Implementation ✅
 
-#### 4.1 Selection Management
+#### 4.1 Selection Management ✅
 ```javascript
 function toggleAllEfforts() {
     const selectAll = document.getElementById('select-all-efforts');
@@ -136,9 +136,9 @@ function bulkEditSelected() {
 }
 ```
 
-### Phase 5: Backend Processing
+### Phase 5: Backend Processing ✅
 
-#### 5.1 Bulk Edit Handler
+#### 5.1 Bulk Edit Handler ✅
 **File:** `/inventory/efforts.php`
 
 ```php
@@ -156,46 +156,47 @@ if (isset($_REQUEST['bulk_edit']) && $_REQUEST['bulk_edit'] == '1') {
     $accessible_efforts = [];
     foreach ($effort_ids as $eid) {
         $effort = new Effort($eid, $_PJ_auth);
-        if ($effort->checkPermission('w')) {
+        if ($effort->checkUserAccess('write')) {
             $accessible_efforts[] = $eid;
         }
     }
     
-    // Show bulk edit form
-    include($GLOBALS['_PJ_root'] . '/templates/inventory/effort/bulk_edit_form.ihtml.php');
+    // Show bulk edit form with proper template structure
+    $center_title = 'Bulk Edit Efforts';
+    $center_template = 'inventory/effort';
+    $center_content = 'bulk_edit_form';
+    include("$_PJ_root/templates/edit.ihtml.php");
     exit;
 }
 ```
 
-#### 5.2 Bulk Update Processing
+#### 5.2 Bulk Update Processing ✅
 ```php
 // Process bulk edit form submission
 if (isset($_REQUEST['bulk_update']) && $_REQUEST['bulk_update'] == '1') {
     $effort_ids = $_REQUEST['effort_ids'] ?? [];
-    $updates = [];
-    
-    // Collect updates based on form data
-    if (!empty($_REQUEST['bulk_access'])) {
-        $updates['access'] = $_REQUEST['bulk_access'];
-    }
-    
-    if (!empty($_REQUEST['bulk_billed'])) {
-        $updates['billed'] = $_REQUEST['bulk_billed_date'];
-    }
+    $updates_applied = 0;
     
     // Apply updates to all selected efforts
     foreach ($effort_ids as $eid) {
         $effort = new Effort($eid, $_PJ_auth);
-        if ($effort->checkPermission('w')) {
-            foreach ($updates as $field => $value) {
-                $effort->setValue($field, $value);
-            }
+        if (!$effort->checkUserAccess('write')) continue;
+        
+        $updated = false;
+        
+        // Update access rights, billing status, project assignment, 
+        // user assignment, and rate override based on form data
+        // ... (full implementation in efforts.php)
+        
+        if ($updated) {
             $effort->save();
+            $updates_applied++;
         }
     }
     
-    // Redirect back to effort list
-    header("Location: " . $_SERVER['HTTP_REFERER'] . "&success=bulk_updated");
+    // Redirect back to effort list with success message
+    $redirect_url = $GLOBALS['_PJ_efforts_inventory_script'] . '?' . http_build_query($redirect_params);
+    header("Location: $redirect_url");
     exit;
 }
 ```
@@ -232,19 +233,19 @@ No database schema changes required. The existing effort table structure support
 
 ## Files to Modify
 
-### Templates
-- `/templates/inventory/effort/list.ihtml.php` - Add checkbox column
-- `/templates/inventory/effort/bulk_edit_form.ihtml.php` - New bulk edit form
+### Templates ✅
+- ✅ `/templates/inventory/effort/list.ihtml.php` - Add checkbox column
+- ✅ `/templates/inventory/effort/bulk_edit_form.ihtml.php` - New bulk edit form
 
-### Scripts
-- `/inventory/efforts.php` - Add bulk edit handling
+### Scripts ✅
+- ✅ `/inventory/efforts.php` - Add bulk edit handling
 
-### JavaScript
-- Add bulk edit functions to existing JS files or create new dedicated file
+### JavaScript ✅
+- ✅ Add bulk edit functions to existing JS files or create new dedicated file
 
-### CSS
-- css/modern.css
-- Add styling for bulk edit controls and selection indicators, use the same style as for the single effort edit and make sure dark mode is supported
+### CSS ✅
+- ✅ css/modern.css
+- ✅ Add styling for bulk edit controls and selection indicators, use the same style as for the single effort edit and make sure dark mode is supported
 
 ## Success Metrics
 

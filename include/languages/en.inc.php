@@ -48,6 +48,10 @@
 	$GLOBALS['_PJ_strings']['customer_list']			= 'Customer list';
 	$GLOBALS['_PJ_strings']['customer_rates_data']		= 'Rates';
 	$GLOBALS['_PJ_strings']['customers']				= 'Customers';
+	$GLOBALS['_PJ_strings']['bulk_edit_select_all']		= 'Select All';
+	$GLOBALS['_PJ_strings']['bulk_edit_selected']		= 'Edit Selected';
+	$GLOBALS['_PJ_strings']['bulk_edit_clear']			= 'Clear Selection';
+	$GLOBALS['_PJ_strings']['bulk_edit_no_selection']	= 'Please select at least one effort to edit.';
 	$GLOBALS['_PJ_strings']['data']						= 'Data';
 	$GLOBALS['_PJ_strings']['date']						= 'Date';
 	$GLOBALS['_PJ_strings']['day']						= 'Day';
