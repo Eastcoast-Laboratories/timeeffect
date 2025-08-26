@@ -53,6 +53,21 @@ Add JavaScript functions for:
 For each Field:
 - ✅ show all distinct different values in a list ( e.g. "Current values: [value1, value2]" )
 - ✅ add the option to change all efforts to the new value or keep existing values
+1. 
+die hourly rates sollen den tatsächlich entsprechenden rates entsprechen, die in ndem momentanen projekt orhanden sind
+
+2.  zeigt er bei den meissten "current values" noch ncihts an es geht nur bei 
+- ✅ Access Rights:
+- ✅ billed status
+fehlt noch bei:
+- Project Assignment
+- Customer Assignment
+- User Assignment
+- Group Assignment
+- Rate Override
+
+3. 
+Project Assignment zeigt noch keine kunden  an, es sollen dort alle projekte im system angeboten werden zu denen der eingeloffte user zugriffsrechte hat mit kunden
 
 
 #### 2.3 Validation & Security ✅

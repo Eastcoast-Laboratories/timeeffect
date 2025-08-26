@@ -116,7 +116,7 @@
 				die("Host is empty");
 			}
 			// Debug log to track what DSN is being used (mask password)
-			error_log("Auth DSN constructed: " . preg_replace('/:[^@]*@/', ':***@', $dsn));
+			// error_log("Auth DSN constructed: " . preg_replace('/:[^@]*@/', ':***@', $dsn));
 			
 			// Initialize login attempt tracker
 			$this->loginAttemptTracker = new LoginAttemptTracker();

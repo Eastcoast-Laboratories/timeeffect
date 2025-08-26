@@ -139,7 +139,15 @@
 			$current_values['project_id'][] = $effort->giveValue('project_id') ?: 0;
 			$current_values['user'][] = $effort->giveValue('user') ?: 0;
 			$current_values['gid'][] = $effort->giveValue('gid') ?: 0;
-			$current_values['rate'][] = number_format($effort->giveValue('rate') ?: 0, 2);
+			// Get actual project rate for this effort
+			$project_id = $effort->giveValue('project_id');
+			if ($project_id) {
+				$project = new Project($customer, $_PJ_auth, $project_id);
+				$project_rate = $project->giveValue('rate') ?: 0;
+			} else {
+				$project_rate = 0;
+			}
+			$current_values['rate'][] = number_format($project_rate, 2);
 		}
 		
 		// Remove duplicates for cleaner display
@@ -191,11 +199,18 @@
 			if (!empty($_REQUEST['update_billed'])) {
 				$action = $_REQUEST['bulk_billed_action'] ?? 'mark_billed';
 				if ($action === 'mark_billed' && !empty($_REQUEST['bulk_billed_date'])) {
-					$effort->data['billed'] = $_REQUEST['bulk_billed_date'];
+					// Validate date format before saving
+					$date = $_REQUEST['bulk_billed_date'];
+					if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $date) && strtotime($date) !== false) {
+						$effort->data['billed'] = $date;
+						$updated = true;
+					} else {
+						debugLog("BULK_EDIT_ERROR", "Invalid date format for billing: " . $date);
+					}
 				} else if ($action === 'mark_unbilled') {
 					$effort->data['billed'] = null;
+					$updated = true;
 				}
-				$updated = true;
 			}
 			
 			// Update project assignment

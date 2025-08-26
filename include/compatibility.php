@@ -218,6 +218,3 @@ class ModernDBResult {
         return true;
     }
 }
-
-// Log compatibility layer activation
-error_log("PEAR DB Compatibility Layer activated - using Doctrine DBAL backend");

@@ -140,14 +140,17 @@
 							<select name="bulk_project_id">
 								<option value="">-- Select Project --</option>
 								<?php
-								// Show projects where user has 'new' permission
-								$projects = new ProjectList($customer, $_PJ_auth);
-								$projects->reset();
-								while($projects->nextProject()) {
-									$project = $projects->giveProject();
-									if($project->checkUserAccess('new')) {
+								// Show all accessible projects with ACL filtering
+								$projectList = new ProjectList($customer, $_PJ_auth);
+								while($projectList->nextProject()) {
+									$project = $projectList->projects[$projectList->project_cursor];
+									if ($project && is_object($project)) {
+										$customer_name = ($project->customer && is_object($project->customer)) ? 
+											$project->customer->giveValue('customer_name') : 'No Customer';
+										$project_name = $project->giveValue('project_name') ?: 'Unnamed Project';
+										$display_name = $customer_name . ' - ' . $project_name;
 										echo '<option value="' . $project->giveValue('id') . '">' . 
-											 htmlspecialchars($project->giveValue('name') ?: '') . '</option>';
+											 htmlspecialchars($display_name) . '</option>';
 									}
 								}
 								?>
@@ -180,14 +183,21 @@
 							<select name="bulk_user_id">
 								<option value="">-- Select User --</option>
 								<?php
-								// Show all active users
-								$users = $_PJ_auth->listUsers();
-								foreach($users as $user) {
-									if(isset($user['active']) && $user['active'] == 1) {
-										echo '<option value="' . $user['id'] . '">' . 
-											 htmlspecialchars(($user['firstname'] ?: '') . ' ' . ($user['lastname'] ?: '')) . '</option>';
-									}
-								}
+								// Get all active users for user assignment dropdown
+								$db = new Database();
+								$user_query = "SELECT id, firstname, lastname FROM " . $GLOBALS['_PJ_auth_table'] . " WHERE confirmed = 1 ORDER BY firstname, lastname";
+								$db->query($user_query);
+        $users = [];
+        while ($db->next_record()) {
+            $user_id = $db->f('id');
+            $firstname = $db->f('firstname') ?: '';
+            $lastname = $db->f('lastname') ?: '';
+            $display_name = trim($firstname . ' ' . $lastname) ?: "User $user_id";
+            $users[$user_id] = $display_name;
+        }
+        foreach ($users as $user_id => $display_name) {
+            echo '<option value="' . $user_id . '">' . htmlspecialchars($display_name) . '</option>';
+        }
 								?>
 							</select>
 						</div>
@@ -227,10 +237,10 @@
 								<option value="">-- Select Group --</option>
 								<option value="0">No Group</option>
 								<?php
-								// Show all available groups
+								// Show user groups (gids) instead of global groups
 								$db = new Database();
-								$safeGroupTable = DatabaseSecurity::sanitizeColumnName($GLOBALS['_PJ_group_table']);
-								$db->query("SELECT id, name FROM {$safeGroupTable} ORDER BY name");
+								$safeGidsTable = DatabaseSecurity::sanitizeColumnName($GLOBALS['_PJ_gid_table']);
+								$db->query("SELECT id, name FROM {$safeGidsTable} ORDER BY name");
 								while($db->next_record()) {
 									echo '<option value="' . $db->f('id') . '">' . 
 										 htmlspecialchars($db->f('name') ?: '') . '</option>';

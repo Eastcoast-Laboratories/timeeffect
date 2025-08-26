@@ -523,7 +523,18 @@
 			$query .= "'" . $this->data['note'] . "', ";
 			$query .= "'" . $this->data['rate'] . "', ";
 			$query .= "'" . $this->data['user'] . "', ";
-			$query .= $this->data['billed'] . ")";
+			// Handle billed field with proper validation and quoting
+			if (!empty($this->data['billed'])) {
+				// Validate date format before inserting
+				if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $this->data['billed']) && strtotime($this->data['billed']) !== false) {
+					$query .= "'" . $this->data['billed'] . "'";
+				} else {
+					$query .= "NULL";
+				}
+			} else {
+				$query .= "NULL";
+			}
+			$query .= ")";
 
 			$this->db->query($query);
 
