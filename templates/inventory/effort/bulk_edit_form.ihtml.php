@@ -27,6 +27,7 @@
 							'billed' => [],
 							'project_id' => [],
 							'user' => [],
+							'gid' => [],
 							'rate' => []
 						];
 						
@@ -36,6 +37,7 @@
 							$current_values['billed'][] = $effort->giveValue('billed') ?: 'unbilled';
 							$current_values['project_id'][] = $effort->giveValue('project_id');
 							$current_values['user'][] = $effort->giveValue('user');
+							$current_values['gid'][] = $effort->giveValue('gid');
 							$current_values['rate'][] = $effort->giveValue('rate');
 						}
 						

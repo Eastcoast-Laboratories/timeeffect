@@ -217,7 +217,8 @@
 			
 			// Update project assignment
 			if (!empty($_REQUEST['update_project']) && !empty($_REQUEST['bulk_project_id'])) {
-				$new_project = new Project(null, $_PJ_auth, $_REQUEST['bulk_project_id']);
+				$null_customer = null; // Fix: null cannot be passed by reference
+				$new_project = new Project($null_customer, $_PJ_auth, $_REQUEST['bulk_project_id']);
 				if ($new_project->checkUserAccess('new')) {
 					$effort->data['project_id'] = $_REQUEST['bulk_project_id'];
 					$updated = true;
@@ -232,7 +233,13 @@
 			
 			// Update group assignment
 			if (!empty($_REQUEST['update_group']) && isset($_REQUEST['bulk_group_id'])) {
-				$effort->data['gid'] = $_REQUEST['bulk_group_id'] === '0' ? null : $_REQUEST['bulk_group_id'];
+				$gid_value = $_REQUEST['bulk_group_id'];
+				// Fix: Convert empty string to 0 for MySQL integer column
+				if ($gid_value === '' || $gid_value === '0') {
+					$effort->data['gid'] = 0;
+				} else {
+					$effort->data['gid'] = intval($gid_value);
+				}
 				$updated = true;
 			}
 			
