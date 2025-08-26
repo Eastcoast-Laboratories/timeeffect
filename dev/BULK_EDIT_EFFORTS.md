@@ -56,19 +56,22 @@ For each Field:
 1. 
 die hourly rates sollen den tatsächlich entsprechenden rates entsprechen, die in ndem momentanen projekt orhanden sind
 
-2.  zeigt er bei den meissten "current values" noch ncihts an es geht nur bei 
-- ✅ Access Rights:
-- ✅ billed status
-fehlt noch bei:
-- Project Assignment
-- Customer Assignment
-- User Assignment
-- Group Assignment
-- Rate Override
+2. ✅ Current values display fixed for all sections:
+- ✅ Access Rights
+- ✅ Billed status  
+- ✅ Project Assignment (shows "Customer - Project" format with fallback database query)
+- ✅ User Assignment (shows "Firstname Lastname" format)
+- ✅ Group Assignment (shows user group names from gids table)
+ - missing: Current values
+- ✅ Rate Override (dropdown with actual project rates and common rates, showing project context)
 
-3. 
-Project Assignment zeigt noch keine kunden  an, es sollen dort alle projekte im system angeboten werden zu denen der eingeloffte user zugriffsrechte hat mit kunden
+3. ✅ Project Assignment dropdown now shows customers with projects:
+- ✅ Uses ACL filtering for accessible projects only with table alias 'p'
+- ✅ Shows format "Customer Name - Project Name" 
+- Includes all open projects with proper access rights (closed = 0 filter)
+ - missing: the dropdown is still empty
 
+4. global: falls nur einwert bei current values ist, dann sol das dropdown diesen gleich vor auswählen
 
 #### 2.3 Validation & Security ✅
 - ✅ Verify user has edit permissions for all selected efforts

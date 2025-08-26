@@ -22,26 +22,27 @@ class BulkEditTest extends PHPUnit\Framework\TestCase {
         
         // Create test customer
         $this->customer = new Customer($this->auth);
-        $this->customer->setValue('customer_name', 'Test Customer for Bulk Edit');
-        $this->customer->setValue('active', 'yes');
+        $this->customer->data['customer_name'] = 'Test Customer for Bulk Edit';
+        $this->customer->data['active'] = 'yes';
         $this->customer->save();
         
         // Create test project
         $this->project = new Project($this->customer, $this->auth);
-        $this->project->setValue('project_name', 'Test Project for Bulk Edit');
-        $this->project->setValue('customer_id', $this->customer->giveValue('id'));
+        $this->project->data['project_name'] = 'Test Project for Bulk Edit';
+        $this->project->data['customer_id'] = $this->customer->giveValue('id');
         $this->project->save();
         
         // Create test efforts
         $this->effort_ids = [];
         for($i = 0; $i < 3; $i++) {
             $effort = new Effort($this->customer, $this->auth);
-            $effort->setValue('project_id', $this->project->giveValue('id'));
-            $effort->setValue('user', $this->auth->giveValue('id'));
-            $effort->setValue('description', "Test Effort $i for Bulk Edit");
-            $effort->setValue('start_time', date('Y-m-d H:i:s'));
-            $effort->setValue('end_time', date('Y-m-d H:i:s', strtotime('+1 hour')));
-            $effort->setValue('access', 'rw-r-----');
+            $effort->data['project_id'] = $this->project->giveValue('id');
+            $effort->data['user'] = $this->auth->giveValue('id');
+            $effort->data['description'] = "Test Effort $i for Bulk Edit";
+            $effort->data['date'] = date('Y-m-d');
+            $effort->data['begin'] = '09:00:00';
+            $effort->data['end'] = '10:00:00';
+            $effort->data['access'] = 'rw-r-----';
             $effort->save();
             $this->effort_ids[] = $effort->giveValue('id');
         }
