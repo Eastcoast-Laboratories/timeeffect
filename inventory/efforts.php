@@ -150,6 +150,8 @@
 			$current_values['rate'][] = number_format($project_rate, 2);
 		}
 		
+		debugLog('BULK_EDIT_DEBUG', 'Current values collected: ' . print_r($current_values, true));
+		
 		// Remove duplicates for cleaner display
 		foreach ($current_values as $key => $values) {
 			$current_values[$key] = array_unique($values);

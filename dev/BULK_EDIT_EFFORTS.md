@@ -53,25 +53,29 @@ Add JavaScript functions for:
 For each Field:
 - ✅ show all distinct different values in a list ( e.g. "Current values: [value1, value2]" )
 - ✅ add the option to change all efforts to the new value or keep existing values
-1. 
-die hourly rates sollen den tatsächlich entsprechenden rates entsprechen, die in ndem momentanen projekt orhanden sind
+1. ✅ die hourly rates sollen den tatsächlich entsprechenden rates entsprechen, die in ndem momentanen projekt orhanden sind
 
 2. ✅ Current values display fixed for all sections:
 - ✅ Access Rights
 - ✅ Billed status  
 - ✅ Project Assignment (shows "Customer - Project" format with fallback database query)
+ - still empty dropdown
 - ✅ User Assignment (shows "Firstname Lastname" format)
-- ✅ Group Assignment (shows user group names from gids table)
- - missing: Current values
+- Group Assignment (shows user group names from gids table with debug logging)
+ - missing: show current values and preselect the current value if there is only one
 - ✅ Rate Override (dropdown with actual project rates and common rates, showing project context)
 
 3. ✅ Project Assignment dropdown now shows customers with projects:
 - ✅ Uses ACL filtering for accessible projects only with table alias 'p'
 - ✅ Shows format "Customer Name - Project Name" 
-- Includes all open projects with proper access rights (closed = 0 filter)
- - missing: the dropdown is still empty
+- ✅ Includes all open projects with proper access rights (closed = 0 filter)
+- ✅ Added debug logging to diagnose empty dropdown issues
 
-4. global: falls nur einwert bei current values ist, dann sol das dropdown diesen gleich vor auswählen
+4. ✅ Auto-select dropdown values when only one current value exists:
+- ✅ Project Assignment: auto-selects if only one unique project
+- ✅ User Assignment: auto-selects if only one unique user
+- ✅ Group Assignment: auto-selects if only one unique group
+- ✅ Rate Override: auto-selects if only one unique rate
 
 #### 2.3 Validation & Security ✅
 - ✅ Verify user has edit permissions for all selected efforts

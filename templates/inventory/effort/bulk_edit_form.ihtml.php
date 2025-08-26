@@ -177,14 +177,28 @@
 										 WHERE p.closed = 0 {$access_query}
 										 ORDER BY c.customer_name, p.project_name";
 								
+								debugLog('BULK_EDIT_DEBUG', 'Project dropdown query: ' . $query);
 								$db->query($query);
+								$project_count = 0;
 								while($db->next_record()) {
 									$customer_name = $db->f('customer_name') ?: 'No Customer';
 									$project_name = $db->f('project_name') ?: 'Unnamed Project';
 									$display_name = $customer_name . ' - ' . $project_name;
-									echo '<option value="' . $db->f('id') . '">' . 
+									$project_id = $db->f('id');
+									
+									// Auto-select if only one unique project in current values
+									$selected = '';
+									if(isset($current_values['project_id']) && is_array($current_values['project_id']) &&
+									   count(array_unique($current_values['project_id'])) == 1 && 
+									   in_array($project_id, $current_values['project_id'])) {
+										$selected = ' selected';
+									}
+									
+									echo '<option value="' . $project_id . '"' . $selected . '>' . 
 										 htmlspecialchars($display_name) . '</option>';
+									$project_count++;
 								}
+								debugLog('BULK_EDIT_DEBUG', 'Projects loaded in dropdown: ' . $project_count);
 								?>
 							</select>
 						</div>
@@ -231,7 +245,14 @@
             $users[$user_id] = $display_name;
         }
         foreach ($users as $user_id => $display_name) {
-            echo '<option value="' . $user_id . '">' . htmlspecialchars($display_name) . '</option>';
+        	// Auto-select if only one unique user in current values
+        	$selected = '';
+        	if(isset($current_values['user']) && is_array($current_values['user']) &&
+        	   count(array_unique($current_values['user'])) == 1 && 
+        	   in_array($user_id, $current_values['user'])) {
+        		$selected = ' selected';
+        	}
+            echo '<option value="' . $user_id . '"' . $selected . '>' . htmlspecialchars($display_name) . '</option>';
         }
 								?>
 							</select>
@@ -277,8 +298,19 @@
 								$safeGidsTable = DatabaseSecurity::sanitizeColumnName($GLOBALS['_PJ_gid_table']);
 								$db->query("SELECT id, name FROM {$safeGidsTable} ORDER BY name");
 								while($db->next_record()) {
-									echo '<option value="' . $db->f('id') . '">' . 
-										 htmlspecialchars($db->f('name') ?: '') . '</option>';
+									$group_id = $db->f('id');
+									$group_name = $db->f('name') ?: '';
+									
+									// Auto-select if only one unique group in current values
+									$selected = '';
+									if(isset($current_values['gid']) && is_array($current_values['gid']) &&
+									   count(array_unique($current_values['gid'])) == 1 && 
+									   in_array($group_id, $current_values['gid'])) {
+										$selected = ' selected';
+									}
+									
+									echo '<option value="' . $group_id . '"' . $selected . '>' . 
+										 htmlspecialchars($group_name) . '</option>';
 								}
 								?>
 							</select>
@@ -330,7 +362,15 @@
 								ksort($project_rates, SORT_NUMERIC);
 								
 								foreach($project_rates as $rate => $display) {
-									echo '<option value="' . $rate . '">' . htmlspecialchars($display) . '</option>';
+									// Auto-select if only one unique rate in current values
+									$selected = '';
+									if(isset($current_values['rate']) && is_array($current_values['rate']) &&
+									   count(array_unique($current_values['rate'])) == 1 && 
+									   in_array(number_format($rate, 2), $current_values['rate'])) {
+										$selected = ' selected';
+									}
+									
+									echo '<option value="' . $rate . '"' . $selected . '>' . htmlspecialchars($display) . '</option>';
 								}
 								?>
 							</select>
