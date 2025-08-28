@@ -4,13 +4,14 @@ require_once('../include/payment.class.php');
 require_once('../include/invoice.class.php');
 
 // Check authentication
-if (!isset($_SESSION['user_id'])) {
+$user_id = $_PJ_auth->giveValue('id');
+if (!$user_id) {
     header('Location: ../index.php');
     exit;
 }
 
-$payment = new PaymentManager($db, $_SESSION['user_id']);
-$invoice = new Invoice($db, $_SESSION['user_id']);
+$payment = new PaymentManager($db, $user_id);
+$invoice = new Invoice($db, $user_id);
 
 $action = $_GET['action'] ?? $_POST['action'] ?? 'list';
 $reminder_id = $_GET['id'] ?? $_POST['id'] ?? 0;
@@ -59,5 +60,8 @@ $pending_reminders = $payment->getPendingReminders();
 // Get overdue invoices
 $overdue_invoices = $payment->getOverdueInvoices();
 
-$page_title = 'Payment Reminders';
-include('../templates/invoice/reminders.ihtml.php');
+// Set up template variables for unified layout
+$center_template = "invoice/reminders";
+$center_title = 'Payment Reminders';
+
+include("$_PJ_root/templates/list.ihtml.php");

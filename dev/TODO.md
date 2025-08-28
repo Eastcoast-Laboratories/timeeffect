@@ -13,6 +13,9 @@
 
 4. index.php: "Improve project profitability analysis"  ist vielleicht noch irreführend
 
-5. mach mal einen md plan in ndev/ wie man rechnungen autmatisierrt erzeugen kann. ich habe einen kunden für den ich jeden monat fest 1500 erruo vereinbart habe für 15h. wenn ich mehr oder weniger arbeite, dann muss ich immer einen übertrag mitführen.
+5.
 
-wahrscheinlich kann man das am besten einbauen, wenn man den report erstellt und die haken "berechnen"  sezt unddann auf "berechne" buton drückt, da müsste dann automatisch die rechnung geeriert werden und abgespeichert unter iener fortlaufenden nummer. diese rechnungen müsste man auch wieder abrufen können oder noch mal bearbeiten im detail ausserdem müsste dort die mwst eausgewiesen werden und eine beschriftung für die stunden festgelegt werden, also ich will nicht in der rechnung alle einzelnen efforts aufgelistet haben sondern unur die gesamtsumme , die efforts sollen in eiem anhang stehen und dort soll auch der berhang berechnet werden und aufgelistet (optional)
+
+Fatal error: Uncaught Error: Call to undefined method DB_Sql::prepare() in /var/www/html/include/contract.class.php:192 Stack trace: #0 /var/www/html/inventory/contracts.php(62): Contract->hasOverlappingContract('5', NULL, '2025-08-28', NULL, NULL) #1 {main} thrown in /var/www/html/include/contract.class.php on line 192
+
+@contract.class.php#L192-194 benutze hier die selbe alte  db zugang wie sonst in timeeffect berall

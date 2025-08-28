@@ -53,6 +53,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     }
 }
 
-$page_title = 'Invoice ' . $invoice_data['invoice_number'];
+// Set up template variables for unified layout
+$center_template = "invoice/view";
+$center_title = 'Invoice ' . $invoice_data['invoice_number'];
 $force_light_mode = true; // Force light mode for invoice view
-include('../templates/invoice/view.ihtml.php');
+
+include("$_PJ_root/templates/list.ihtml.php");

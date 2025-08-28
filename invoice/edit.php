@@ -105,5 +105,8 @@ while ($db->next_record()) {
     $projects[] = $db->Record;
 }
 
-$page_title = 'Edit Invoice ' . $invoice_data['invoice_number'];
-include('../templates/invoice/edit_form.ihtml.php');
+// Set up template variables for unified layout
+$center_template = "invoice/edit_form";
+$center_title = 'Edit Invoice ' . $invoice_data['invoice_number'];
+
+include("$_PJ_root/templates/list.ihtml.php");

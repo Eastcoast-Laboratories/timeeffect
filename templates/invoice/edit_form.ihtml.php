@@ -1,16 +1,9 @@
-<?php
-// Include unified header
-include_once(__DIR__ . '/../shared/header.ihtml.php');
-?>
-
-<body>
-<div class="container">
-    <div class="header">
-        <h1><?php echo $page_title; ?></h1>
-        <div class="actions">
-            <a href="view.php?id=<?php echo $invoice_data['id']; ?>" class="btn btn-secondary">Back to View</a>
-        </div>
+<!-- Invoice Edit Form Content -->
+<div class="page-header">
+    <div class="actions">
+        <a href="view.php?id=<?php echo $invoice_data['id']; ?>" class="btn btn-secondary">Back to View</a>
     </div>
+</div>
 
     <?php if (!empty($errors)): ?>
         <div class="alert alert-error">
@@ -145,7 +138,6 @@ include_once(__DIR__ . '/../shared/header.ihtml.php');
             <?php endif; ?>
         </div>
     </form>
-</div>
 
 <script>
 // Projects data for filtering
@@ -199,19 +191,11 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <style>
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.header {
+.page-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
-    margin-bottom: 30px;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .btn {
@@ -344,6 +328,3 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 }
 </style>
-
-</body>
-</html>

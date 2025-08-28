@@ -145,5 +145,8 @@ while ($db->next_record()) {
     $projects[] = $db->Record;
 }
 
-$page_title = 'Create Invoice';
-include('../templates/invoice/form.ihtml.php');
+// Set up template variables for unified layout
+$center_template = "invoice/form";
+$center_title = 'Create Invoice';
+
+include("$_PJ_root/templates/list.ihtml.php");

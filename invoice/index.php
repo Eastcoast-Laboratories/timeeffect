@@ -36,5 +36,9 @@ while ($db->next_record()) {
     $customers[] = $db->Record;
 }
 
-$page_title = 'Invoice Management';
-include('../templates/invoice/list.ihtml.php');
+// Set up template variables for unified layout
+$center_template = "invoice";
+$center_title = 'Invoice Management';
+
+include("$_PJ_root/templates/list.ihtml.php");
+include_once("$_PJ_include_path/degestiv.inc.php");

@@ -1,20 +1,13 @@
-<?php
-// Include unified header
-include_once(__DIR__ . '/../shared/header.ihtml.php');
-?>
-
-<body class="<?php echo isset($force_light_mode) && $force_light_mode ? 'light-mode' : ''; ?>" style="<?php echo isset($force_light_mode) && $force_light_mode ? 'background-color: white !important; color: black !important;' : ''; ?>">
-<div class="container" style="<?php echo isset($force_light_mode) && $force_light_mode ? 'background-color: white !important; color: black !important;' : ''; ?>">
-    <div class="header">
-        <h1><?php echo $page_title; ?></h1>
-        <div class="actions">
-            <a href="pdf.php?id=<?php echo $invoice_data['id']; ?>" class="btn btn-success">Download PDF</a>
-            <?php if ($invoice_data['status'] === 'draft'): ?>
-                <a href="edit.php?id=<?php echo $invoice_data['id']; ?>" class="btn btn-warning">Edit</a>
-            <?php endif; ?>
-            <a href="index.php" class="btn btn-secondary">Back to List</a>
-        </div>
+<!-- Invoice View Content -->
+<div class="page-header">
+    <div class="actions">
+        <a href="pdf.php?id=<?php echo $invoice_data['id']; ?>" class="btn btn-success">Download PDF</a>
+        <?php if ($invoice_data['status'] === 'draft'): ?>
+            <a href="edit.php?id=<?php echo $invoice_data['id']; ?>" class="btn btn-warning">Edit</a>
+        <?php endif; ?>
+        <a href="index.php" class="btn btn-secondary">Back to List</a>
     </div>
+</div>
 
     <div class="invoice-details">
         <!-- Invoice Header -->
@@ -246,22 +239,13 @@ include_once(__DIR__ . '/../shared/header.ihtml.php');
             </form>
         </div>
     </div>
-</div>
 
 <style>
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.header {
+.page-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
-    margin-bottom: 30px;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .actions {
@@ -479,6 +463,3 @@ include_once(__DIR__ . '/../shared/header.ihtml.php');
     }
 }
 </style>
-
-</body>
-</html>

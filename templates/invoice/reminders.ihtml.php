@@ -1,16 +1,9 @@
-<?php
-// Include unified header
-include_once(__DIR__ . '/../shared/header.ihtml.php');
-?>
-
-<body>
-<div class="container">
-    <div class="header">
-        <h1><?php echo $page_title; ?></h1>
-        <div class="actions">
-            <a href="index.php" class="btn btn-secondary">Back to Invoices</a>
-        </div>
+<!-- Payment Reminders Content -->
+<div class="page-header">
+    <div class="actions">
+        <a href="index.php" class="btn btn-secondary">Back to Invoices</a>
     </div>
+</div>
 
     <?php if (!empty($errors)): ?>
         <div class="alert alert-error">
@@ -132,7 +125,6 @@ include_once(__DIR__ . '/../shared/header.ihtml.php');
             </table>
         <?php endif; ?>
     </div>
-</div>
 
 <!-- Reminder Preview Modal -->
 <div id="reminderModal" class="modal" style="display: none;">
@@ -213,19 +205,11 @@ window.onclick = function(event) {
 </script>
 
 <style>
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.header {
+.page-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
-    margin-bottom: 30px;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .btn {
@@ -474,6 +458,3 @@ window.onclick = function(event) {
     }
 }
 </style>
-
-</body>
-</html>
