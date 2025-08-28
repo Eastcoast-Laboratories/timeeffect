@@ -196,3 +196,34 @@ CREATE TABLE `rate` (
 #
 # Daten fuer Tabelle `rate`
 #
+
+# --------------------------------------------------------
+
+#
+# Tabellenstruktur fuer Tabelle `customer_contracts`
+#
+
+DROP TABLE IF EXISTS `customer_contracts`;
+CREATE TABLE `customer_contracts` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `customer_id` int(11) unsigned NOT NULL,
+  `project_id` int(11) unsigned NULL,
+  `contract_type` enum('hourly','fixed','retainer') NOT NULL default 'hourly',
+  `hourly_rate` decimal(10,2) NULL,
+  `fixed_amount` decimal(10,2) NULL,
+  `retainer_hours` int(11) NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NULL,
+  `active` tinyint(1) NOT NULL default '1',
+  `created_at` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_customer_id` (`customer_id`),
+  KEY `idx_project_id` (`project_id`),
+  KEY `idx_active` (`active`),
+  KEY `idx_dates` (`start_date`, `end_date`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
+
+#
+# Daten fuer Tabelle `customer_contracts`
+#

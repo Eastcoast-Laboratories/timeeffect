@@ -81,10 +81,10 @@
 			if(!isset($this->user) || !is_object($this->user)) {
 				return array('read' => false, 'write' => false, 'new' => false);
 			}
-			if($this->user->checkPermission('admin')) {
+			if(is_callable(array($this->user, 'checkPermission')) && $this->user->checkPermission('admin')) {
 				return array('read' => true, 'write' => true, 'new' => true);
 			}
-			$u_gids			= explode(',', $this->user->giveValue('gids'));
+			$u_gids			= explode(',', is_callable(array($this->user, 'giveValue')) ? $this->user->giveValue('gids') : (property_exists($this->user, 'gids') ? $this->user->gids : ''));
 			// Fix: Add null checks for substr() to prevent PHP 8.4 deprecation warnings
 			$access_value = $this->giveValue('access');
 			// FATAL: access field is null - this should never happen!

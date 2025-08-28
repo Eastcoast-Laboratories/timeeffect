@@ -1235,7 +1235,13 @@ function output($debug=0){
 //  $content="%PDF-1.3\n";
   $pos=strlen($content);
   foreach($this->objects as $k=>$v){
+    if (!isset($v['t']) || empty($v['t'])) {
+      continue; // Skip objects without type
+    }
     $tmp='o_'.$v['t'];
+    if (!method_exists($this, $tmp)) {
+      continue; // Skip if method doesn't exist
+    }
     $cont=$this->$tmp($k,'out');
     $content.=$cont;
     $xref[]=$pos;
@@ -1510,10 +1516,14 @@ function selectFont($fontName,$encoding='',$set=1){
         // note that pdf supports only binary format type 1 font files, though there is a 
         // simple utility to convert them from pfa to pfb.
         $fp = fopen($fbfile,'rb');
-        $tmp = get_magic_quotes_runtime();
-        set_magic_quotes_runtime(0);
+        if (function_exists('get_magic_quotes_runtime')) {
+          $tmp = get_magic_quotes_runtime();
+          set_magic_quotes_runtime(0);
+        }
         $data = fread($fp,filesize($fbfile));
-        set_magic_quotes_runtime($tmp);
+        if (function_exists('set_magic_quotes_runtime') && isset($tmp)) {
+          set_magic_quotes_runtime($tmp);
+        }
         fclose($fp);
 
         // create the font descriptor
@@ -1620,15 +1630,23 @@ function setCurrentFont(){
     // then we are in some state or another
     // and this font has a family, and the current setting exists within it
     // select the font, then return it
-    $nf = substr($this->currentBaseFont,0,strrpos($this->currentBaseFont,'/')+1).$this->fontFamilies[$cf][$this->currentTextState];
-    $this->selectFont($nf,'',0);
-    $this->currentFont = $nf;
-    $this->currentFontNum = $this->fonts[$nf]['fontNum'];
+    if (isset($this->fontFamilies[$cf][$this->currentTextState])) {
+      $nf = substr($this->currentBaseFont,0,strrpos($this->currentBaseFont,'/')+1).$this->fontFamilies[$cf][$this->currentTextState];
+      $this->selectFont($nf,'',0);
+      $this->currentFont = $nf;
+      $this->currentFontNum = $this->fonts[$nf]['fontNum'];
+    } else {
+      // fallback to base font if family member doesn't exist
+      $this->currentFont = $this->currentBaseFont;
+      $this->currentFontNum = $this->fonts[$this->currentFont]['fontNum'];
+    }
   } else {
     // the this font must not have the right family member for the current state
     // simply assume the base font
     $this->currentFont = $this->currentBaseFont;
-    $this->currentFontNum = $this->fonts[$this->currentFont]['fontNum'];    
+    if (isset($this->fonts[$this->currentFont]['fontNum'])) {
+      $this->currentFontNum = $this->fonts[$this->currentFont]['fontNum'];
+    }    
   }
 }
 
@@ -1913,10 +1931,12 @@ function stream($options=''){
   } else {
     $tmp = $this->output();
   }
-  header("Content-type: application/pdf");
-  header("Content-Length: ".strlen(ltrim($tmp)));
-  $fileName = (isset($options['Content-Disposition'])?$options['Content-Disposition']:'file.pdf');
-  header("Content-Disposition: inline; filename=".$fileName);
+  if (!headers_sent()) {
+    header("Content-type: application/pdf");
+    header("Content-Length: ".strlen(ltrim($tmp)));
+    $fileName = (isset($options['Content-Disposition'])?$options['Content-Disposition']:'file.pdf');
+    header("Content-Disposition: inline; filename=".$fileName);
+  }
   if (isset($options['Accept-Ranges']) && $options['Accept-Ranges']==1){
     header("Accept-Ranges: ".strlen(ltrim($tmp))); 
   }
@@ -1931,6 +1951,9 @@ function getFontHeight($size){
     $this->selectFont('./fonts/Helvetica');
   }
   // for the current font, and the given size, what is the height of the font in user units
+  if (!isset($this->fonts[$this->currentFont]['FontBBox']) || !is_array($this->fonts[$this->currentFont]['FontBBox'])) {
+    return $size * 0.7; // Default height ratio
+  }
   $h = $this->fonts[$this->currentFont]['FontBBox'][3]-$this->fonts[$this->currentFont]['FontBBox'][1];
   return $size*$h/1000;
 }
@@ -1944,6 +1967,9 @@ function getFontDecender($size){
   // note that this will most likely return a negative value
   if (!$this->numFonts){
     $this->selectFont('./fonts/Helvetica');
+  }
+  if (!isset($this->fonts[$this->currentFont]['FontBBox']) || !is_array($this->fonts[$this->currentFont]['FontBBox'])) {
+    return $size * -0.2; // Default descender ratio
   }
   $h = $this->fonts[$this->currentFont]['FontBBox'][1];
   return $size*$h/1000;
@@ -2408,17 +2434,21 @@ function addTextWrap($x,$y,$width,$size,$text,$justification='left',$angle=0,$te
           return substr($text,$i);
         }
       }
-      if ($text[$i]=='-'){
+      if (isset($text[$i]) && $text[$i]=='-'){
         $break=$i;
         $breakWidth = $w*$size/1000;
       }
-      if ($text[$i]==' '){
+      if (isset($text[$i]) && $text[$i]==' '){
         $break=$i;
         $ctmp=ord($text[$i]);
         if (isset($this->fonts[$cf]['differences'][$ctmp])){
           $ctmp=$this->fonts[$cf]['differences'][$ctmp];
         }
-        $breakWidth = ($w-$this->fonts[$cf]['C'][$ctmp]['WX'])*$size/1000;
+        if (isset($this->fonts[$cf]['C'][$ctmp]['WX'])) {
+          $breakWidth = ($w-$this->fonts[$cf]['C'][$ctmp]['WX'])*$size/1000;
+        } else {
+          $breakWidth = $w*$size/1000;
+        }
       }
     }
   }
@@ -2637,8 +2667,10 @@ function PRVT_getBytes(&$data,$pos,$num){
 function addPngFromFile($file,$x,$y,$w=0,$h=0){
   // read in a png file, interpret it, then add to the system
   $error=0;
-  $tmp = get_magic_quotes_runtime();
-  set_magic_quotes_runtime(0);
+  if (function_exists('get_magic_quotes_runtime')) {
+    $tmp = get_magic_quotes_runtime();
+    set_magic_quotes_runtime(0);
+  }
   $fp = @fopen($file,'rb');
   if(!empty($fp)){
     $data='';
@@ -2650,7 +2682,9 @@ function addPngFromFile($file,$x,$y,$w=0,$h=0){
     $error = 1;
     $errormsg = 'trouble opening file: '.$file;
   }
-  set_magic_quotes_runtime($tmp);
+  if (function_exists('set_magic_quotes_runtime') && isset($tmp)) {
+    set_magic_quotes_runtime($tmp);
+  }
   
   if(empty($error)){
     $header = chr(137).chr(80).chr(78).chr(71).chr(13).chr(10).chr(26).chr(10);
@@ -2852,14 +2886,18 @@ function addJpegFromFile($img,$x,$y,$w=0,$h=0){
 
   $fp=fopen($img,'rb');
 
-  $tmp = get_magic_quotes_runtime();
-  set_magic_quotes_runtime(0);
+  if (function_exists('get_magic_quotes_runtime')) {
+    $tmp = get_magic_quotes_runtime();
+    set_magic_quotes_runtime(0);
+  }
   $data = fread($fp,filesize($img));
-  set_magic_quotes_runtime($tmp);
+  if (function_exists('set_magic_quotes_runtime') && isset($tmp)) {
+    set_magic_quotes_runtime($tmp);
+  }
   
   fclose($fp);
 
-  $this->addJpegImage_common($data,$x,$y,$w,$h,$imageWidth,$imageHeight,$channels);
+  $this->addJpegImage_common($data,$x,$y,$imageWidth,$imageHeight,$w,$h,$channels);
 }
 
 /**
@@ -2903,8 +2941,10 @@ function addImage(&$img,$x,$y,$w=0,$h=0,$quality=75){
   imagejpeg($img,$tmpName,$quality);
   $fp=fopen($tmpName,'rb');
 
-  $tmp = get_magic_quotes_runtime();
-  set_magic_quotes_runtime(0);
+  if (function_exists('get_magic_quotes_runtime')) {
+    $tmp = get_magic_quotes_runtime();
+    set_magic_quotes_runtime(0);
+  }
   $fp = @fopen($tmpName,'rb');
   if(!empty($fp)){
     $data='';
@@ -2917,10 +2957,12 @@ function addImage(&$img,$x,$y,$w=0,$h=0,$quality=75){
     $errormsg = 'trouble opening file';
   }
 //  $data = fread($fp,filesize($tmpName));
-  set_magic_quotes_runtime($tmp);
+  if (function_exists('set_magic_quotes_runtime') && isset($tmp)) {
+    set_magic_quotes_runtime($tmp);
+  }
 //  fclose($fp);
   unlink($tmpName);
-  $this->addJpegImage_common($data,$x,$y,$w,$h,$imageWidth,$imageHeight);
+  $this->addJpegImage_common($data,$x,$y,$imageWidth,$imageHeight,$w,$h);
 }
 
 /**
@@ -2928,7 +2970,7 @@ function addImage(&$img,$x,$y,$w=0,$h=0,$quality=75){
 *
 * @access private
 */
-function addJpegImage_common(&$data,$x,$y,$w=0,$h=0,$imageWidth,$imageHeight,$channels=3){
+function addJpegImage_common(&$data,$x,$y,$imageWidth,$imageHeight,$w=0,$h=0,$channels=3){
   // note that this function is not to be called externally
   // it is just the common code between the GD and the file options
   $this->numImages++;

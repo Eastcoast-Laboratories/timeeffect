@@ -247,7 +247,7 @@ $_PJ_db_host = 'localhost';        // Database host
 $_PJ_db_database = 'timeeffect_db';   // Database name
 $_PJ_db_user = 'timeeffect';       // Database user
 $_PJ_db_password = 'your_password'; // Database password
-$_PJ_db_prefix = '';               // Table prefix (optional)
+$_PJ_table_prefix = '';               // Table prefix (optional)
 ```
 
 ### 4.2 Application Settings

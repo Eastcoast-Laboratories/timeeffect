@@ -248,11 +248,11 @@ else return null;
 
 			$query = "REPLACE INTO " . $GLOBALS['_PJ_project_table'] . " (";
 
-			if($this->data['id']) {
+			if(!empty($this->data['id'])) {
 				$query .= "id, ";
 			}
 			$query .= "customer_id, user, gid, access, project_name, project_desc, project_budget, project_budget_currency, last, closed) VALUES(";
-			if($this->data['id']) {
+			if(!empty($this->data['id'])) {
 				$query .= $this->data['id'] . ", ";
 			}
 			$query .= $this->data['customer_id'] . ", ";

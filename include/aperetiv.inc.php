@@ -30,8 +30,8 @@ if(isset($lang)) {
 /*
    $_PJ_db_type is currently used for PEAR Module Auth only. Leave this untouched!
 */
-$_PJ_db_type		= 'mysqli';
-$_PJ_include_path	= $_PJ_root . '/include';
+$_PJ_db_type = 'mysqli';
+$_PJ_include_path = $_PJ_root . '/include';
 
 if(!isset($_PJ_root)) {
 	print '<b>ERROR:</b> $_PJ_root is not defined! (' . __FILE__ . ', line: 21)';

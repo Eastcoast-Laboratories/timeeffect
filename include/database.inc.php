@@ -33,7 +33,7 @@
 		// Only run migrations if configuration is properly loaded
 		if (!isset($GLOBALS['_PJ_auth_table']) || 
 			!isset($GLOBALS['_PJ_db_host']) || 
-			!isset($GLOBALS['_PJ_db_prefix'])) {
+			!isset($GLOBALS['_PJ_table_prefix'])) {
 			return; // Configuration not ready
 		}
 

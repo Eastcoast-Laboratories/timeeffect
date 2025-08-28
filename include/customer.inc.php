@@ -272,8 +272,8 @@
 			if (isSecureDefaultsEnabled() && !isset($this->data['id'])) {
 				global $_PJ_auth;
 				if (isset($_PJ_auth) && is_object($_PJ_auth)) {
-					$current_user_id = $_PJ_auth->giveValue('id');
-					$current_group_id = $_PJ_auth->giveValue('gid');
+					$current_user_id = is_callable(array($_PJ_auth, 'giveValue')) ? $_PJ_auth->giveValue('id') : (property_exists($_PJ_auth, 'id') ? $_PJ_auth->id : null);
+					$current_group_id = is_callable(array($_PJ_auth, 'giveValue')) ? $_PJ_auth->giveValue('gid') : (property_exists($_PJ_auth, 'gid') ? $_PJ_auth->gid : null);
 					
 					// Apply secure customer defaults
 					$this->data = applySecureCustomerDefaults($this->data, $current_user_id, $current_group_id);

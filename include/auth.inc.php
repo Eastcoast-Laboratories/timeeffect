@@ -4,6 +4,11 @@
 		exit;
 	}
 
+	// Skip auth initialization in CLI mode
+	if (isset($GLOBALS['_PJ_CLI_MODE']) && $GLOBALS['_PJ_CLI_MODE']) {
+		return;
+	}
+
 	require_once('Auth/Auth.php');
 	require_once($_PJ_root . '/include/login_attempts.inc.php');
 

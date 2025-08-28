@@ -14,7 +14,24 @@ class PDFReport extends Cezpdf {
 	var $footnote_count	= 0;
 
 	function PDFReport($paper = 'a4', $orientation = 'landscape') {
+		// Initialize ez array first
+		if (!isset($this->ez)) {
+			$this->ez = array('fontSize' => 10);
+		}
+		
 		$this->Cezpdf($paper, $orientation);
+		
+		// Force initialization of all required margins and page dimensions
+		$this->ez['pageWidth'] = isset($this->ez['pageWidth']) ? $this->ez['pageWidth'] : 595;
+		$this->ez['pageHeight'] = isset($this->ez['pageHeight']) ? $this->ez['pageHeight'] : 842;
+		$this->ez['leftMargin'] = isset($this->ez['leftMargin']) ? $this->ez['leftMargin'] : 30;
+		$this->ez['rightMargin'] = isset($this->ez['rightMargin']) ? $this->ez['rightMargin'] : 30;
+		$this->ez['topMargin'] = isset($this->ez['topMargin']) ? $this->ez['topMargin'] : 30;
+		$this->ez['bottomMargin'] = isset($this->ez['bottomMargin']) ? $this->ez['bottomMargin'] : 30;
+		
+		// Set current writing position
+		$this->y = $this->ez['pageHeight'] - $this->ez['topMargin'];
+		
 		$this->setFontFamily('Lucida-Sans.afm', $GLOBALS['_PJ_pdf_fonts']);
 		$this->selectFont($GLOBALS['_PJ_include_path'] . '/font/Lucida-Sans.afm');
 	}

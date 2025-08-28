@@ -36,12 +36,12 @@ Run `php sql/migrate.php` once; applied files are tracked in `{prefix}migrations
 private function runMigrationX() {
     try {
         // Safety check
-        $query = "SHOW TABLES LIKE '" . $GLOBALS['_PJ_db_prefix'] . "new_table'";
+        $query = "SHOW TABLES LIKE '" . $GLOBALS['_PJ_table_prefix'] . "new_table'";
         $this->db->query($query);
         if ($this->db->next_record()) return true;
         
         // Create table
-        $query = "CREATE TABLE " . $GLOBALS['_PJ_db_prefix'] . "new_table (
+        $query = "CREATE TABLE " . $GLOBALS['_PJ_table_prefix'] . "new_table (
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(255) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

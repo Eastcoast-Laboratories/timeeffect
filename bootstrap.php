@@ -91,9 +91,10 @@ function checkTimeEffectMigration() {
     
     // Skip checks for migration page itself and during installation
     $current_script = basename($_SERVER['SCRIPT_NAME']);
+    $request_uri = $_SERVER['REQUEST_URI'] ?? '';
     if ($current_script === 'migrate.php' || 
-        strpos($_SERVER['REQUEST_URI'], '/install/') !== false ||
-        strpos($_SERVER['REQUEST_URI'], '/sql/') !== false) {
+        strpos($request_uri, '/install/') !== false ||
+        strpos($request_uri, '/sql/') !== false) {
         return;
     }
     

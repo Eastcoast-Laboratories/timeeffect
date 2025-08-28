@@ -16,6 +16,22 @@
 	$password_retype = $_REQUEST['password_retype'] ?? '';
 	$theme_preference = $_REQUEST['theme_preference'] ?? null;
 	$gids = $_REQUEST['gids'] ?? [];
+	
+	// Invoice settings
+	$company_name = $_REQUEST['company_name'] ?? '';
+	$company_address = $_REQUEST['company_address'] ?? '';
+	$company_postal_code = $_REQUEST['company_postal_code'] ?? '';
+	$company_city = $_REQUEST['company_city'] ?? '';
+	$company_country = $_REQUEST['company_country'] ?? '';
+	$tax_number = $_REQUEST['tax_number'] ?? '';
+	$vat_number = $_REQUEST['vat_number'] ?? '';
+	$bank_name = $_REQUEST['bank_name'] ?? '';
+	$bank_iban = $_REQUEST['bank_iban'] ?? '';
+	$bank_bic = $_REQUEST['bank_bic'] ?? '';
+	$invoice_number_format = $_REQUEST['invoice_number_format'] ?? 'R-{YYYY}-{MM}-{###}';
+	$default_vat_rate = $_REQUEST['default_vat_rate'] ?? '19.00';
+	$payment_terms_days = $_REQUEST['payment_terms_days'] ?? '14';
+	$payment_terms_text = $_REQUEST['payment_terms_text'] ?? '';
 
 	$center_template	= "user";
 	$center_title		= 'Benutzer';
@@ -32,6 +48,30 @@
 				// Refresh auth data to reflect theme changes
 				$_PJ_auth->fetchAdditionalData();
 			}
+		}
+		
+		// Handle invoice settings update via direct database update
+		$user_id = $_PJ_auth->giveValue('id');
+		$invoice_update_query = "UPDATE " . $GLOBALS['_PJ_auth_table'] . " SET 
+			company_name = '" . add_slashes($company_name) . "',
+			company_address = '" . add_slashes($company_address) . "',
+			company_postal_code = '" . add_slashes($company_postal_code) . "',
+			company_city = '" . add_slashes($company_city) . "',
+			company_country = '" . add_slashes($company_country) . "',
+			tax_number = '" . add_slashes($tax_number) . "',
+			vat_number = '" . add_slashes($vat_number) . "',
+			bank_name = '" . add_slashes($bank_name) . "',
+			bank_iban = '" . add_slashes($bank_iban) . "',
+			bank_bic = '" . add_slashes($bank_bic) . "',
+			invoice_number_format = '" . add_slashes($invoice_number_format) . "',
+			default_vat_rate = " . floatval($default_vat_rate) . ",
+			payment_terms_days = " . intval($payment_terms_days) . ",
+			payment_terms_text = '" . add_slashes($payment_terms_text) . "'
+			WHERE id = " . intval($user_id);
+		
+		if($db->query($invoice_update_query)) {
+			// Refresh auth data to reflect invoice settings changes
+			$_PJ_auth->fetchAdditionalData();
 		}
 		
 		// Handle regular user data updates

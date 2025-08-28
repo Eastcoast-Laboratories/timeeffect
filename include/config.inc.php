@@ -76,3 +76,32 @@ $GLOBALS['mysql_charset'] = 'utf8';
 
 require_once('fix_php7.php');
 require_once('aperetiv.inc.php');
+
+// Auto-run database migrations after database connection is established
+if (isset($GLOBALS['_PJ_db_host']) && !defined('SKIP_AUTO_MIGRATIONS')) {
+    // Skip migrations during installation or migration script execution
+    $current_script = basename($_SERVER['SCRIPT_NAME'] ?? '');
+    $skip_scripts = ['migrate.php', 'install.php', 'index.php'];
+    $skip_paths = ['/install/', '/sql/'];
+    
+    $should_skip = in_array($current_script, $skip_scripts);
+    foreach ($skip_paths as $path) {
+        if (strpos($_SERVER['REQUEST_URI'] ?? '', $path) !== false) {
+            $should_skip = true;
+            break;
+        }
+    }
+    
+    if (!$should_skip) {
+        try {
+            require_once(__DIR__ . '/migrations.inc.php');
+            $migrations_run = checkAndRunMigrations();
+            
+            if ($migrations_run !== false && !empty($migrations_run)) {
+                error_log("TimeEffect: Auto-migrations completed: " . implode(', ', $migrations_run));
+            }
+        } catch (Exception $e) {
+            error_log("TimeEffect: Auto-migration failed: " . $e->getMessage());
+        }
+    }
+}

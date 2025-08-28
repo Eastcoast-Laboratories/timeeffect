@@ -16,7 +16,7 @@
 	$altered = $_REQUEST['altered'] ?? null;
 	$project_name = $_REQUEST['project_name'] ?? '';
 	$project_desc = $_REQUEST['project_desc'] ?? '';
-	$project_budget = $_REQUEST['project_budget'] ?? '';
+	$project_budget = $_REQUEST['project_budget'] ?? '0';
 	$project_budget_currency = $_REQUEST['project_budget_currency'] ?? '';
 	$closed = $_REQUEST['closed'] ?? '';
 	$gid = $_REQUEST['gid'] ?? '';

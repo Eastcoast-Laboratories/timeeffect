@@ -28,7 +28,16 @@ if(is_array($users)) {
 ?>
 <A CLASS="list" HREF="<?= $GLOBALS['_PJ_pdf_statistics_script'] . "?mode=$mode&cid=$cid&pid=$pid&syear=$syear&smonth=$smonth&sday=$sday&eyear=$eyear&emonth=$emonth&eday=$eday$qs" ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/acrobat.gif" BORDER="0" ALT="<?php if(!empty($GLOBALS['_PJ_strings']['createpdf'])) echo $GLOBALS['_PJ_strings']['createpdf'] ?>" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;<?php if(!empty($GLOBALS['_PJ_strings']['createpdf'])) echo $GLOBALS['_PJ_strings']['createpdf'] ?></A>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<A CLASS="list" HREF="<?= $GLOBALS['_PJ_csv_statistics_script'] . "?mode=$mode&cid=$cid&pid=$pid&syear=$syear&smonth=$smonth&sday=$sday&eyear=$eyear&emonth=$emonth&eday=$eday$qs" ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/csv.gif" BORDER="0" ALT="<?php if(!empty($GLOBALS['_PJ_strings']['createcsv'])) echo $GLOBALS['_PJ_strings']['createcsv'] ?>" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;<?php if(!empty($GLOBALS['_PJ_strings']['createcsv'])) echo $GLOBALS['_PJ_strings']['createcsv'] ?></A>
+<A CLASS="list" HREF="<?php echo $GLOBALS['_PJ_csv_statistics_script'] . "?mode=$mode&cid=$cid&pid=$pid&syear=$syear&smonth=$smonth&sday=$sday&eyear=$eyear&emonth=$emonth&eday=$eday$qs" ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/csv.gif" BORDER="0" ALT="<?php if(!empty($GLOBALS['_PJ_strings']['createcsv'])) echo $GLOBALS['_PJ_strings']['createcsv'] ?>" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;<?php if(!empty($GLOBALS['_PJ_strings']['createcsv'])) echo $GLOBALS['_PJ_strings']['createcsv'] ?></A>
+<?php
+// Add invoice generation option if customer is selected and user has accountant permission
+if($cid && $cid !== 'unassigned' && $_PJ_auth->checkPermission('accountant')) {
+?>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<A CLASS="list" HREF="<?php echo $_PJ_http_root ?>/invoice/create.php?customer_id=<?php echo $cid ?><?php echo $pid ? "&project_id=$pid" : "" ?>&period_start=<?php echo "$syear-$smonth-$sday" ?>&period_end=<?php echo "$eyear-$emonth-$eday" ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/acrobat23.gif" BORDER="0" ALT="Generate Invoice" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;Generate Invoice</A>
+<?php
+}
+?>
 <?php
 } else { ?>&nbsp;<?php
 } ?></TH>

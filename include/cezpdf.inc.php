@@ -224,7 +224,7 @@ function ezNewPage(){
 
   if(!empty($pageRequired)){
     // make a new page, setting the writing point back to the top
-    $this->y = $this->ez['pageHeight']-$this->ez['topMargin'];
+    $this->y = (isset($this->ez['pageHeight']) ? $this->ez['pageHeight'] : 842) - (isset($this->ez['topMargin']) ? $this->ez['topMargin'] : 30);
     // make the new page with a call to the basic class.
     $this->ezPageCount++;
     if (isset($this->ez['insertMode']) && $this->ez['insertMode']==1){
@@ -467,7 +467,7 @@ function ezOutput($options=0){
 function ezSetY($y){
   // used to change the vertical position of the writing point.
   $this->y = $y;
-  if ( $this->y < $this->ez['bottomMargin']){
+  if ( $this->y < (isset($this->ez['bottomMargin']) ? $this->ez['bottomMargin'] : 30)){
     // then make a new page
     $this->ezNewPage();
   }
@@ -683,7 +683,7 @@ function ezTable(&$data,$cols='',$title='',$options=''){
   }
   $options['gap']=2*$options['colGap'];
   
-  $middle = ($this->ez['pageWidth']-$this->ez['rightMargin'])/2+($this->ez['leftMargin'])/2;
+  $middle = ((isset($this->ez['pageWidth']) ? $this->ez['pageWidth'] : 595)-(isset($this->ez['rightMargin']) ? $this->ez['rightMargin'] : 30))/2+((isset($this->ez['leftMargin']) ? $this->ez['leftMargin'] : 30))/2;
   // figure out the maximum widths of the text within each column
   $maxWidth=array();
   foreach($cols as $colName=>$colHeading){
@@ -824,7 +824,7 @@ function ezTable(&$data,$cols='',$title='',$options=''){
       $xref = $this->ez['leftMargin'];
       break;
     case 'right':
-      $xref = $this->ez['pageWidth'] - $this->ez['rightMargin'];
+      $xref = (isset($this->ez['pageWidth']) ? $this->ez['pageWidth'] : 595) - (isset($this->ez['rightMargin']) ? $this->ez['rightMargin'] : 30);
       break;
     case 'centre':
     case 'center':
@@ -854,7 +854,7 @@ function ezTable(&$data,$cols='',$title='',$options=''){
   $x0=$x+$dx;
   $x1=$t+$dx;
 
-  $baseLeftMargin = $this->ez['leftMargin'];
+  $baseLeftMargin = (isset($this->ez['leftMargin']) ? $this->ez['leftMargin'] : 30);
   $basePos = $pos;
   $baseX0 = $x0;
   $baseX1 = $x1;
@@ -874,7 +874,7 @@ function ezTable(&$data,$cols='',$title='',$options=''){
   while ($abortTable){
   $abortTable=0;
 
-  $dm = $this->ez['leftMargin']-$baseLeftMargin;
+  $dm = (isset($this->ez['leftMargin']) ? $this->ez['leftMargin'] : 30)-$baseLeftMargin;
   foreach($basePos as $k=>$v){
     $pos[$k]=$v+$dm;
   }
@@ -904,7 +904,7 @@ function ezTable(&$data,$cols='',$title='',$options=''){
   }
 
         // margins may have changed on the newpage
-        $dm = $this->ez['leftMargin']-$baseLeftMargin;
+        $dm = (isset($this->ez['leftMargin']) ? $this->ez['leftMargin'] : 30)-$baseLeftMargin;
         foreach($basePos as $k=>$v){
           $pos[$k]=$v+$dm;
         }
@@ -928,7 +928,7 @@ function ezTable(&$data,$cols='',$title='',$options=''){
     $y1 = $y;
 
 
-    $dm = $this->ez['leftMargin']-$baseLeftMargin;
+    $dm = (isset($this->ez['leftMargin']) ? $this->ez['leftMargin'] : 30)-$baseLeftMargin;
     foreach($basePos as $k=>$v){
       $pos[$k]=$v+$dm;
     }
@@ -975,7 +975,7 @@ function ezTable(&$data,$cols='',$title='',$options=''){
     while(!$abortTable && ($newPage || $newRow)){
       
       $y-=$height;
-      if ($newPage || $y<$this->ez['bottomMargin'] || (isset($options['minRowSpace']) && $y<($this->ez['bottomMargin']+$options['minRowSpace'])) ){
+      if ($newPage || $y<(isset($this->ez['bottomMargin']) ? $this->ez['bottomMargin'] : 30) || (isset($options['minRowSpace']) && $y<((isset($this->ez['bottomMargin']) ? $this->ez['bottomMargin'] : 30)+$options['minRowSpace'])) ){
         // check that enough rows are with the heading
         if ($options['protectRows']>0 && $movedOnce==0 && $cnt<=$options['protectRows']){
           // then we need to move the whole table onto the next page
@@ -1062,7 +1062,7 @@ function ezTable(&$data,$cols='',$title='',$options=''){
             if(empty($colNewPage)){
               $this->y=$this->y-$height;
             }
-            if ($this->y < $this->ez['bottomMargin']){
+            if ($this->y < (isset($this->ez['bottomMargin']) ? $this->ez['bottomMargin'] : 30)){
   //            $this->ezNewPage();
               $newPage=1;  // whether a new page is required for any of the columns
               $colNewPage=1; // whether a new page is required for this column
@@ -1231,12 +1231,12 @@ function ezText($text,$size=0,$options=array(),$test=0){
   if (is_array($options) && isset($options['aleft'])){
     $left=$options['aleft'];
   } else {
-    $left = $this->ez['leftMargin'] + ((is_array($options) && isset($options['left']))?$options['left']:0);
+    $left = (isset($this->ez['leftMargin']) ? $this->ez['leftMargin'] : 30) + (isset($options['left']) ? $options['left'] : 0);
   }
   if (is_array($options) && isset($options['aright'])){
     $right=$options['aright'];
   } else {
-    $right = $this->ez['pageWidth'] - $this->ez['rightMargin'] - ((is_array($options) && isset($options['right']))?$options['right']:0);
+    $right = (isset($this->ez['pageWidth']) ? $this->ez['pageWidth'] : 595) - (isset($this->ez['rightMargin']) ? $this->ez['rightMargin'] : 30) - (isset($options['right']) ? $options['right'] : 0);
   }
   if ($size<=0){
     $size = $this->ez['fontSize'];
@@ -1266,7 +1266,7 @@ function ezText($text,$size=0,$options=array(),$test=0){
     while (strlen($line) || $start){
       $start=0;
       $this->y=$this->y-$height;
-      if ($this->y < $this->ez['bottomMargin']){
+      if ($this->y < (isset($this->ez['bottomMargin']) ? $this->ez['bottomMargin'] : 30)){
         if(!empty($test)){
           $newPage=true;
         } else {
@@ -1277,12 +1277,12 @@ function ezText($text,$size=0,$options=array(),$test=0){
       if (is_array($options) && isset($options['aleft'])){
         $left=$options['aleft'];
       } else {
-        $left = $this->ez['leftMargin'] + ((is_array($options) && isset($options['left']))?$options['left']:0);
+        $left = (isset($this->ez['leftMargin']) ? $this->ez['leftMargin'] : 30) + (isset($options['left']) ? $options['left'] : 0);
       }
       if (is_array($options) && isset($options['aright'])){
         $right=$options['aright'];
       } else {
-        $right = $this->ez['pageWidth'] - $this->ez['rightMargin'] - ((is_array($options) && isset($options['right']))?$options['right']:0);
+        $right = (isset($this->ez['pageWidth']) ? $this->ez['pageWidth'] : 595) - (isset($this->ez['rightMargin']) ? $this->ez['rightMargin'] : 30) - (isset($options['right']) ? $options['right'] : 0);
       }
       $line=$this->addTextWrap($left,$this->y,$right-$left,$size,$line,$just,0,$test);
     }

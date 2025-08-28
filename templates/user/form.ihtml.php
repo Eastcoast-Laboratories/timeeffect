@@ -127,6 +127,55 @@
 						<OPTION VALUE="light"<?php if(isset($user) && $user->giveValue('theme_preference') == 'light') print ' SELECTED'; ?>>Light</OPTION>
 						<OPTION VALUE="dark"<?php if(isset($user) && $user->giveValue('theme_preference') == 'dark') print ' SELECTED'; ?>>Dark</OPTION>
 					</SELECT></TD>
+				</TR><TR>
+					<TD COLSPAN="2" CLASS="FormFieldName" style="padding-top: 20px; font-weight: bold; border-top: 1px solid #ccc;">Invoice Settings</TD>
+				</TR><TR>
+					<TD CLASS="FormFieldName">Company Name:</TD>
+					<TD CLASS="FormField"><INPUT CLASS="FormField" NAME="company_name" VALUE="<?php echo htmlspecialchars($user->giveValue('company_name') ?? ''); ?>"></TD>
+				</TR><TR>
+					<TD CLASS="FormFieldName">Company Address:</TD>
+					<TD CLASS="FormField"><TEXTAREA CLASS="FormField" NAME="company_address" rows="3"><?php echo htmlspecialchars($user->giveValue('company_address') ?? ''); ?></TEXTAREA></TD>
+				</TR><TR>
+					<TD CLASS="FormFieldName">Postal Code:</TD>
+					<TD CLASS="FormField"><INPUT CLASS="FormField" NAME="company_postal_code" VALUE="<?php echo htmlspecialchars($user->giveValue('company_postal_code') ?? ''); ?>"></TD>
+				</TR><TR>
+					<TD CLASS="FormFieldName">City:</TD>
+					<TD CLASS="FormField"><INPUT CLASS="FormField" NAME="company_city" VALUE="<?php echo htmlspecialchars($user->giveValue('company_city') ?? ''); ?>"></TD>
+				</TR><TR>
+					<TD CLASS="FormFieldName">Country:</TD>
+					<TD CLASS="FormField"><INPUT CLASS="FormField" NAME="company_country" VALUE="<?php echo htmlspecialchars($user->giveValue('company_country') ?? ''); ?>"></TD>
+				</TR><TR>
+					<TD CLASS="FormFieldName">Tax Number:</TD>
+					<TD CLASS="FormField"><INPUT CLASS="FormField" NAME="tax_number" VALUE="<?php echo htmlspecialchars($user->giveValue('tax_number') ?? ''); ?>"></TD>
+				</TR><TR>
+					<TD CLASS="FormFieldName">VAT Number:</TD>
+					<TD CLASS="FormField"><INPUT CLASS="FormField" NAME="vat_number" VALUE="<?php echo htmlspecialchars($user->giveValue('vat_number') ?? ''); ?>"></TD>
+				</TR><TR>
+					<TD CLASS="FormFieldName">Bank Name:</TD>
+					<TD CLASS="FormField"><INPUT CLASS="FormField" NAME="bank_name" VALUE="<?php echo htmlspecialchars($user->giveValue('bank_name') ?? ''); ?>"></TD>
+				</TR><TR>
+					<TD CLASS="FormFieldName">Bank IBAN:</TD>
+					<TD CLASS="FormField"><INPUT CLASS="FormField" NAME="bank_iban" VALUE="<?php echo htmlspecialchars($user->giveValue('bank_iban') ?? ''); ?>"></TD>
+				</TR><TR>
+					<TD CLASS="FormFieldName">Bank BIC:</TD>
+					<TD CLASS="FormField"><INPUT CLASS="FormField" NAME="bank_bic" VALUE="<?php echo htmlspecialchars($user->giveValue('bank_bic') ?? ''); ?>"></TD>
+				</TR><TR>
+					<TD CLASS="FormFieldName">Invoice Number Format:</TD>
+					<TD CLASS="FormField">
+						<INPUT CLASS="FormField" NAME="invoice_number_format" VALUE="<?php echo htmlspecialchars($user->giveValue('invoice_number_format') ?? 'R-{YYYY}-{MM}-{###}'); ?>">
+						<div style="font-size: 11px; color: #666; margin-top: 3px;">
+							Use {YYYY} for year, {MM} for month, {###} for sequential number
+						</div>
+					</TD>
+				</TR><TR>
+					<TD CLASS="FormFieldName">Default VAT Rate (%):</TD>
+					<TD CLASS="FormField"><INPUT CLASS="FormField" TYPE="number" step="0.01" NAME="default_vat_rate" VALUE="<?php echo htmlspecialchars($user->giveValue('default_vat_rate') ?? '19.00'); ?>"></TD>
+				</TR><TR>
+					<TD CLASS="FormFieldName">Payment Terms (Days):</TD>
+					<TD CLASS="FormField"><INPUT CLASS="FormField" TYPE="number" NAME="payment_terms_days" VALUE="<?php echo htmlspecialchars($user->giveValue('payment_terms_days') ?? '14'); ?>"></TD>
+				</TR><TR>
+					<TD CLASS="FormFieldName">Payment Terms Text:</TD>
+					<TD CLASS="FormField"><TEXTAREA CLASS="FormField" NAME="payment_terms_text" rows="3"><?php echo htmlspecialchars($user->giveValue('payment_terms_text') ?? ''); ?></TEXTAREA></TD>
 					<?php
 if($_PJ_auth->checkPermission('admin')) {
 	?>
