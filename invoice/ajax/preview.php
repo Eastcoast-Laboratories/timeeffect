@@ -25,9 +25,9 @@ try {
     
     if (empty($customer_id) || empty($period_start) || empty($period_end)) {
         if (empty($period_start)) {
-            $errormessage="Set a Month for the invoice";
+            $errormessage = !empty($GLOBALS['_PJ_strings']['set_month_for_invoice']) ? $GLOBALS['_PJ_strings']['set_month_for_invoice'] : 'Set a Month for the invoice';
         }else {
-            $errormessage="Missing required fields";
+            $errormessage = !empty($GLOBALS['_PJ_strings']['missing_required_fields']) ? $GLOBALS['_PJ_strings']['missing_required_fields'] : 'Missing required fields';
         }
         echo json_encode(['success' => false, 'error' => $errormessage, 'debug' => [
             'customer_id' => $customer_id,
@@ -108,25 +108,25 @@ try {
     
     // Invoice Header
     $html .= '<div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 20px;">';
-    $html .= '<h2 style="margin: 0; color: #333;">INVOICE PREVIEW</h2>';
-    $html .= '<p style="margin: 5px 0; color: #666;">Invoice Date: ' . date('d.m.Y', strtotime($invoice_date)) . '</p>';
+    $html .= '<h2 style="margin: 0; color: #333;">' . (!empty($GLOBALS['_PJ_strings']['invoice_preview']) ? $GLOBALS['_PJ_strings']['invoice_preview'] : 'INVOICE PREVIEW') . '</h2>';
+    $html .= '<p style="margin: 5px 0; color: #666;">' . (!empty($GLOBALS['_PJ_strings']['invoice_date']) ? $GLOBALS['_PJ_strings']['invoice_date'] : 'Invoice Date') . ': ' . date('d.m.Y', strtotime($invoice_date)) . '</p>';
     $html .= '</div>';
     
     // Customer Information
     $html .= '<div style="margin-bottom: 25px;">';
-    $html .= '<h4 style="margin-bottom: 10px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 5px;">Bill To:</h4>';
+    $html .= '<h4 style="margin-bottom: 10px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 5px;">' . (!empty($GLOBALS['_PJ_strings']['bill_to']) ? $GLOBALS['_PJ_strings']['bill_to'] : 'Bill To') . ':</h4>';
     $html .= '<div style="font-size: 14px; line-height: 1.6;">';
     $html .= '<strong>' . htmlspecialchars($customer['name']) . '</strong><br>';
     if ($project) {
-        $html .= 'Project: ' . htmlspecialchars($project['name']) . '<br>';
+        $html .= (!empty($GLOBALS['_PJ_strings']['project']) ? $GLOBALS['_PJ_strings']['project'] : 'Project') . ': ' . htmlspecialchars($project['name']) . '<br>';
     }
     $html .= '</div>';
     $html .= '</div>';
     
     // Invoice Period
     $html .= '<div style="margin-bottom: 25px; background: #f9f9f9; padding: 15px; border-left: 4px solid #007cba;">';
-    $html .= '<strong>Service Period:</strong> ' . date('d.m.Y', strtotime($period_start)) . ' - ' . date('d.m.Y', strtotime($period_end)) . '<br>';
-    $html .= '<strong>Total Hours:</strong> ' . number_format($total_hours, 2) . 'h';
+    $html .= '<strong>' . (!empty($GLOBALS['_PJ_strings']['service_period']) ? $GLOBALS['_PJ_strings']['service_period'] : 'Service Period') . ':</strong> ' . date('d.m.Y', strtotime($period_start)) . ' - ' . date('d.m.Y', strtotime($period_end)) . '<br>';
+    $html .= '<strong>' . (!empty($GLOBALS['_PJ_strings']['total_hours']) ? $GLOBALS['_PJ_strings']['total_hours'] : 'Total Hours') . ':</strong> ' . number_format($total_hours, 2) . 'h';
     $html .= '</div>';
     
     if ($generate_type === 'fixed_contract' && $activeContract && $activeContract['contract_type'] === 'fixed_monthly') {
@@ -139,11 +139,11 @@ try {
         
         // Fixed contract table
         $html .= '<table style="width: 100%; border-collapse: collapse; margin-bottom: 25px; border: 1px solid #ddd;">';
-        $html .= '<thead><tr style="background: #f5f5f5;"><th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Description</th><th style="padding: 12px; text-align: right; border: 1px solid #ddd;">Hours</th><th style="padding: 12px; text-align: right; border: 1px solid #ddd;">Amount</th></tr></thead>';
+        $html .= '<thead><tr style="background: #f5f5f5;"><th style="padding: 12px; text-align: left; border: 1px solid #ddd;">' . (!empty($GLOBALS['_PJ_strings']['description']) ? $GLOBALS['_PJ_strings']['description'] : 'Description') . '</th><th style="padding: 12px; text-align: right; border: 1px solid #ddd;">' . (!empty($GLOBALS['_PJ_strings']['hours']) ? $GLOBALS['_PJ_strings']['hours'] : 'Hours') . '</th><th style="padding: 12px; text-align: right; border: 1px solid #ddd;">' . (!empty($GLOBALS['_PJ_strings']['amount']) ? $GLOBALS['_PJ_strings']['amount'] : 'Amount') . '</th></tr></thead>';
         $html .= '<tbody>';
-        $html .= '<tr><td style="padding: 12px; border: 1px solid #ddd;">Fixed Monthly Contract</td><td style="padding: 12px; text-align: right; border: 1px solid #ddd;">' . number_format($contracted_hours, 2) . 'h</td><td style="padding: 12px; text-align: right; border: 1px solid #ddd;">' . number_format($fixed_amount, 2) . '€</td></tr>';
-        $html .= '<tr><td style="padding: 12px; border: 1px solid #ddd;">Previous Carryover</td><td style="padding: 12px; text-align: right; border: 1px solid #ddd;">' . number_format($previous_carryover, 2) . 'h</td><td style="padding: 12px; text-align: right; border: 1px solid #ddd;">-</td></tr>';
-        $html .= '<tr><td style="padding: 12px; border: 1px solid #ddd;">Current Carryover</td><td style="padding: 12px; text-align: right; border: 1px solid #ddd;">' . number_format($current_carryover, 2) . 'h</td><td style="padding: 12px; text-align: right; border: 1px solid #ddd;">-</td></tr>';
+        $html .= '<tr><td style="padding: 12px; border: 1px solid #ddd;">' . (!empty($GLOBALS['_PJ_strings']['fixed_monthly_contract']) ? $GLOBALS['_PJ_strings']['fixed_monthly_contract'] : 'Fixed Monthly Contract') . '</td><td style="padding: 12px; text-align: right; border: 1px solid #ddd;">' . number_format($contracted_hours, 2) . 'h</td><td style="padding: 12px; text-align: right; border: 1px solid #ddd;">' . number_format($fixed_amount, 2) . '€</td></tr>';
+        $html .= '<tr><td style="padding: 12px; border: 1px solid #ddd;">' . (!empty($GLOBALS['_PJ_strings']['previous_carryover']) ? $GLOBALS['_PJ_strings']['previous_carryover'] : 'Previous Carryover') . '</td><td style="padding: 12px; text-align: right; border: 1px solid #ddd;">' . number_format($previous_carryover, 2) . 'h</td><td style="padding: 12px; text-align: right; border: 1px solid #ddd;">-</td></tr>';
+        $html .= '<tr><td style="padding: 12px; border: 1px solid #ddd;">' . (!empty($GLOBALS['_PJ_strings']['current_carryover']) ? $GLOBALS['_PJ_strings']['current_carryover'] : 'Current Carryover') . '</td><td style="padding: 12px; text-align: right; border: 1px solid #ddd;">' . number_format($current_carryover, 2) . 'h</td><td style="padding: 12px; text-align: right; border: 1px solid #ddd;">-</td></tr>';
         $html .= '</tbody></table>';
         
         $net_amount = $fixed_amount;
@@ -153,9 +153,9 @@ try {
         $net_amount = $total_hours * $hourly_rate;
         
         $html .= '<table style="width: 100%; border-collapse: collapse; margin-bottom: 25px; border: 1px solid #ddd;">';
-        $html .= '<thead><tr style="background: #f5f5f5;"><th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Description</th><th style="padding: 12px; text-align: right; border: 1px solid #ddd;">Hours</th><th style="padding: 12px; text-align: right; border: 1px solid #ddd;">Rate</th><th style="padding: 12px; text-align: right; border: 1px solid #ddd;">Amount</th></tr></thead>';
+        $html .= '<thead><tr style="background: #f5f5f5;"><th style="padding: 12px; text-align: left; border: 1px solid #ddd;">' . (!empty($GLOBALS['_PJ_strings']['description']) ? $GLOBALS['_PJ_strings']['description'] : 'Description') . '</th><th style="padding: 12px; text-align: right; border: 1px solid #ddd;">' . (!empty($GLOBALS['_PJ_strings']['hours']) ? $GLOBALS['_PJ_strings']['hours'] : 'Hours') . '</th><th style="padding: 12px; text-align: right; border: 1px solid #ddd;">' . (!empty($GLOBALS['_PJ_strings']['rate']) ? $GLOBALS['_PJ_strings']['rate'] : 'Rate') . '</th><th style="padding: 12px; text-align: right; border: 1px solid #ddd;">' . (!empty($GLOBALS['_PJ_strings']['amount']) ? $GLOBALS['_PJ_strings']['amount'] : 'Amount') . '</th></tr></thead>';
         $html .= '<tbody>';
-        $html .= '<tr><td style="padding: 12px; border: 1px solid #ddd;">Professional Services</td><td style="padding: 12px; text-align: right; border: 1px solid #ddd;">' . number_format($total_hours, 2) . 'h</td><td style="padding: 12px; text-align: right; border: 1px solid #ddd;">' . number_format($hourly_rate, 2) . '€</td><td style="padding: 12px; text-align: right; border: 1px solid #ddd;">' . number_format($net_amount, 2) . '€</td></tr>';
+        $html .= '<tr><td style="padding: 12px; border: 1px solid #ddd;">' . (!empty($GLOBALS['_PJ_strings']['professional_services']) ? $GLOBALS['_PJ_strings']['professional_services'] : 'Professional Services') . '</td><td style="padding: 12px; text-align: right; border: 1px solid #ddd;">' . number_format($total_hours, 2) . 'h</td><td style="padding: 12px; text-align: right; border: 1px solid #ddd;">' . number_format($hourly_rate, 2) . '€</td><td style="padding: 12px; text-align: right; border: 1px solid #ddd;">' . number_format($net_amount, 2) . '€</td></tr>';
         $html .= '</tbody></table>';
     }
     
@@ -173,17 +173,17 @@ try {
     $html .= '<div style="margin-top: 30px; border-top: 2px solid #333; padding-top: 20px;">';
     $html .= '<table style="width: 100%; border-collapse: collapse; margin-bottom: 25px;">';
     $html .= '<tbody>';
-    $html .= '<tr><td style="padding: 8px; text-align: right; font-weight: bold;">Subtotal:</td><td style="padding: 8px; text-align: right; width: 120px;">' . number_format($totals['net_amount'], 2) . '€</td></tr>';
-    $html .= '<tr><td style="padding: 8px; text-align: right;">VAT (' . number_format($vat_rate, 1) . '%):</td><td style="padding: 8px; text-align: right;">' . number_format($totals['vat_amount'], 2) . '€</td></tr>';
-    $html .= '<tr style="border-top: 2px solid #333; font-weight: bold; font-size: 16px;"><td style="padding: 12px; text-align: right;">TOTAL:</td><td style="padding: 12px; text-align: right; background: #f0f0f0;">' . number_format($totals['gross_amount'], 2) . '€</td></tr>';
+    $html .= '<tr><td style="padding: 8px; text-align: right; font-weight: bold;">' . (!empty($GLOBALS['_PJ_strings']['subtotal']) ? $GLOBALS['_PJ_strings']['subtotal'] : 'Subtotal') . ':</td><td style="padding: 8px; text-align: right; width: 120px;">' . number_format($totals['net_amount'], 2) . '€</td></tr>';
+    $html .= '<tr><td style="padding: 8px; text-align: right;">' . (!empty($GLOBALS['_PJ_strings']['vat']) ? $GLOBALS['_PJ_strings']['vat'] : 'VAT') . ' (' . number_format($vat_rate, 1) . '%):</td><td style="padding: 8px; text-align: right;">' . number_format($totals['vat_amount'], 2) . '€</td></tr>';
+    $html .= '<tr style="border-top: 2px solid #333; font-weight: bold; font-size: 16px;"><td style="padding: 12px; text-align: right;">' . (!empty($GLOBALS['_PJ_strings']['total']) ? strtoupper($GLOBALS['_PJ_strings']['total']) : 'TOTAL') . ':</td><td style="padding: 12px; text-align: right; background: #f0f0f0;">' . number_format($totals['gross_amount'], 2) . '€</td></tr>';
     $html .= '</tbody></table>';
     $html .= '</div>';
     
     if (!empty($efforts)) {
         $html .= '<div style="margin-top: 30px;">';
-        $html .= '<h4 style="margin-bottom: 15px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 5px;">Work Details (' . count($efforts) . ' entries)</h4>';
+        $html .= '<h4 style="margin-bottom: 15px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 5px;">' . (!empty($GLOBALS['_PJ_strings']['work_details']) ? $GLOBALS['_PJ_strings']['work_details'] : 'Work Details') . ' (' . count($efforts) . ' ' . (!empty($GLOBALS['_PJ_strings']['entries']) ? $GLOBALS['_PJ_strings']['entries'] : 'entries') . ')</h4>';
         $html .= '<table style="width: 100%; border-collapse: collapse; font-size: 13px;">';
-        $html .= '<thead><tr style="background: #f8f8f8;"><th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Date</th><th style="padding: 8px; text-align: right; border: 1px solid #ddd;">Hours</th><th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Description</th></tr></thead>';
+        $html .= '<thead><tr style="background: #f8f8f8;"><th style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . (!empty($GLOBALS['_PJ_strings']['date']) ? $GLOBALS['_PJ_strings']['date'] : 'Date') . '</th><th style="padding: 8px; text-align: right; border: 1px solid #ddd;">' . (!empty($GLOBALS['_PJ_strings']['hours']) ? $GLOBALS['_PJ_strings']['hours'] : 'Hours') . '</th><th style="padding: 8px; text-align: left; border: 1px solid #ddd;">' . (!empty($GLOBALS['_PJ_strings']['description']) ? $GLOBALS['_PJ_strings']['description'] : 'Description') . '</th></tr></thead>';
         $html .= '<tbody>';
         foreach ($efforts as $effort) {
             $html .= '<tr>';

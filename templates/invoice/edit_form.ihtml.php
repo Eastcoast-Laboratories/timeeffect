@@ -1,7 +1,7 @@
 <!-- Invoice Edit Form Content -->
 <div class="page-header">
     <div class="actions">
-        <a href="view.php?id=<?php echo $invoice_data['id']; ?>" class="btn btn-secondary">Back to View</a>
+        <a href="view.php?id=<?php echo $invoice_data['id']; ?>" class="btn btn-secondary"><?php if(!empty($GLOBALS['_PJ_strings']['back_to_view'])) echo $GLOBALS['_PJ_strings']['back_to_view']; else echo 'Back to View'; ?></a>
     </div>
 </div>
 
@@ -17,13 +17,13 @@
 
     <form method="POST" class="invoice-form">
         <div class="form-section">
-            <h3>Basic Information</h3>
+            <h3><?php if(!empty($GLOBALS['_PJ_strings']['basic_information'])) echo $GLOBALS['_PJ_strings']['basic_information']; else echo 'Basic Information'; ?></h3>
             
             <div class="form-row">
                 <div class="form-group">
-                    <label for="customer_id">Customer *</label>
+                    <label for="customer_id"><?php if(!empty($GLOBALS['_PJ_strings']['customer'])) echo $GLOBALS['_PJ_strings']['customer']; else echo 'Customer'; ?> *</label>
                     <select name="customer_id" id="customer_id" required onchange="updateProjects()">
-                        <option value="">Select Customer</option>
+                        <option value=""><?php if(!empty($GLOBALS['_PJ_strings']['select_customer'])) echo $GLOBALS['_PJ_strings']['select_customer']; else echo 'Select Customer'; ?></option>
                         <?php foreach ($customers as $customer): ?>
                             <option value="<?php echo $customer['id']; ?>" 
                                     <?php echo ($invoice_data['customer_id'] == $customer['id']) ? 'selected' : ''; ?>>
@@ -34,39 +34,39 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="project_id">Project</label>
+                    <label for="project_id"><?php if(!empty($GLOBALS['_PJ_strings']['project'])) echo $GLOBALS['_PJ_strings']['project']; else echo 'Project'; ?></label>
                     <select name="project_id" id="project_id">
-                        <option value="">All Projects</option>
+                        <option value=""><?php if(!empty($GLOBALS['_PJ_strings']['all_projects'])) echo $GLOBALS['_PJ_strings']['all_projects']; else echo 'All Projects'; ?></option>
                     </select>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="invoice_date">Invoice Date *</label>
+                    <label for="invoice_date"><?php if(!empty($GLOBALS['_PJ_strings']['invoice_date'])) echo $GLOBALS['_PJ_strings']['invoice_date']; else echo 'Invoice Date'; ?> *</label>
                     <input type="date" name="invoice_date" id="invoice_date" required
                            value="<?php echo $invoice_data['invoice_date']; ?>">
                 </div>
 
                 <div class="form-group">
-                    <label>Contract Type</label>
+                    <label><?php if(!empty($GLOBALS['_PJ_strings']['contract_type'])) echo $GLOBALS['_PJ_strings']['contract_type']; else echo 'Contract Type'; ?></label>
                     <input type="text" value="<?php echo ucfirst(str_replace('_', ' ', $invoice_data['contract_type'])); ?>" readonly class="readonly">
                 </div>
             </div>
         </div>
 
         <div class="form-section">
-            <h3>Period</h3>
+            <h3><?php if(!empty($GLOBALS['_PJ_strings']['period'])) echo $GLOBALS['_PJ_strings']['period']; else echo 'Period'; ?></h3>
             
             <div class="form-row">
                 <div class="form-group">
-                    <label for="period_start">Period Start *</label>
+                    <label for="period_start"><?php if(!empty($GLOBALS['_PJ_strings']['period_start'])) echo $GLOBALS['_PJ_strings']['period_start']; else echo 'Period Start'; ?> *</label>
                     <input type="date" name="period_start" id="period_start" required
                            value="<?php echo !empty($invoice_data['period_start']) ? $invoice_data['period_start'] : (isset($_GET['period_start']) ? $_GET['period_start'] : ''); ?>">
                 </div>
 
                 <div class="form-group">
-                    <label for="period_end">Period End *</label>
+                    <label for="period_end"><?php if(!empty($GLOBALS['_PJ_strings']['period_end'])) echo $GLOBALS['_PJ_strings']['period_end']; else echo 'Period End'; ?> *</label>
                     <input type="date" name="period_end" id="period_end" required
                            value="<?php echo !empty($invoice_data['period_end']) ? $invoice_data['period_end'] : (isset($_GET['period_end']) ? $_GET['period_end'] : ''); ?>">
                 </div>
@@ -74,17 +74,17 @@
         </div>
 
         <div class="form-section">
-            <h3>Invoice Details</h3>
+            <h3><?php if(!empty($GLOBALS['_PJ_strings']['invoice_details'])) echo $GLOBALS['_PJ_strings']['invoice_details']; else echo 'Invoice Details'; ?></h3>
             
             <div class="form-row">
                 <div class="form-group">
-                    <label for="total_hours">Total Hours</label>
+                    <label for="total_hours"><?php if(!empty($GLOBALS['_PJ_strings']['total_hours'])) echo $GLOBALS['_PJ_strings']['total_hours']; else echo 'Total Hours'; ?></label>
                     <input type="number" step="0.01" name="total_hours" id="total_hours"
                            value="<?php echo number_format($invoice_data['total_hours'], 2); ?>">
                 </div>
 
                 <div class="form-group">
-                    <label for="total_amount">Net Amount (€) *</label>
+                    <label for="total_amount"><?php if(!empty($GLOBALS['_PJ_strings']['net_amount'])) echo $GLOBALS['_PJ_strings']['net_amount']; else echo 'Net Amount'; ?> (€) *</label>
                     <input type="number" step="0.01" name="total_amount" id="total_amount" required
                            value="<?php echo number_format($invoice_data['total_amount'], 2); ?>"
                            onchange="calculateTotals()">
@@ -93,14 +93,14 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="vat_rate">VAT Rate (%)</label>
+                    <label for="vat_rate"><?php if(!empty($GLOBALS['_PJ_strings']['vat_rate'])) echo $GLOBALS['_PJ_strings']['vat_rate']; else echo 'VAT Rate'; ?> (%)</label>
                     <input type="number" step="0.01" name="vat_rate" id="vat_rate"
                            value="<?php echo number_format($invoice_data['vat_rate'], 2); ?>"
                            onchange="calculateTotals()">
                 </div>
 
                 <div class="form-group">
-                    <label>Gross Amount (€)</label>
+                    <label><?php if(!empty($GLOBALS['_PJ_strings']['gross_amount'])) echo $GLOBALS['_PJ_strings']['gross_amount']; else echo 'Gross Amount'; ?> (€)</label>
                     <input type="text" id="gross_amount_display" readonly class="readonly"
                            value="<?php echo number_format($invoice_data['gross_amount'], 2); ?>">
                 </div>
@@ -109,12 +109,12 @@
             <?php if ($invoice_data['contract_type'] === 'fixed_monthly'): ?>
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Fixed Hours</label>
+                        <label><?php if(!empty($GLOBALS['_PJ_strings']['fixed_hours'])) echo $GLOBALS['_PJ_strings']['fixed_hours']; else echo 'Fixed Hours'; ?></label>
                         <input type="text" value="<?php echo number_format($invoice_data['fixed_hours'], 2); ?>" readonly class="readonly">
                     </div>
 
                     <div class="form-group">
-                        <label>Current Carryover</label>
+                        <label><?php if(!empty($GLOBALS['_PJ_strings']['current_carryover'])) echo $GLOBALS['_PJ_strings']['current_carryover']; else echo 'Current Carryover'; ?></label>
                         <input type="text" value="<?php echo number_format($invoice_data['carryover_current'], 2); ?>h" readonly class="readonly">
                     </div>
                 </div>
@@ -122,19 +122,19 @@
         </div>
 
         <div class="form-section">
-            <h3>Description</h3>
+            <h3><?php if(!empty($GLOBALS['_PJ_strings']['description'])) echo $GLOBALS['_PJ_strings']['description']; else echo 'Description'; ?></h3>
             
             <div class="form-group">
-                <label for="description">Invoice Description</label>
+                <label for="description"><?php if(!empty($GLOBALS['_PJ_strings']['invoice_description'])) echo $GLOBALS['_PJ_strings']['invoice_description']; else echo 'Invoice Description'; ?></label>
                 <textarea name="description" id="description" rows="3"><?php echo htmlspecialchars($invoice_data['description']); ?></textarea>
             </div>
         </div>
 
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Update Invoice</button>
-            <a href="view.php?id=<?php echo $invoice_data['id']; ?>" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary"><?php if(!empty($GLOBALS['_PJ_strings']['update_invoice'])) echo $GLOBALS['_PJ_strings']['update_invoice']; else echo 'Update Invoice'; ?></button>
+            <a href="view.php?id=<?php echo $invoice_data['id']; ?>" class="btn btn-secondary"><?php if(!empty($GLOBALS['_PJ_strings']['cancel'])) echo $GLOBALS['_PJ_strings']['cancel']; else echo 'Cancel'; ?></a>
             <?php if ($invoice_data['status'] === 'draft'): ?>
-                <button type="button" onclick="confirmDelete()" class="btn btn-danger">Delete Invoice</button>
+                <button type="button" onclick="confirmDelete()" class="btn btn-danger"><?php if(!empty($GLOBALS['_PJ_strings']['delete_invoice'])) echo $GLOBALS['_PJ_strings']['delete_invoice']; else echo 'Delete Invoice'; ?></button>
             <?php endif; ?>
         </div>
     </form>
@@ -149,7 +149,7 @@ function updateProjects() {
     const projectSelect = document.getElementById('project_id');
     
     // Clear existing options
-    projectSelect.innerHTML = '<option value="">All Projects</option>';
+    projectSelect.innerHTML = '<option value=""><?php if(!empty($GLOBALS['_PJ_strings']['all_projects'])) echo $GLOBALS['_PJ_strings']['all_projects']; else echo 'All Projects'; ?></option>';
     
     if (customerId) {
         // Filter projects by customer
@@ -178,7 +178,7 @@ function calculateTotals() {
 }
 
 function confirmDelete() {
-    if (confirm('Are you sure you want to delete this invoice? This action cannot be undone.')) {
+    if (confirm('<?php if(!empty($GLOBALS['_PJ_strings']['confirm_delete_invoice'])) echo $GLOBALS['_PJ_strings']['confirm_delete_invoice']; else echo 'Are you sure you want to delete this invoice? This action cannot be undone.'; ?>')) {
         window.location.href = 'delete.php?id=<?php echo $invoice_data['id']; ?>';
     }
 }

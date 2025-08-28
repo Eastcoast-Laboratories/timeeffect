@@ -40,19 +40,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Validation
     if (empty($customer_id)) {
-        $errors[] = 'Customer is required';
+        $errors[] = !empty($GLOBALS['_PJ_strings']['customer_required']) ? $GLOBALS['_PJ_strings']['customer_required'] : 'Customer is required';
     }
     if (empty($invoice_date)) {
-        $errors[] = 'Invoice date is required';
+        $errors[] = !empty($GLOBALS['_PJ_strings']['invoice_date_required']) ? $GLOBALS['_PJ_strings']['invoice_date_required'] : 'Invoice date is required';
     }
     if (empty($period_start)) {
-        $errors[] = 'Period start is required';
+        $errors[] = !empty($GLOBALS['_PJ_strings']['period_start_required']) ? $GLOBALS['_PJ_strings']['period_start_required'] : 'Period start is required';
     }
     if (empty($period_end)) {
-        $errors[] = 'Period end is required';
+        $errors[] = !empty($GLOBALS['_PJ_strings']['period_end_required']) ? $GLOBALS['_PJ_strings']['period_end_required'] : 'Period end is required';
     }
     if ($total_amount <= 0) {
-        $errors[] = 'Total amount must be greater than 0';
+        $errors[] = !empty($GLOBALS['_PJ_strings']['total_amount_greater_zero']) ? $GLOBALS['_PJ_strings']['total_amount_greater_zero'] : 'Total amount must be greater than 0';
     }
     
     if (empty($errors)) {
@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: view.php?id={$invoice_id}");
             exit;
         } else {
-            $errors[] = 'Failed to update invoice';
+            $errors[] = !empty($GLOBALS['_PJ_strings']['failed_update_invoice']) ? $GLOBALS['_PJ_strings']['failed_update_invoice'] : 'Failed to update invoice';
         }
     }
 }
@@ -107,6 +107,6 @@ while ($db->next_record()) {
 
 // Set up template variables for unified layout
 $center_template = "invoice/edit_form";
-$center_title = 'Edit Invoice ' . $invoice_data['invoice_number'];
+$center_title = (!empty($GLOBALS['_PJ_strings']['edit_invoice']) ? $GLOBALS['_PJ_strings']['edit_invoice'] : 'Edit Invoice') . ' ' . $invoice_data['invoice_number'];
 
 include("$_PJ_root/templates/list.ihtml.php");

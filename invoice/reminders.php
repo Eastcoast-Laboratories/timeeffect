@@ -46,10 +46,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header("Location: reminders.php?success=sent");
                 exit;
             } else {
-                $errors[] = 'Failed to mark reminder as sent';
+                $errors[] = !empty($GLOBALS['_PJ_strings']['failed_mark_reminder_sent']) ? $GLOBALS['_PJ_strings']['failed_mark_reminder_sent'] : 'Failed to mark reminder as sent';
             }
         } else {
-            $errors[] = 'Reminder not found';
+            $errors[] = !empty($GLOBALS['_PJ_strings']['reminder_not_found']) ? $GLOBALS['_PJ_strings']['reminder_not_found'] : 'Reminder not found';
         }
     }
 }
@@ -62,6 +62,6 @@ $overdue_invoices = $payment->getOverdueInvoices();
 
 // Set up template variables for unified layout
 $center_template = "invoice/reminders";
-$center_title = 'Payment Reminders';
+$center_title = !empty($GLOBALS['_PJ_strings']['payment_reminders']) ? $GLOBALS['_PJ_strings']['payment_reminders'] : 'Payment Reminders';
 
 include("$_PJ_root/templates/list.ihtml.php");

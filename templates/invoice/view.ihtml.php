@@ -1,11 +1,11 @@
 <!-- Invoice View Content -->
 <div class="page-header">
     <div class="actions">
-        <a href="pdf.php?id=<?php echo $invoice_data['id']; ?>" class="btn btn-success">Download PDF</a>
+        <a href="pdf.php?id=<?php echo $invoice_data['id']; ?>" class="btn btn-success"><?php if(!empty($GLOBALS['_PJ_strings']['download_pdf'])) echo $GLOBALS['_PJ_strings']['download_pdf']; else echo 'Download PDF'; ?></a>
         <?php if ($invoice_data['status'] === 'draft'): ?>
-            <a href="edit.php?id=<?php echo $invoice_data['id']; ?>" class="btn btn-warning">Edit</a>
+            <a href="edit.php?id=<?php echo $invoice_data['id']; ?>" class="btn btn-warning"><?php if(!empty($GLOBALS['_PJ_strings']['edit'])) echo $GLOBALS['_PJ_strings']['edit']; else echo 'Edit'; ?></a>
         <?php endif; ?>
-        <a href="index.php" class="btn btn-secondary">Back to List</a>
+        <a href="index.php" class="btn btn-secondary"><?php if(!empty($GLOBALS['_PJ_strings']['back_to_list'])) echo $GLOBALS['_PJ_strings']['back_to_list']; else echo 'Back to List'; ?></a>
     </div>
 </div>
 
@@ -13,7 +13,7 @@
         <!-- Invoice Header -->
         <div class="invoice-header">
             <div class="invoice-info">
-                <h2>Invoice <?php echo htmlspecialchars($invoice_data['invoice_number']); ?></h2>
+                <h2><?php if(!empty($GLOBALS['_PJ_strings']['invoice'])) echo $GLOBALS['_PJ_strings']['invoice']; else echo 'Invoice'; ?> <?php echo htmlspecialchars($invoice_data['invoice_number']); ?></h2>
                 <div class="status">
                     <span class="status-badge status-<?php echo $invoice_data['status']; ?>">
                         <?php echo ucfirst($invoice_data['status']); ?>
@@ -22,8 +22,8 @@
             </div>
             
             <div class="invoice-dates">
-                <div><strong>Invoice Date:</strong> <?php echo date('d.m.Y', strtotime($invoice_data['invoice_date'])); ?></div>
-                <div><strong>Period:</strong> 
+                <div><strong><?php if(!empty($GLOBALS['_PJ_strings']['invoice_date'])) echo $GLOBALS['_PJ_strings']['invoice_date']; else echo 'Invoice Date'; ?>:</strong> <?php echo date('d.m.Y', strtotime($invoice_data['invoice_date'])); ?></div>
+                <div><strong><?php if(!empty($GLOBALS['_PJ_strings']['period'])) echo $GLOBALS['_PJ_strings']['period']; else echo 'Period'; ?>:</strong> 
                     <?php echo date('d.m.Y', strtotime($invoice_data['period_start'])); ?> - 
                     <?php echo date('d.m.Y', strtotime($invoice_data['period_end'])); ?>
                 </div>
@@ -32,61 +32,61 @@
 
         <!-- Customer Information -->
         <div class="section">
-            <h3>Customer Information</h3>
+            <h3><?php if(!empty($GLOBALS['_PJ_strings']['customer_information'])) echo $GLOBALS['_PJ_strings']['customer_information']; else echo 'Customer Information'; ?></h3>
             <div class="customer-info">
-                <div><strong>Name:</strong> <?php echo htmlspecialchars($invoice_data['customer_name']); ?></div>
+                <div><strong><?php if(!empty($GLOBALS['_PJ_strings']['name'])) echo $GLOBALS['_PJ_strings']['name']; else echo 'Name'; ?>:</strong> <?php echo htmlspecialchars($invoice_data['customer_name']); ?></div>
                 <?php if ($invoice_data['customer_address']): ?>
-                    <div><strong>Address:</strong> <?php echo nl2br(htmlspecialchars($invoice_data['customer_address'])); ?></div>
+                    <div><strong><?php if(!empty($GLOBALS['_PJ_strings']['address'])) echo $GLOBALS['_PJ_strings']['address']; else echo 'Address'; ?>:</strong> <?php echo nl2br(htmlspecialchars($invoice_data['customer_address'])); ?></div>
                 <?php endif; ?>
                 <?php if ($invoice_data['project_name']): ?>
-                    <div><strong>Project:</strong> <?php echo htmlspecialchars($invoice_data['project_name']); ?></div>
+                    <div><strong><?php if(!empty($GLOBALS['_PJ_strings']['project'])) echo $GLOBALS['_PJ_strings']['project']; else echo 'Project'; ?>:</strong> <?php echo htmlspecialchars($invoice_data['project_name']); ?></div>
                 <?php endif; ?>
             </div>
         </div>
 
         <!-- Invoice Summary -->
         <div class="section">
-            <h3>Invoice Summary</h3>
+            <h3><?php if(!empty($GLOBALS['_PJ_strings']['invoice_summary'])) echo $GLOBALS['_PJ_strings']['invoice_summary']; else echo 'Invoice Summary'; ?></h3>
             <div class="invoice-summary">
                 <div class="summary-row">
-                    <span>Contract Type:</span>
+                    <span><?php if(!empty($GLOBALS['_PJ_strings']['contract_type'])) echo $GLOBALS['_PJ_strings']['contract_type']; else echo 'Contract Type'; ?>:</span>
                     <span><?php echo ucfirst(str_replace('_', ' ', $invoice_data['contract_type'])); ?></span>
                 </div>
                 
                 <div class="summary-row">
-                    <span>Total Hours:</span>
+                    <span><?php if(!empty($GLOBALS['_PJ_strings']['total_hours'])) echo $GLOBALS['_PJ_strings']['total_hours']; else echo 'Total Hours'; ?>:</span>
                     <span><?php echo number_format($invoice_data['total_hours'], 2); ?>h</span>
                 </div>
                 
                 <?php if ($invoice_data['contract_type'] === 'fixed_monthly'): ?>
                     <div class="summary-row">
-                        <span>Fixed Hours:</span>
+                        <span><?php if(!empty($GLOBALS['_PJ_strings']['fixed_hours'])) echo $GLOBALS['_PJ_strings']['fixed_hours']; else echo 'Fixed Hours'; ?>:</span>
                         <span><?php echo number_format($invoice_data['fixed_hours'], 2); ?>h</span>
                     </div>
                     
                     <div class="summary-row">
-                        <span>Previous Carryover:</span>
+                        <span><?php if(!empty($GLOBALS['_PJ_strings']['previous_carryover'])) echo $GLOBALS['_PJ_strings']['previous_carryover']; else echo 'Previous Carryover'; ?>:</span>
                         <span><?php echo number_format($invoice_data['carryover_previous'], 2); ?>h</span>
                     </div>
                     
                     <div class="summary-row">
-                        <span>Current Carryover:</span>
+                        <span><?php if(!empty($GLOBALS['_PJ_strings']['current_carryover'])) echo $GLOBALS['_PJ_strings']['current_carryover']; else echo 'Current Carryover'; ?>:</span>
                         <span><?php echo number_format($invoice_data['carryover_current'], 2); ?>h</span>
                     </div>
                 <?php endif; ?>
                 
                 <div class="summary-row">
-                    <span>Net Amount:</span>
+                    <span><?php if(!empty($GLOBALS['_PJ_strings']['net_amount'])) echo $GLOBALS['_PJ_strings']['net_amount']; else echo 'Net Amount'; ?>:</span>
                     <span><?php echo number_format(floatval($invoice_data['total_amount']), 2); ?>€</span>
                 </div>
                 
                 <div class="summary-row">
-                    <span>VAT (<?php echo number_format(floatval($invoice_data['vat_rate']), 1); ?>%):</span>
+                    <span><?php if(!empty($GLOBALS['_PJ_strings']['vat_rate'])) echo $GLOBALS['_PJ_strings']['vat_rate']; else echo 'VAT'; ?> (<?php echo number_format(floatval($invoice_data['vat_rate']), 1); ?>%):</span>
                     <span><?php echo number_format(floatval($invoice_data['vat_amount']), 2); ?>€</span>
                 </div>
                 
                 <div class="summary-row total">
-                    <span><strong>Total Amount:</strong></span>
+                    <span><strong><?php if(!empty($GLOBALS['_PJ_strings']['total_amount'])) echo $GLOBALS['_PJ_strings']['total_amount']; else echo 'Total Amount'; ?>:</strong></span>
                     <span><strong><?php echo number_format(floatval($invoice_data['gross_amount']), 2); ?>€</strong></span>
                 </div>
             </div>
@@ -95,7 +95,7 @@
         <?php if ($invoice_data['description']): ?>
             <!-- Description -->
             <div class="section">
-                <h3>Description</h3>
+                <h3><?php if(!empty($GLOBALS['_PJ_strings']['description'])) echo $GLOBALS['_PJ_strings']['description']; else echo 'Description'; ?></h3>
                 <div class="description">
                     <?php echo nl2br(htmlspecialchars($invoice_data['description'])); ?>
                 </div>
@@ -105,14 +105,14 @@
         <?php if (!empty($invoice_efforts)): ?>
             <!-- Linked Efforts -->
             <div class="section">
-                <h3>Included Efforts (<?php echo count($invoice_efforts); ?> entries)</h3>
+                <h3><?php if(!empty($GLOBALS['_PJ_strings']['included_efforts'])) echo sprintf($GLOBALS['_PJ_strings']['included_efforts'], count($invoice_efforts)); else echo 'Included Efforts (' . count($invoice_efforts) . ' entries)'; ?></h3>
                 <div class="efforts-table">
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Hours</th>
-                                <th>Description</th>
+                                <th><?php if(!empty($GLOBALS['_PJ_strings']['date'])) echo $GLOBALS['_PJ_strings']['date']; else echo 'Date'; ?></th>
+                                <th><?php if(!empty($GLOBALS['_PJ_strings']['hours'])) echo $GLOBALS['_PJ_strings']['hours']; else echo 'Hours'; ?></th>
+                                <th><?php if(!empty($GLOBALS['_PJ_strings']['description'])) echo $GLOBALS['_PJ_strings']['description']; else echo 'Description'; ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -131,17 +131,17 @@
 
         <!-- Payments Section -->
         <div class="section">
-            <h3>Payments</h3>
+            <h3><?php if(!empty($GLOBALS['_PJ_strings']['payments'])) echo $GLOBALS['_PJ_strings']['payments']; else echo 'Payments'; ?></h3>
             
             <?php if (!empty($payments)): ?>
                 <div class="payments-table">
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Amount</th>
-                                <th>Method</th>
-                                <th>Notes</th>
+                                <th><?php if(!empty($GLOBALS['_PJ_strings']['date'])) echo $GLOBALS['_PJ_strings']['date']; else echo 'Date'; ?></th>
+                                <th><?php if(!empty($GLOBALS['_PJ_strings']['amount'])) echo $GLOBALS['_PJ_strings']['amount']; else echo 'Amount'; ?></th>
+                                <th><?php if(!empty($GLOBALS['_PJ_strings']['method'])) echo $GLOBALS['_PJ_strings']['method']; else echo 'Method'; ?></th>
+                                <th><?php if(!empty($GLOBALS['_PJ_strings']['notes'])) echo $GLOBALS['_PJ_strings']['notes']; else echo 'Notes'; ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -160,56 +160,56 @@
                         </tbody>
                         <tfoot>
                             <tr class="total">
-                                <td><strong>Total Paid:</strong></td>
+                                <td><strong><?php if(!empty($GLOBALS['_PJ_strings']['total_paid'])) echo $GLOBALS['_PJ_strings']['total_paid']; else echo 'Total Paid'; ?>:</strong></td>
                                 <td><strong><?php echo number_format($total_paid, 2); ?>€</strong></td>
                                 <td colspan="2">
-                                    <strong>Outstanding: <?php echo number_format($invoice_data['gross_amount'] - $total_paid, 2); ?>€</strong>
+                                    <strong><?php if(!empty($GLOBALS['_PJ_strings']['outstanding'])) echo $GLOBALS['_PJ_strings']['outstanding']; else echo 'Outstanding'; ?>: <?php echo number_format($invoice_data['gross_amount'] - $total_paid, 2); ?>€</strong>
                                 </td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
             <?php else: ?>
-                <p>No payments recorded yet.</p>
+                <p><?php if(!empty($GLOBALS['_PJ_strings']['no_payments_recorded'])) echo $GLOBALS['_PJ_strings']['no_payments_recorded']; else echo 'No payments recorded yet.'; ?></p>
             <?php endif; ?>
 
             <!-- Add Payment Form -->
             <?php if ($invoice_data['status'] !== 'cancelled'): ?>
                 <div class="add-payment">
-                    <h4>Add Payment</h4>
+                    <h4><?php if(!empty($GLOBALS['_PJ_strings']['add_payment'])) echo $GLOBALS['_PJ_strings']['add_payment']; else echo 'Add Payment'; ?></h4>
                     <form method="POST" class="payment-form">
                         <input type="hidden" name="action" value="add_payment">
                         
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="payment_amount">Amount</label>
+                                <label for="payment_amount"><?php if(!empty($GLOBALS['_PJ_strings']['amount'])) echo $GLOBALS['_PJ_strings']['amount']; else echo 'Amount'; ?></label>
                                 <input type="number" step="0.01" name="payment_amount" id="payment_amount" required>
                             </div>
                             
                             <div class="form-group">
-                                <label for="payment_date">Date</label>
+                                <label for="payment_date"><?php if(!empty($GLOBALS['_PJ_strings']['date'])) echo $GLOBALS['_PJ_strings']['date']; else echo 'Date'; ?></label>
                                 <input type="date" name="payment_date" id="payment_date" value="<?php echo date('Y-m-d'); ?>" required>
                             </div>
                             
                             <div class="form-group">
-                                <label for="payment_method">Method</label>
+                                <label for="payment_method"><?php if(!empty($GLOBALS['_PJ_strings']['method'])) echo $GLOBALS['_PJ_strings']['method']; else echo 'Method'; ?></label>
                                 <select name="payment_method" id="payment_method">
-                                    <option value="">Select Method</option>
-                                    <option value="bank_transfer">Bank Transfer</option>
-                                    <option value="cash">Cash</option>
-                                    <option value="check">Check</option>
-                                    <option value="paypal">PayPal</option>
-                                    <option value="other">Other</option>
+                                    <option value=""><?php if(!empty($GLOBALS['_PJ_strings']['select_method'])) echo $GLOBALS['_PJ_strings']['select_method']; else echo 'Select Method'; ?></option>
+                                    <option value="bank_transfer"><?php if(!empty($GLOBALS['_PJ_strings']['bank_transfer'])) echo $GLOBALS['_PJ_strings']['bank_transfer']; else echo 'Bank Transfer'; ?></option>
+                                    <option value="cash"><?php if(!empty($GLOBALS['_PJ_strings']['cash'])) echo $GLOBALS['_PJ_strings']['cash']; else echo 'Cash'; ?></option>
+                                    <option value="check"><?php if(!empty($GLOBALS['_PJ_strings']['check'])) echo $GLOBALS['_PJ_strings']['check']; else echo 'Check'; ?></option>
+                                    <option value="paypal"><?php if(!empty($GLOBALS['_PJ_strings']['paypal'])) echo $GLOBALS['_PJ_strings']['paypal']; else echo 'PayPal'; ?></option>
+                                    <option value="other"><?php if(!empty($GLOBALS['_PJ_strings']['other'])) echo $GLOBALS['_PJ_strings']['other']; else echo 'Other'; ?></option>
                                 </select>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label for="payment_notes">Notes</label>
-                            <input type="text" name="payment_notes" id="payment_notes" placeholder="Optional notes">
+                            <label for="payment_notes"><?php if(!empty($GLOBALS['_PJ_strings']['notes'])) echo $GLOBALS['_PJ_strings']['notes']; else echo 'Notes'; ?></label>
+                            <input type="text" name="payment_notes" id="payment_notes" placeholder="<?php if(!empty($GLOBALS['_PJ_strings']['optional_notes'])) echo $GLOBALS['_PJ_strings']['optional_notes']; else echo 'Optional notes'; ?>">
                         </div>
                         
-                        <button type="submit" class="btn btn-primary">Add Payment</button>
+                        <button type="submit" class="btn btn-primary"><?php if(!empty($GLOBALS['_PJ_strings']['add_payment'])) echo $GLOBALS['_PJ_strings']['add_payment']; else echo 'Add Payment'; ?></button>
                     </form>
                 </div>
             <?php endif; ?>
@@ -217,23 +217,23 @@
 
         <!-- Status Management -->
         <div class="section">
-            <h3>Status Management</h3>
+            <h3><?php if(!empty($GLOBALS['_PJ_strings']['status_management'])) echo $GLOBALS['_PJ_strings']['status_management']; else echo 'Status Management'; ?></h3>
             <form method="POST" class="status-form">
                 <input type="hidden" name="action" value="update_status">
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="status">Change Status:</label>
+                        <label for="status"><?php if(!empty($GLOBALS['_PJ_strings']['change_status'])) echo $GLOBALS['_PJ_strings']['change_status']; else echo 'Change Status'; ?>:</label>
                         <select name="status" id="status">
-                            <option value="draft" <?php echo ($invoice_data['status'] === 'draft') ? 'selected' : ''; ?>>Draft</option>
-                            <option value="sent" <?php echo ($invoice_data['status'] === 'sent') ? 'selected' : ''; ?>>Sent</option>
-                            <option value="paid" <?php echo ($invoice_data['status'] === 'paid') ? 'selected' : ''; ?>>Paid</option>
-                            <option value="cancelled" <?php echo ($invoice_data['status'] === 'cancelled') ? 'selected' : ''; ?>>Cancelled</option>
+                            <option value="draft" <?php echo ($invoice_data['status'] === 'draft') ? 'selected' : ''; ?>><?php if(!empty($GLOBALS['_PJ_strings']['draft'])) echo $GLOBALS['_PJ_strings']['draft']; else echo 'Draft'; ?></option>
+                            <option value="sent" <?php echo ($invoice_data['status'] === 'sent') ? 'selected' : ''; ?>><?php if(!empty($GLOBALS['_PJ_strings']['sent'])) echo $GLOBALS['_PJ_strings']['sent']; else echo 'Sent'; ?></option>
+                            <option value="paid" <?php echo ($invoice_data['status'] === 'paid') ? 'selected' : ''; ?>><?php if(!empty($GLOBALS['_PJ_strings']['paid'])) echo $GLOBALS['_PJ_strings']['paid']; else echo 'Paid'; ?></option>
+                            <option value="cancelled" <?php echo ($invoice_data['status'] === 'cancelled') ? 'selected' : ''; ?>><?php if(!empty($GLOBALS['_PJ_strings']['cancelled'])) echo $GLOBALS['_PJ_strings']['cancelled']; else echo 'Cancelled'; ?></option>
                         </select>
                     </div>
                     
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Update Status</button>
+                        <button type="submit" class="btn btn-primary"><?php if(!empty($GLOBALS['_PJ_strings']['update_status'])) echo $GLOBALS['_PJ_strings']['update_status']; else echo 'Update Status'; ?></button>
                     </div>
                 </div>
             </form>

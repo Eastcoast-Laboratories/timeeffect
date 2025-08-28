@@ -1,7 +1,7 @@
 <!-- Payment Reminders Content -->
 <div class="page-header">
     <div class="actions">
-        <a href="index.php" class="btn btn-secondary">Back to Invoices</a>
+        <a href="index.php" class="btn btn-secondary"><?php if(!empty($GLOBALS['_PJ_strings']['back_to_invoices'])) echo $GLOBALS['_PJ_strings']['back_to_invoices']; else echo 'Back to Invoices'; ?></a>
     </div>
 </div>
 
@@ -17,28 +17,28 @@
 
     <?php if (isset($_GET['success'])): ?>
         <div class="alert alert-success">
-            Reminder <?php echo htmlspecialchars($_GET['success']); ?> successfully!
+            <?php if(!empty($GLOBALS['_PJ_strings']['reminder_success'])) echo sprintf($GLOBALS['_PJ_strings']['reminder_success'], htmlspecialchars($_GET['success'])); else echo 'Reminder ' . htmlspecialchars($_GET['success']) . ' successfully!'; ?>
         </div>
     <?php endif; ?>
 
     <!-- Pending Reminders -->
     <div class="section">
-        <h3>Pending Reminders (<?php echo count($pending_reminders); ?>)</h3>
+        <h3><?php if(!empty($GLOBALS['_PJ_strings']['pending_reminders'])) echo sprintf($GLOBALS['_PJ_strings']['pending_reminders'], count($pending_reminders)); else echo 'Pending Reminders (' . count($pending_reminders) . ')'; ?></h3>
         
         <?php if (empty($pending_reminders)): ?>
             <div class="no-data">
-                <p>No pending reminders.</p>
+                <p><?php if(!empty($GLOBALS['_PJ_strings']['no_pending_reminders'])) echo $GLOBALS['_PJ_strings']['no_pending_reminders']; else echo 'No pending reminders.'; ?></p>
             </div>
         <?php else: ?>
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>Invoice</th>
-                        <th>Customer</th>
-                        <th>Amount</th>
-                        <th>Type</th>
-                        <th>Due Date</th>
-                        <th>Actions</th>
+                        <th><?php if(!empty($GLOBALS['_PJ_strings']['invoice'])) echo $GLOBALS['_PJ_strings']['invoice']; else echo 'Invoice'; ?></th>
+                        <th><?php if(!empty($GLOBALS['_PJ_strings']['customer'])) echo $GLOBALS['_PJ_strings']['customer']; else echo 'Customer'; ?></th>
+                        <th><?php if(!empty($GLOBALS['_PJ_strings']['amount'])) echo $GLOBALS['_PJ_strings']['amount']; else echo 'Amount'; ?></th>
+                        <th><?php if(!empty($GLOBALS['_PJ_strings']['type'])) echo $GLOBALS['_PJ_strings']['type']; else echo 'Type'; ?></th>
+                        <th><?php if(!empty($GLOBALS['_PJ_strings']['due_date'])) echo $GLOBALS['_PJ_strings']['due_date']; else echo 'Due Date'; ?></th>
+                        <th><?php if(!empty($GLOBALS['_PJ_strings']['actions'])) echo $GLOBALS['_PJ_strings']['actions']; else echo 'Actions'; ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,12 +59,12 @@
                             <td><?php echo date('d.m.Y', strtotime($reminder['due_date'])); ?></td>
                             <td class="actions">
                                 <button onclick="showReminderPreview(<?php echo $reminder['id']; ?>)" 
-                                        class="btn btn-sm btn-info">Preview</button>
+                                        class="btn btn-sm btn-info"><?php if(!empty($GLOBALS['_PJ_strings']['preview'])) echo $GLOBALS['_PJ_strings']['preview']; else echo 'Preview'; ?></button>
                                 <form method="POST" style="display: inline;">
                                     <input type="hidden" name="action" value="send_reminder">
                                     <input type="hidden" name="id" value="<?php echo $reminder['id']; ?>">
                                     <button type="submit" class="btn btn-sm btn-primary" 
-                                            onclick="return confirm('Send this reminder?')">Send</button>
+                                            onclick="return confirm('<?php if(!empty($GLOBALS['_PJ_strings']['confirm_send_reminder'])) echo $GLOBALS['_PJ_strings']['confirm_send_reminder']; else echo 'Send this reminder?'; ?>')"><?php if(!empty($GLOBALS['_PJ_strings']['send'])) echo $GLOBALS['_PJ_strings']['send']; else echo 'Send'; ?></button>
                                 </form>
                             </td>
                         </tr>
@@ -76,23 +76,23 @@
 
     <!-- Overdue Invoices -->
     <div class="section">
-        <h3>Overdue Invoices (<?php echo count($overdue_invoices); ?>)</h3>
+        <h3><?php if(!empty($GLOBALS['_PJ_strings']['overdue_invoices'])) echo sprintf($GLOBALS['_PJ_strings']['overdue_invoices'], count($overdue_invoices)); else echo 'Overdue Invoices (' . count($overdue_invoices) . ')'; ?></h3>
         
         <?php if (empty($overdue_invoices)): ?>
             <div class="no-data">
-                <p>No overdue invoices.</p>
+                <p><?php if(!empty($GLOBALS['_PJ_strings']['no_overdue_invoices'])) echo $GLOBALS['_PJ_strings']['no_overdue_invoices']; else echo 'No overdue invoices.'; ?></p>
             </div>
         <?php else: ?>
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>Invoice</th>
-                        <th>Customer</th>
-                        <th>Amount</th>
-                        <th>Invoice Date</th>
-                        <th>Days Overdue</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th><?php if(!empty($GLOBALS['_PJ_strings']['invoice'])) echo $GLOBALS['_PJ_strings']['invoice']; else echo 'Invoice'; ?></th>
+                        <th><?php if(!empty($GLOBALS['_PJ_strings']['customer'])) echo $GLOBALS['_PJ_strings']['customer']; else echo 'Customer'; ?></th>
+                        <th><?php if(!empty($GLOBALS['_PJ_strings']['amount'])) echo $GLOBALS['_PJ_strings']['amount']; else echo 'Amount'; ?></th>
+                        <th><?php if(!empty($GLOBALS['_PJ_strings']['invoice_date'])) echo $GLOBALS['_PJ_strings']['invoice_date']; else echo 'Invoice Date'; ?></th>
+                        <th><?php if(!empty($GLOBALS['_PJ_strings']['days_overdue'])) echo $GLOBALS['_PJ_strings']['days_overdue']; else echo 'Days Overdue'; ?></th>
+                        <th><?php if(!empty($GLOBALS['_PJ_strings']['status'])) echo $GLOBALS['_PJ_strings']['status']; else echo 'Status'; ?></th>
+                        <th><?php if(!empty($GLOBALS['_PJ_strings']['actions'])) echo $GLOBALS['_PJ_strings']['actions']; else echo 'Actions'; ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -107,7 +107,7 @@
                             <td><?php echo number_format($overdue['gross_amount'], 2); ?>€</td>
                             <td><?php echo date('d.m.Y', strtotime($overdue['invoice_date'])); ?></td>
                             <td class="days-overdue">
-                                <?php echo $overdue['days_overdue']; ?> days
+                                <?php if(!empty($GLOBALS['_PJ_strings']['days_count'])) echo sprintf($GLOBALS['_PJ_strings']['days_count'], $overdue['days_overdue']); else echo $overdue['days_overdue'] . ' days'; ?>
                             </td>
                             <td>
                                 <span class="status-badge status-<?php echo $overdue['status']; ?>">
@@ -115,9 +115,9 @@
                                 </span>
                             </td>
                             <td class="actions">
-                                <a href="view.php?id=<?php echo $overdue['id']; ?>" class="btn btn-sm btn-info">View</a>
+                                <a href="view.php?id=<?php echo $overdue['id']; ?>" class="btn btn-sm btn-info"><?php if(!empty($GLOBALS['_PJ_strings']['view'])) echo $GLOBALS['_PJ_strings']['view']; else echo 'View'; ?></a>
                                 <button onclick="scheduleReminders(<?php echo $overdue['id']; ?>)" 
-                                        class="btn btn-sm btn-warning">Schedule Reminders</button>
+                                        class="btn btn-sm btn-warning"><?php if(!empty($GLOBALS['_PJ_strings']['schedule_reminders'])) echo $GLOBALS['_PJ_strings']['schedule_reminders']; else echo 'Schedule Reminders'; ?></button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -130,14 +130,14 @@
 <div id="reminderModal" class="modal" style="display: none;">
     <div class="modal-content">
         <div class="modal-header">
-            <h4>Reminder Preview</h4>
+            <h4><?php if(!empty($GLOBALS['_PJ_strings']['reminder_preview'])) echo $GLOBALS['_PJ_strings']['reminder_preview']; else echo 'Reminder Preview'; ?></h4>
             <span class="close" onclick="closeModal()">&times;</span>
         </div>
         <div class="modal-body">
             <div id="reminderPreview"></div>
         </div>
         <div class="modal-footer">
-            <button onclick="closeModal()" class="btn btn-secondary">Close</button>
+            <button onclick="closeModal()" class="btn btn-secondary"><?php if(!empty($GLOBALS['_PJ_strings']['close'])) echo $GLOBALS['_PJ_strings']['close']; else echo 'Close'; ?></button>
         </div>
     </div>
 </div>
@@ -157,17 +157,17 @@ function showReminderPreview(reminderId) {
             document.getElementById('reminderPreview').innerHTML = '<pre>' + data.text + '</pre>';
             document.getElementById('reminderModal').style.display = 'block';
         } else {
-            alert('Failed to load reminder preview: ' + (data.error || 'Unknown error'));
+            alert('<?php if(!empty($GLOBALS['_PJ_strings']['failed_load_reminder_preview'])) echo $GLOBALS['_PJ_strings']['failed_load_reminder_preview']; else echo 'Failed to load reminder preview'; ?>: ' + (data.error || '<?php if(!empty($GLOBALS['_PJ_strings']['unknown_error'])) echo $GLOBALS['_PJ_strings']['unknown_error']; else echo 'Unknown error'; ?>'));
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Failed to load reminder preview');
+        alert('<?php if(!empty($GLOBALS['_PJ_strings']['failed_load_reminder_preview'])) echo $GLOBALS['_PJ_strings']['failed_load_reminder_preview']; else echo 'Failed to load reminder preview'; ?>');
     });
 }
 
 function scheduleReminders(invoiceId) {
-    if (confirm('Schedule automatic reminders for this invoice?')) {
+    if (confirm('<?php if(!empty($GLOBALS['_PJ_strings']['confirm_schedule_reminders'])) echo $GLOBALS['_PJ_strings']['confirm_schedule_reminders']; else echo 'Schedule automatic reminders for this invoice?'; ?>')) {
         fetch('ajax/schedule_reminders.php', {
             method: 'POST',
             headers: {
@@ -178,15 +178,15 @@ function scheduleReminders(invoiceId) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Reminders scheduled successfully');
+                alert('<?php if(!empty($GLOBALS['_PJ_strings']['reminders_scheduled_successfully'])) echo $GLOBALS['_PJ_strings']['reminders_scheduled_successfully']; else echo 'Reminders scheduled successfully'; ?>');
                 location.reload();
             } else {
-                alert('Failed to schedule reminders: ' + (data.error || 'Unknown error'));
+                alert('<?php if(!empty($GLOBALS['_PJ_strings']['failed_schedule_reminders'])) echo $GLOBALS['_PJ_strings']['failed_schedule_reminders']; else echo 'Failed to schedule reminders'; ?>: ' + (data.error || '<?php if(!empty($GLOBALS['_PJ_strings']['unknown_error'])) echo $GLOBALS['_PJ_strings']['unknown_error']; else echo 'Unknown error'; ?>'));
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Failed to schedule reminders');
+            alert('<?php if(!empty($GLOBALS['_PJ_strings']['failed_schedule_reminders'])) echo $GLOBALS['_PJ_strings']['failed_schedule_reminders']; else echo 'Failed to schedule reminders'; ?>');
         });
     }
 }

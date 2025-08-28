@@ -10,7 +10,7 @@ try {
     $invoice_id = $_POST['invoice_id'] ?? 0;
     
     if (!$invoice_id) {
-        echo json_encode(['success' => false, 'error' => 'Missing invoice ID']);
+        echo json_encode(['success' => false, 'error' => !empty($GLOBALS['_PJ_strings']['missing_invoice_id']) ? $GLOBALS['_PJ_strings']['missing_invoice_id'] : 'Missing invoice ID']);
         exit;
     }
     
@@ -27,7 +27,7 @@ try {
     }
     
     if ($existing_count > 0) {
-        echo json_encode(['success' => false, 'error' => 'Reminders already scheduled for this invoice']);
+        echo json_encode(['success' => false, 'error' => !empty($GLOBALS['_PJ_strings']['reminders_already_scheduled']) ? $GLOBALS['_PJ_strings']['reminders_already_scheduled'] : 'Reminders already scheduled for this invoice']);
         exit;
     }
     
@@ -35,7 +35,7 @@ try {
     if ($payment->scheduleReminders($invoice_id)) {
         echo json_encode(['success' => true]);
     } else {
-        echo json_encode(['success' => false, 'error' => 'Failed to schedule reminders']);
+        echo json_encode(['success' => false, 'error' => !empty($GLOBALS['_PJ_strings']['failed_schedule_reminders']) ? $GLOBALS['_PJ_strings']['failed_schedule_reminders'] : 'Failed to schedule reminders']);
     }
     
 } catch (Exception $e) {

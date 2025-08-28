@@ -13,8 +13,8 @@
                 <TR HEIGHT="24">
                     <TD WIDTH="40"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="40" HEIGHT="1" BORDER="0"></TD>
                     <TD BACKGROUND="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/option-sb.gif"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/option-bs.gif" BORDER="0"></TD>
-                    <TD CLASS="option" BACKGROUND="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/option-sb.gif">&nbsp;&nbsp;<A CLASS="option" HREF="create.php">New Invoice</A>&nbsp;&nbsp;</TD>
-                    <TD CLASS="option" BACKGROUND="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/option-sb.gif">&nbsp;&nbsp;<A CLASS="option" HREF="../index.php">Back to Main</A>&nbsp;&nbsp;</TD>
+                    <TD CLASS="option" BACKGROUND="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/option-sb.gif">&nbsp;&nbsp;<A CLASS="option" HREF="create.php"><?php if(!empty($GLOBALS['_PJ_strings']['new_invoice'])) echo $GLOBALS['_PJ_strings']['new_invoice']; else echo 'New Invoice'; ?></A>&nbsp;&nbsp;</TD>
+                    <TD CLASS="option" BACKGROUND="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/option-sb.gif">&nbsp;&nbsp;<A CLASS="option" HREF="../index.php"><?php if(!empty($GLOBALS['_PJ_strings']['back_to_main'])) echo $GLOBALS['_PJ_strings']['back_to_main']; else echo 'Back to Main'; ?></A>&nbsp;&nbsp;</TD>
                     <TD>&nbsp;</TD>
                 </TR>
             </TABLE>
@@ -30,14 +30,14 @@
             <!-- Filters -->
             <TABLE CELLPADDING="0" CELLSPACING="0" BORDER="<?php print($_PJ_inner_frame_border); ?>" WIDTH="100%" CLASS="form">
                 <TR>
-                    <TD CLASS="FormTitle" COLSPAN="6">Filter Invoices</TD>
+                    <TD CLASS="FormTitle" COLSPAN="6"><?php if(!empty($GLOBALS['_PJ_strings']['filter_invoices'])) echo $GLOBALS['_PJ_strings']['filter_invoices']; else echo 'Filter Invoices'; ?></TD>
                 </TR>
                 <FORM METHOD="GET">
                     <TR>
-                        <TD CLASS="FormFieldName">Customer:</TD>
+                        <TD CLASS="FormFieldName"><?php if(!empty($GLOBALS['_PJ_strings']['customer'])) echo $GLOBALS['_PJ_strings']['customer']; else echo 'Customer'; ?>:</TD>
                         <TD CLASS="FormField">
                             <SELECT NAME="customer_id" CLASS="FormSelect">
-                                <OPTION VALUE="">All Customers</OPTION>
+                                <OPTION VALUE=""><?php if(!empty($GLOBALS['_PJ_strings']['all_customers'])) echo $GLOBALS['_PJ_strings']['all_customers']; else echo 'All Customers'; ?></OPTION>
                                 <?php foreach ($customers as $customer): ?>
                                     <OPTION VALUE="<?php echo $customer['id']; ?>" 
                                             <?php echo (isset($_GET['customer_id']) && $_GET['customer_id'] == $customer['id']) ? 'selected' : ''; ?>>
@@ -46,32 +46,32 @@
                                 <?php endforeach; ?>
                             </SELECT>
                         </TD>
-                        <TD CLASS="FormFieldName">Status:</TD>
+                        <TD CLASS="FormFieldName"><?php if(!empty($GLOBALS['_PJ_strings']['status'])) echo $GLOBALS['_PJ_strings']['status']; else echo 'Status'; ?>:</TD>
                         <TD CLASS="FormField">
                             <SELECT NAME="status" CLASS="FormSelect">
-                                <OPTION VALUE="">All Status</OPTION>
-                                <OPTION VALUE="draft" <?php echo (isset($_GET['status']) && $_GET['status'] == 'draft') ? 'selected' : ''; ?>>Draft</OPTION>
-                                <OPTION VALUE="sent" <?php echo (isset($_GET['status']) && $_GET['status'] == 'sent') ? 'selected' : ''; ?>>Sent</OPTION>
-                                <OPTION VALUE="paid" <?php echo (isset($_GET['status']) && $_GET['status'] == 'paid') ? 'selected' : ''; ?>>Paid</OPTION>
-                                <OPTION VALUE="cancelled" <?php echo (isset($_GET['status']) && $_GET['status'] == 'cancelled') ? 'selected' : ''; ?>>Cancelled</OPTION>
+                                <OPTION VALUE=""><?php if(!empty($GLOBALS['_PJ_strings']['all_status'])) echo $GLOBALS['_PJ_strings']['all_status']; else echo 'All Status'; ?></OPTION>
+                                <OPTION VALUE="draft" <?php echo (isset($_GET['status']) && $_GET['status'] == 'draft') ? 'selected' : ''; ?>><?php if(!empty($GLOBALS['_PJ_strings']['draft'])) echo $GLOBALS['_PJ_strings']['draft']; else echo 'Draft'; ?></OPTION>
+                                <OPTION VALUE="sent" <?php echo (isset($_GET['status']) && $_GET['status'] == 'sent') ? 'selected' : ''; ?>><?php if(!empty($GLOBALS['_PJ_strings']['sent'])) echo $GLOBALS['_PJ_strings']['sent']; else echo 'Sent'; ?></OPTION>
+                                <OPTION VALUE="paid" <?php echo (isset($_GET['status']) && $_GET['status'] == 'paid') ? 'selected' : ''; ?>><?php if(!empty($GLOBALS['_PJ_strings']['paid'])) echo $GLOBALS['_PJ_strings']['paid']; else echo 'Paid'; ?></OPTION>
+                                <OPTION VALUE="cancelled" <?php echo (isset($_GET['status']) && $_GET['status'] == 'cancelled') ? 'selected' : ''; ?>><?php if(!empty($GLOBALS['_PJ_strings']['cancelled'])) echo $GLOBALS['_PJ_strings']['cancelled']; else echo 'Cancelled'; ?></OPTION>
                             </SELECT>
                         </TD>
-                        <TD CLASS="FormFieldName">From:</TD>
+                        <TD CLASS="FormFieldName"><?php if(!empty($GLOBALS['_PJ_strings']['from'])) echo $GLOBALS['_PJ_strings']['from']; else echo 'From'; ?>:</TD>
                         <TD CLASS="FormField">
                             <INPUT TYPE="date" NAME="date_from" CLASS="FormInput" 
                                    VALUE="<?php echo htmlspecialchars($_GET['date_from'] ?? ''); ?>">
                         </TD>
                     </TR>
                     <TR>
-                        <TD CLASS="FormFieldName">To:</TD>
+                        <TD CLASS="FormFieldName"><?php if(!empty($GLOBALS['_PJ_strings']['to'])) echo $GLOBALS['_PJ_strings']['to']; else echo 'To'; ?>:</TD>
                         <TD CLASS="FormField">
                             <INPUT TYPE="date" NAME="date_to" CLASS="FormInput" 
                                    VALUE="<?php echo htmlspecialchars($_GET['date_to'] ?? ''); ?>">
                         </TD>
                         <TD CLASS="FormFieldName">&nbsp;</TD>
                         <TD CLASS="FormField">
-                            <INPUT TYPE="submit" VALUE="Filter" CLASS="FormButton">
-                            <INPUT TYPE="button" VALUE="Clear" CLASS="FormButton" ONCLICK="window.location.href='index.php'">
+                            <INPUT TYPE="submit" VALUE="<?php if(!empty($GLOBALS['_PJ_strings']['filter'])) echo $GLOBALS['_PJ_strings']['filter']; else echo 'Filter'; ?>" CLASS="FormButton">
+                            <INPUT TYPE="button" VALUE="<?php if(!empty($GLOBALS['_PJ_strings']['clear'])) echo $GLOBALS['_PJ_strings']['clear']; else echo 'Clear'; ?>" CLASS="FormButton" ONCLICK="window.location.href='index.php'">
                         </TD>
                         <TD COLSPAN="2">&nbsp;</TD>
                     </TR>
@@ -82,26 +82,26 @@
             <!-- Invoice List -->
             <TABLE CELLPADDING="0" CELLSPACING="0" BORDER="<?php print($_PJ_inner_frame_border); ?>" WIDTH="100%" CLASS="list">
                 <TR>
-                    <TD CLASS="ListTitle" COLSPAN="8">Invoice Management</TD>
+                    <TD CLASS="ListTitle" COLSPAN="8"><?php if(!empty($GLOBALS['_PJ_strings']['invoice_management'])) echo $GLOBALS['_PJ_strings']['invoice_management']; else echo 'Invoice Management'; ?></TD>
                 </TR>
 
                 <?php if (empty($invoices)): ?>
                     <TR>
                         <TD CLASS="ListContent" COLSPAN="8" ALIGN="center" STYLE="padding: 40px;">
-                            <P>No invoices found.</P>
-                            <A HREF="create.php" CLASS="FormButton">Create your first invoice</A>
+                            <P><?php if(!empty($GLOBALS['_PJ_strings']['no_invoices_found'])) echo $GLOBALS['_PJ_strings']['no_invoices_found']; else echo 'No invoices found.'; ?></P>
+                            <A HREF="create.php" CLASS="FormButton"><?php if(!empty($GLOBALS['_PJ_strings']['create_first_invoice'])) echo $GLOBALS['_PJ_strings']['create_first_invoice']; else echo 'Create your first invoice'; ?></A>
                         </TD>
                     </TR>
                 <?php else: ?>
                     <TR CLASS="ListHeader">
-                        <TD CLASS="ListHeader">Invoice #</TD>
-                        <TD CLASS="ListHeader">Customer</TD>
-                        <TD CLASS="ListHeader">Project</TD>
-                        <TD CLASS="ListHeader">Date</TD>
-                        <TD CLASS="ListHeader">Period</TD>
-                        <TD CLASS="ListHeader">Amount</TD>
-                        <TD CLASS="ListHeader">Status</TD>
-                        <TD CLASS="ListHeader">Actions</TD>
+                        <TD CLASS="ListHeader"><?php if(!empty($GLOBALS['_PJ_strings']['invoice_number'])) echo $GLOBALS['_PJ_strings']['invoice_number']; else echo 'Invoice #'; ?></TD>
+                        <TD CLASS="ListHeader"><?php if(!empty($GLOBALS['_PJ_strings']['customer'])) echo $GLOBALS['_PJ_strings']['customer']; else echo 'Customer'; ?></TD>
+                        <TD CLASS="ListHeader"><?php if(!empty($GLOBALS['_PJ_strings']['project'])) echo $GLOBALS['_PJ_strings']['project']; else echo 'Project'; ?></TD>
+                        <TD CLASS="ListHeader"><?php if(!empty($GLOBALS['_PJ_strings']['date'])) echo $GLOBALS['_PJ_strings']['date']; else echo 'Date'; ?></TD>
+                        <TD CLASS="ListHeader"><?php if(!empty($GLOBALS['_PJ_strings']['period'])) echo $GLOBALS['_PJ_strings']['period']; else echo 'Period'; ?></TD>
+                        <TD CLASS="ListHeader"><?php if(!empty($GLOBALS['_PJ_strings']['amount'])) echo $GLOBALS['_PJ_strings']['amount']; else echo 'Amount'; ?></TD>
+                        <TD CLASS="ListHeader"><?php if(!empty($GLOBALS['_PJ_strings']['status'])) echo $GLOBALS['_PJ_strings']['status']; else echo 'Status'; ?></TD>
+                        <TD CLASS="ListHeader"><?php if(!empty($GLOBALS['_PJ_strings']['actions'])) echo $GLOBALS['_PJ_strings']['actions']; else echo 'Actions'; ?></TD>
                     </TR>
                     <?php foreach ($invoices as $inv): ?>
                         <TR CLASS="ListContent status-<?php echo $inv['status']; ?>">
@@ -126,11 +126,11 @@
                                 </SPAN>
                             </TD>
                             <TD CLASS="ListContent">
-                                <A HREF="view.php?id=<?php echo $inv['id']; ?>" CLASS="ActionLink" TITLE="View">View</A>
+                                <A HREF="view.php?id=<?php echo $inv['id']; ?>" CLASS="ActionLink" TITLE="<?php if(!empty($GLOBALS['_PJ_strings']['view'])) echo $GLOBALS['_PJ_strings']['view']; else echo 'View'; ?>"><?php if(!empty($GLOBALS['_PJ_strings']['view'])) echo $GLOBALS['_PJ_strings']['view']; else echo 'View'; ?></A>
                                 <?php if ($inv['status'] === 'draft'): ?>
-                                    <A HREF="edit.php?id=<?php echo $inv['id']; ?>" CLASS="ActionLink" TITLE="Edit">Edit</A>
+                                    <A HREF="edit.php?id=<?php echo $inv['id']; ?>" CLASS="ActionLink" TITLE="<?php if(!empty($GLOBALS['_PJ_strings']['edit'])) echo $GLOBALS['_PJ_strings']['edit']; else echo 'Edit'; ?>"><?php if(!empty($GLOBALS['_PJ_strings']['edit'])) echo $GLOBALS['_PJ_strings']['edit']; else echo 'Edit'; ?></A>
                                 <?php endif; ?>
-                                <A HREF="pdf.php?id=<?php echo $inv['id']; ?>" CLASS="ActionLink" TITLE="Download PDF">PDF</A>
+                                <A HREF="pdf.php?id=<?php echo $inv['id']; ?>" CLASS="ActionLink" TITLE="<?php if(!empty($GLOBALS['_PJ_strings']['download_pdf'])) echo $GLOBALS['_PJ_strings']['download_pdf']; else echo 'Download PDF'; ?>"><?php if(!empty($GLOBALS['_PJ_strings']['pdf'])) echo $GLOBALS['_PJ_strings']['pdf']; else echo 'PDF'; ?></A>
                             </TD>
                         </TR>
                     <?php endforeach; ?>
@@ -142,24 +142,24 @@
                 <!-- Summary -->
                 <TABLE CELLPADDING="0" CELLSPACING="0" BORDER="<?php print($_PJ_inner_frame_border); ?>" WIDTH="100%" CLASS="form">
                     <TR>
-                        <TD CLASS="FormTitle" COLSPAN="4">Summary</TD>
+                        <TD CLASS="FormTitle" COLSPAN="4"><?php if(!empty($GLOBALS['_PJ_strings']['summary'])) echo $GLOBALS['_PJ_strings']['summary']; else echo 'Summary'; ?></TD>
                     </TR>
                     <?php
                     $total_amount = array_sum(array_column($invoices, 'gross_amount'));
                     $status_counts = array_count_values(array_column($invoices, 'status'));
                     ?>
                     <TR>
-                        <TD CLASS="FormFieldName">Total Invoices:</TD>
+                        <TD CLASS="FormFieldName"><?php if(!empty($GLOBALS['_PJ_strings']['total_invoices'])) echo $GLOBALS['_PJ_strings']['total_invoices']; else echo 'Total Invoices'; ?>:</TD>
                         <TD CLASS="FormField"><?php echo count($invoices); ?></TD>
-                        <TD CLASS="FormFieldName">Total Amount:</TD>
+                        <TD CLASS="FormFieldName"><?php if(!empty($GLOBALS['_PJ_strings']['total_amount'])) echo $GLOBALS['_PJ_strings']['total_amount']; else echo 'Total Amount'; ?>:</TD>
                         <TD CLASS="FormField"><?php echo number_format($total_amount, 2); ?>€</TD>
                     </TR>
                     <TR>
-                        <TD CLASS="FormFieldName">Status:</TD>
+                        <TD CLASS="FormFieldName"><?php if(!empty($GLOBALS['_PJ_strings']['status'])) echo $GLOBALS['_PJ_strings']['status']; else echo 'Status'; ?>:</TD>
                         <TD CLASS="FormField" COLSPAN="3">
-                            Draft: <?php echo $status_counts['draft'] ?? 0; ?> |
-                            Sent: <?php echo $status_counts['sent'] ?? 0; ?> |
-                            Paid: <?php echo $status_counts['paid'] ?? 0; ?>
+                            <?php if(!empty($GLOBALS['_PJ_strings']['draft'])) echo $GLOBALS['_PJ_strings']['draft']; else echo 'Draft'; ?>: <?php echo $status_counts['draft'] ?? 0; ?> |
+                            <?php if(!empty($GLOBALS['_PJ_strings']['sent'])) echo $GLOBALS['_PJ_strings']['sent']; else echo 'Sent'; ?>: <?php echo $status_counts['sent'] ?? 0; ?> |
+                            <?php if(!empty($GLOBALS['_PJ_strings']['paid'])) echo $GLOBALS['_PJ_strings']['paid']; else echo 'Paid'; ?>: <?php echo $status_counts['paid'] ?? 0; ?>
                         </TD>
                     </TR>
                 </TABLE>

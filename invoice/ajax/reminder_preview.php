@@ -10,7 +10,7 @@ try {
     $reminder_id = $_POST['reminder_id'] ?? 0;
     
     if (!$reminder_id) {
-        echo json_encode(['success' => false, 'error' => 'Missing reminder ID']);
+        echo json_encode(['success' => false, 'error' => !empty($GLOBALS['_PJ_strings']['missing_reminder_id']) ? $GLOBALS['_PJ_strings']['missing_reminder_id'] : 'Missing reminder ID']);
         exit;
     }
     
@@ -33,7 +33,7 @@ try {
     }
     
     if (!$reminder_data) {
-        echo json_encode(['success' => false, 'error' => 'Reminder not found']);
+        echo json_encode(['success' => false, 'error' => !empty($GLOBALS['_PJ_strings']['reminder_not_found']) ? $GLOBALS['_PJ_strings']['reminder_not_found'] : 'Reminder not found']);
         exit;
     }
     

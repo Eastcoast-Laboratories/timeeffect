@@ -31,13 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Validation
     if (empty($customer_id)) {
-        $errors[] = 'Customer is required';
+        $errors[] = !empty($GLOBALS['_PJ_strings']['customer_required']) ? $GLOBALS['_PJ_strings']['customer_required'] : 'Customer is required';
     }
     if (empty($period_start)) {
-        $errors[] = 'Period start is required';
+        $errors[] = !empty($GLOBALS['_PJ_strings']['period_start_required']) ? $GLOBALS['_PJ_strings']['period_start_required'] : 'Period start is required';
     }
     if (empty($period_end)) {
-        $errors[] = 'Period end is required';
+        $errors[] = !empty($GLOBALS['_PJ_strings']['period_end_required']) ? $GLOBALS['_PJ_strings']['period_end_required'] : 'Period end is required';
     }
     
     if (empty($errors)) {
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header("Location: view.php?id={$invoice_id}");
                 exit;
             } else {
-                $errors[] = 'Failed to generate invoice from contract. Please check if an active fixed contract exists.';
+                $errors[] = !empty($GLOBALS['_PJ_strings']['failed_generate_invoice_contract']) ? $GLOBALS['_PJ_strings']['failed_generate_invoice_contract'] : 'Failed to generate invoice from contract. Please check if an active fixed contract exists.';
             }
         } else {
             // Manual invoice creation
@@ -142,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header("Location: view.php?id={$invoice_id}");
                 exit;
             } else {
-                $errors[] = 'Failed to create invoice';
+                $errors[] = !empty($GLOBALS['_PJ_strings']['failed_create_invoice']) ? $GLOBALS['_PJ_strings']['failed_create_invoice'] : 'Failed to create invoice';
             }
         }
     }
@@ -179,6 +179,6 @@ if (!empty($_REQUEST['customer_id'])) {
 
 // Set up template variables for unified layout
 $center_template = "invoice/form";
-$center_title = 'Create Invoice';
+$center_title = !empty($GLOBALS['_PJ_strings']['create_invoice']) ? $GLOBALS['_PJ_strings']['create_invoice'] : 'Create Invoice';
 
 include("$_PJ_root/templates/list.ihtml.php");

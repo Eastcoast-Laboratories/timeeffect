@@ -38,7 +38,7 @@ while ($db->next_record()) {
 
 // Set up template variables for unified layout
 $center_template = "invoice";
-$center_title = 'Invoice Management';
+$center_title = !empty($GLOBALS['_PJ_strings']['invoice_management']) ? $GLOBALS['_PJ_strings']['invoice_management'] : 'Invoice Management';
 
 include("$_PJ_root/templates/list.ihtml.php");
 include_once("$_PJ_include_path/degestiv.inc.php");

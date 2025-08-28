@@ -56,6 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
 // Set up template variables for unified layout
 $center_template = "invoice/view";
-$center_title = 'Invoice ' . $invoice_data['invoice_number'];
+$center_title = (!empty($GLOBALS['_PJ_strings']['invoice']) ? $GLOBALS['_PJ_strings']['invoice'] : 'Invoice') . ' ' . $invoice_data['invoice_number'];
 
 include("$_PJ_root/templates/list.ihtml.php");

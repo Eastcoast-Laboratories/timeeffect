@@ -86,9 +86,9 @@
 				<?php if(isset($user) && is_object($user) && $user->giveValue('id')): ?>
 					<!-- Existing user: Show password change button -->
 					<TR>
-						<TD CLASS="FormFieldName">Password:</TD>
+						<TD CLASS="FormFieldName"><?php if(!empty($GLOBALS['_PJ_strings']['password'])) echo $GLOBALS['_PJ_strings']['password']; else echo 'Password'; ?>:</TD>
 						<TD CLASS="FormField">
-							<button type="button" id="change-password-btn" onclick="togglePasswordFields()" style="background: #007cba; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Change Password</button>
+							<button type="button" id="change-password-btn" onclick="togglePasswordFields()" style="background: #007cba; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;"><?php if(!empty($GLOBALS['_PJ_strings']['change_password'])) echo $GLOBALS['_PJ_strings']['change_password']; else echo 'Change Password'; ?></button>
 						</TD>
 					</TR>
 					<!-- Password fields will be dynamically inserted here by JavaScript -->
@@ -121,92 +121,92 @@
 						<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['theme_preference'])) echo $GLOBALS['_PJ_strings']['theme_preference'] ?></TD>
 						<TD CLASS="content">
 							<select name="theme_preference" class="<?php echo $ro_css_theme_preference ?>">
-								<option value="system" <?php echo (isset($theme_preference) && $theme_preference == 'system') ? 'selected' : '' ?>>System Default</option>
-								<option value="light" <?php echo (isset($theme_preference) && $theme_preference == 'light') ? 'selected' : '' ?>>Light Mode</option>
-								<option value="dark" <?php echo (isset($theme_preference) && $theme_preference == 'dark') ? 'selected' : '' ?>>Dark Mode</option>
+								<option value="system" <?php echo (isset($theme_preference) && $theme_preference == 'system') ? 'selected' : '' ?>><?php if(!empty($GLOBALS['_PJ_strings']['system_default'])) echo $GLOBALS['_PJ_strings']['system_default']; else echo 'System Default'; ?></option>
+								<option value="light" <?php echo (isset($theme_preference) && $theme_preference == 'light') ? 'selected' : '' ?>><?php if(!empty($GLOBALS['_PJ_strings']['light_mode'])) echo $GLOBALS['_PJ_strings']['light_mode']; else echo 'Light Mode'; ?></option>
+								<option value="dark" <?php echo (isset($theme_preference) && $theme_preference == 'dark') ? 'selected' : '' ?>><?php if(!empty($GLOBALS['_PJ_strings']['dark_mode'])) echo $GLOBALS['_PJ_strings']['dark_mode']; else echo 'Dark Mode'; ?></option>
 							</select>
 						</TD>
 					</TR><TR>
 						<TD COLSPAN="2" CLASS="label" style="background-color: #f0f0f0; padding: 10px; font-weight: bold;">
-							Invoice Settings
+							<?php if(!empty($GLOBALS['_PJ_strings']['invoice_settings'])) echo $GLOBALS['_PJ_strings']['invoice_settings']; else echo 'Invoice Settings'; ?>
 						</TD>
 					</TR><TR>
-						<TD CLASS="label">Company Name</TD>
+						<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['company_name'])) echo $GLOBALS['_PJ_strings']['company_name']; else echo 'Company Name'; ?></TD>
 						<TD CLASS="content">
 							<input type="text" name="company_name" value="<?php echo htmlspecialchars($company_name ?? '') ?>" size="40" maxlength="255">
 						</TD>
 					</TR><TR>
-						<TD CLASS="label">Company Address</TD>
+						<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['company_address'])) echo $GLOBALS['_PJ_strings']['company_address']; else echo 'Company Address'; ?></TD>
 						<TD CLASS="content">
 							<textarea name="company_address" rows="3" cols="40"><?php echo htmlspecialchars($company_address ?? '') ?></textarea>
 						</TD>
 					</TR><TR>
-						<TD CLASS="form" ALIGN="right"><?php echo $GLOBALS['_PJ_strings']['invoice_footer_path'] ?? 'Footer Image Path'; ?>:</TD>
+						<TD CLASS="form" ALIGN="right"><?php if(!empty($GLOBALS['_PJ_strings']['invoice_footer_path'])) echo $GLOBALS['_PJ_strings']['invoice_footer_path']; else echo 'Footer Image Path'; ?>:</TD>
 						<TD CLASS="form">
 							<INPUT TYPE="text" NAME="invoice_footer_path" VALUE="<?php echo htmlspecialchars($user->giveValue('invoice_footer_path') ?? ''); ?>" SIZE="50" MAXLENGTH="255" id="footer_path">
 							<INPUT TYPE="file" id="footer_upload" accept="image/*" style="display:none;">
-							<BUTTON TYPE="button" onclick="document.getElementById('footer_upload').click();">Upload</BUTTON>
+							<BUTTON TYPE="button" onclick="document.getElementById('footer_upload').click();"><?php if(!empty($GLOBALS['_PJ_strings']['upload'])) echo $GLOBALS['_PJ_strings']['upload']; else echo 'Upload'; ?></BUTTON>
 							<div id="footer_preview"></div>
 						</TD>
 					</TR><TR>
-						<TD CLASS="label">City</TD>
+						<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['city'])) echo $GLOBALS['_PJ_strings']['city']; else echo 'City'; ?></TD>
 						<TD CLASS="content">
 							<input type="text" name="company_city" value="<?php echo htmlspecialchars($company_city ?? '') ?>" size="30" maxlength="100">
 						</TD>
 					</TR><TR>
-						<TD CLASS="label">Country</TD>
+						<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['country'])) echo $GLOBALS['_PJ_strings']['country']; else echo 'Country'; ?></TD>
 						<TD CLASS="content">
 							<input type="text" name="company_country" value="<?php echo htmlspecialchars($company_country ?? 'Deutschland') ?>" size="30" maxlength="100">
 						</TD>
 					</TR><TR>
-						<TD CLASS="label">Tax Number</TD>
+						<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['tax_number'])) echo $GLOBALS['_PJ_strings']['tax_number']; else echo 'Tax Number'; ?></TD>
 						<TD CLASS="content">
 							<input type="text" name="tax_number" value="<?php echo htmlspecialchars($tax_number ?? '') ?>" size="30" maxlength="50">
 						</TD>
 					</TR><TR>
-						<TD CLASS="label">Logo Path</TD>
+						<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['logo_path'])) echo $GLOBALS['_PJ_strings']['logo_path']; else echo 'Logo Path'; ?></TD>
 						<TD CLASS="content">
 							<input type="text" name="invoice_logo_path" value="<?php echo htmlspecialchars($invoice_logo_path ?? '') ?>" size="50" maxlength="255" id="logo_path">
 							<input type="file" id="logo_upload" accept="image/*" style="display:none;">
-							<button type="button" onclick="document.getElementById('logo_upload').click();">Upload</button>
+							<button type="button" onclick="document.getElementById('logo_upload').click();"><?php if(!empty($GLOBALS['_PJ_strings']['upload'])) echo $GLOBALS['_PJ_strings']['upload']; else echo 'Upload'; ?></button>
 							<div id="logo_preview"></div>
 						</TD>
 					</TR><TR>
-						<TD CLASS="label">Letterhead Path</TD>
+						<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['letterhead_path'])) echo $GLOBALS['_PJ_strings']['letterhead_path']; else echo 'Letterhead Path'; ?></TD>
 						<TD CLASS="content">
 							<input type="text" name="invoice_letterhead_path" value="<?php echo htmlspecialchars($invoice_letterhead_path ?? '') ?>" size="50" maxlength="255" id="letterhead_path">
 							<input type="file" id="letterhead_upload" accept="image/*" style="display:none;">
-							<button type="button" onclick="document.getElementById('letterhead_upload').click();">Upload</button>
+							<button type="button" onclick="document.getElementById('letterhead_upload').click();"><?php if(!empty($GLOBALS['_PJ_strings']['upload'])) echo $GLOBALS['_PJ_strings']['upload']; else echo 'Upload'; ?></button>
 							<div id="letterhead_preview"></div>
 						</TD>
 					</TR><TR>
-						<TD CLASS="label">IBAN</TD>
+						<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['iban'])) echo $GLOBALS['_PJ_strings']['iban']; else echo 'IBAN'; ?></TD>
 						<TD CLASS="content">
 							<input type="text" name="bank_iban" value="<?php echo htmlspecialchars($bank_iban ?? '') ?>" size="30" maxlength="34" pattern="[A-Z]{2}[0-9]{2}[A-Z0-9]{4}[0-9]{7}([A-Z0-9]?){0,16}">
 						</TD>
 					</TR><TR>
-						<TD CLASS="label">BIC</TD>
+						<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['bic'])) echo $GLOBALS['_PJ_strings']['bic']; else echo 'BIC'; ?></TD>
 						<TD CLASS="content">
 							<input type="text" name="bank_bic" value="<?php echo htmlspecialchars($bank_bic ?? '') ?>" size="15" maxlength="11">
 						</TD>
 					</TR><TR>
-						<TD CLASS="label">Invoice Number Format</TD>
+						<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['invoice_number_format'])) echo $GLOBALS['_PJ_strings']['invoice_number_format']; else echo 'Invoice Number Format'; ?></TD>
 						<TD CLASS="content">
 							<input type="text" name="invoice_number_format" value="<?php echo htmlspecialchars($invoice_number_format ?? 'R-{YYYY}-{MM}-{###}') ?>" size="30" maxlength="50">
-							<br><small>Use {YYYY} for year, {MM} for month, {###} for counter</small>
+							<br><small><?php if(!empty($GLOBALS['_PJ_strings']['invoice_format_help'])) echo $GLOBALS['_PJ_strings']['invoice_format_help']; else echo 'Use {YYYY} for year, {MM} for month, {###} for counter'; ?></small>
 						</TD>
 					</TR><TR>
-						<TD CLASS="label">Default VAT Rate (%)</TD>
+						<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['default_vat_rate'])) echo $GLOBALS['_PJ_strings']['default_vat_rate']; else echo 'Default VAT Rate (%)'; ?></TD>
 						<TD CLASS="content">
 							<input type="number" name="default_vat_rate" value="<?php echo htmlspecialchars($default_vat_rate ?? '19.00') ?>" step="0.01" min="0" max="100" size="10">
 						</TD>
 					</TR><TR>
-						<TD CLASS="label">Payment Terms (Days)</TD>
+						<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['payment_terms_days'])) echo $GLOBALS['_PJ_strings']['payment_terms_days']; else echo 'Payment Terms (Days)'; ?></TD>
 						<TD CLASS="content">
 							<input type="number" name="payment_terms_days" value="<?php echo htmlspecialchars($payment_terms_days ?? '14') ?>" min="1" max="365" size="10">
 						</TD>
 					</TR><TR>
-						<TD CLASS="label">Payment Terms Text</TD>
+						<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['payment_terms_text'])) echo $GLOBALS['_PJ_strings']['payment_terms_text']; else echo 'Payment Terms Text'; ?></TD>
 						<TD CLASS="content">
 							<textarea name="payment_terms_text" rows="2" cols="40"><?php echo htmlspecialchars($payment_terms_text ?? 'Zahlbar innerhalb von 14 Tagen ohne Abzug.') ?></textarea>
 						</TD>
@@ -235,11 +235,11 @@
 								document.getElementById(previewId).innerHTML = 
 									'<img src="' + data.path + '" style="max-width:100px;max-height:50px;margin-top:5px;">';
 							} else {
-								alert('Upload failed: ' + data.error);
+								alert('<?php if(!empty($GLOBALS["_PJ_strings"]["upload_failed"])) echo addslashes($GLOBALS["_PJ_strings"]["upload_failed"]); else echo "Upload failed"; ?>: ' + data.error);
 							}
 						})
 						.catch(error => {
-							alert('Upload error: ' + error);
+							alert('<?php if(!empty($GLOBALS["_PJ_strings"]["upload_error"])) echo addslashes($GLOBALS["_PJ_strings"]["upload_error"]); else echo "Upload error"; ?>: ' + error);
 						});
 					});
 				}
@@ -335,7 +335,7 @@ function togglePasswordFields() {
         table.insertBefore(passwordRetypeRow, nextRow);
         
         // Update button
-        button.textContent = 'Cancel Password Change';
+        button.textContent = '<?php if(!empty($GLOBALS["_PJ_strings"]["cancel_password_change"])) echo addslashes($GLOBALS["_PJ_strings"]["cancel_password_change"]); else echo "Cancel Password Change"; ?>';
         button.style.background = '#dc3545';
         
         // Focus first password field
@@ -369,7 +369,7 @@ function togglePasswordFields() {
         document.getElementById('password-retype-fields').remove();
         
         // Update button
-        button.textContent = 'Change Password';
+        button.textContent = '<?php if(!empty($GLOBALS["_PJ_strings"]["change_password"])) echo addslashes($GLOBALS["_PJ_strings"]["change_password"]); else echo "Change Password"; ?>';
         button.style.background = '#007cba';
     }
 }
@@ -432,7 +432,7 @@ function updatePersonalGroup() {
 // Password validation function (from functions.js)
 function validatePasswordStrength(password) {
     if (password.length >= 12) {
-        return { valid: true, message: 'Strong password', class: 'password-strong' };
+        return { valid: true, message: '<?php if(!empty($GLOBALS["_PJ_strings"]["strong_password"])) echo addslashes($GLOBALS["_PJ_strings"]["strong_password"]); else echo "Strong password"; ?>', class: 'password-strong' };
     }
     
     if (password.length >= 8) {
@@ -440,15 +440,15 @@ function validatePasswordStrength(password) {
         var hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
         
         if (hasNumber && hasSpecial) {
-            return { valid: true, message: 'Strong password', class: 'password-strong' };
+            return { valid: true, message: '<?php if(!empty($GLOBALS["_PJ_strings"]["strong_password"])) echo addslashes($GLOBALS["_PJ_strings"]["strong_password"]); else echo "Strong password"; ?>', class: 'password-strong' };
         } else if (hasNumber || hasSpecial) {
-            return { valid: false, message: 'Password needs both number and special character', class: 'password-weak' };
+            return { valid: false, message: '<?php if(!empty($GLOBALS["_PJ_strings"]["password_needs_number_special"])) echo addslashes($GLOBALS["_PJ_strings"]["password_needs_number_special"]); else echo "Password needs both number and special character"; ?>', class: 'password-weak' };
         } else {
-            return { valid: false, message: 'Password needs number and special character', class: 'password-weak' };
+            return { valid: false, message: '<?php if(!empty($GLOBALS["_PJ_strings"]["password_needs_number_special"])) echo addslashes($GLOBALS["_PJ_strings"]["password_needs_number_special"]); else echo "Password needs number and special character"; ?>', class: 'password-weak' };
         }
     }
     
-    return { valid: false, message: 'Password too short (minimum 8 characters)', class: 'password-weak' };
+    return { valid: false, message: '<?php if(!empty($GLOBALS["_PJ_strings"]["password_too_short"])) echo addslashes($GLOBALS["_PJ_strings"]["password_too_short"]); else echo "Password too short (minimum 8 characters)"; ?>', class: 'password-weak' };
 }
 
 // Add event listener when page loads
@@ -522,7 +522,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var result = validatePasswordStrength(passwordField.value);
                 
                 if (!result.valid) {
-                    alert('Password validation failed: ' + result.message);
+                    alert('<?php if(!empty($GLOBALS["_PJ_strings"]["password_validation_failed"])) echo addslashes($GLOBALS["_PJ_strings"]["password_validation_failed"]); else echo "Password validation failed"; ?>: ' + result.message);
                     // Auto-show password fields if they're hidden
                     if (isEditMode && !document.getElementById('password-fields')) {
                         togglePasswordFields();
@@ -533,7 +533,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Check password match
                 if (retypeField && passwordField.value !== retypeField.value) {
-                    alert('Passwords do not match!');
+                    alert('<?php if(!empty($GLOBALS["_PJ_strings"]["passwords_do_not_match"])) echo addslashes($GLOBALS["_PJ_strings"]["passwords_do_not_match"]); else echo "Passwords do not match!"; ?>');
                     // Auto-show password fields if they're hidden
                     if (isEditMode && !document.getElementById('password-fields')) {
                         togglePasswordFields();

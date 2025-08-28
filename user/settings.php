@@ -34,7 +34,7 @@
 	$payment_terms_text = $_REQUEST['payment_terms_text'] ?? '';
 
 	$center_template	= "user";
-	$center_title		= 'Benutzer';
+	$center_title		= !empty($GLOBALS['_PJ_strings']['user']) ? $GLOBALS['_PJ_strings']['user'] : 'Benutzer';
 
 	if(isset($altered)) {
 		// Handle theme preference update separately via direct database update
@@ -102,7 +102,7 @@
 		if($error = $_PJ_auth->save($data)) {
 			$message = "<FONT COLOR=\"red\"><B>$error</B></FONT>";
 		} else {
-			$message = "<FONT COLOR=\"green\"><B>Settings updated successfully.</B></FONT>";
+			$message = "<FONT COLOR=\"green\"><B>" . (!empty($GLOBALS['_PJ_strings']['settings_updated_successfully']) ? $GLOBALS['_PJ_strings']['settings_updated_successfully'] : 'Settings updated successfully.') . "</B></FONT>";
 			
 			// Refresh auth data to show changes immediately
 			$_PJ_auth->fetchAdditionalData();
