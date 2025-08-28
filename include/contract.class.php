@@ -63,9 +63,9 @@ class Contract {
      * Get all contracts for customer
      */
     public function getCustomerContracts($customer_id) {
-        $sql = "SELECT cc.*, p.name as project_name
+        $sql = "SELECT cc.*, p.project_name as project_name
                 FROM " . $GLOBALS['_PJ_table_prefix'] . "customer_contracts cc
-                LEFT JOIN projects p ON cc.project_id = p.id
+                LEFT JOIN " . $GLOBALS['_PJ_project_table'] . " p ON cc.project_id = p.id
                 WHERE cc.customer_id = " . intval($customer_id) . "
                 ORDER BY cc.start_date DESC";
         
@@ -81,7 +81,7 @@ class Contract {
      * Update contract
      */
     public function updateContract($contract_id, $data) {
-        $sql = "UPDATE " . $GLOBALS['_PJ_customer_table'] . "_contracts SET
+        $sql = "UPDATE " . $GLOBALS['_PJ_table_prefix'] . "customer_contracts SET
                 customer_id = " . intval($data['customer_id']) . ",
                 project_id = " . ($data['project_id'] ? intval($data['project_id']) : 'NULL') . ",
                 contract_type = '" . addslashes($data['contract_type']) . "',
@@ -109,10 +109,10 @@ class Contract {
      * Get contract by ID
      */
     public function getContract($contract_id) {
-        $sql = "SELECT cc.*, c.name as customer_name, p.name as project_name
+        $sql = "SELECT cc.*, c.customer_name as customer_name, p.project_name as project_name
                 FROM " . $GLOBALS['_PJ_table_prefix'] . "customer_contracts cc
-                JOIN customers c ON cc.customer_id = c.id
-                LEFT JOIN projects p ON cc.project_id = p.id
+                JOIN " . $GLOBALS['_PJ_customer_table'] . " c ON cc.customer_id = c.id
+                LEFT JOIN " . $GLOBALS['_PJ_project_table'] . " p ON cc.project_id = p.id
                 WHERE cc.id = " . intval($contract_id);
         
         $this->db->query($sql);

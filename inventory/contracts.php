@@ -1,14 +1,16 @@
 <?php
 require_once(__DIR__ . "/../bootstrap.php");
+include_once(__DIR__ . "/../include/config.inc.php");
+include_once($GLOBALS['_PJ_include_path'] . '/scripts.inc.php');
 require_once(__DIR__ . "/../include/contract.class.php");
 
-// Check authentication
-if (!isset($_SESSION['user_id'])) {
+// Check authentication using TimeEffect auth system
+if (!$_PJ_auth->giveValue('id')) {
     header('Location: ../index.php');
     exit;
 }
 
-$contract = new Contract($db, $_SESSION['user_id']);
+$contract = new Contract($db, $_PJ_auth->giveValue('id'));
 
 $customer_id = $_GET['customer_id'] ?? $_POST['customer_id'] ?? 0;
 $contract_id = $_GET['id'] ?? $_POST['id'] ?? 0;
@@ -119,5 +121,9 @@ if ($action === 'edit' && $contract_id) {
     }
 }
 
-$page_title = 'Contract Management - ' . $customer_data['name'];
-include('../templates/inventory/customer/contracts.ihtml.php');
+// Set up template variables for unified layout
+$center_template = "inventory/customer/contracts";
+$center_title = 'Contract Management - ' . $customer_data['name'];
+
+include("$_PJ_root/templates/list.ihtml.php");
+include_once("$_PJ_include_path/degestiv.inc.php");

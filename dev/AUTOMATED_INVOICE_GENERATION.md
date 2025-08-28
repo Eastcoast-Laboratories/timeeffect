@@ -480,7 +480,6 @@ Rechnungsbetrag: 1500€ (Pauschal)
    - Add invoice management pages (list, view, edit invoices)
    - Integrate invoice settings into user/settings.php
 
-
 ### Phase 6: Template System
 1. **Dynamic Template Generation**
    ```php

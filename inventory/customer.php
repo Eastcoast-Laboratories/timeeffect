@@ -249,7 +249,13 @@
 
 	$customer_list = new CustomerList($_PJ_auth, @$shown['ic']);
 	$center_template	= "inventory/customer";
-	$center_title		= $GLOBALS['_PJ_strings']['inventory'] . ': ' . $GLOBALS['_PJ_strings']['customer_list'];
+	$center_title		= 'Kunden';
+	
+	// Add contract management link for existing customers
+	$show_contract_link = false;
+	if ($edit && $id) {
+		$show_contract_link = true;
+	}
 
 	include("$_PJ_root/templates/list.ihtml.php");
 	include_once("$_PJ_include_path/degestiv.inc.php");

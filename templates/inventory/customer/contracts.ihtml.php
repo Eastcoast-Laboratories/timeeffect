@@ -7,6 +7,7 @@ include_once(__DIR__ . '/../../shared/header.ihtml.php');
 <div class="container">
     <div class="header">
         <h1><?php echo $page_title; ?></h1>
+        <!-- inventory/customer/contracts/list.ihtml - START -->
         <div class="actions">
             <a href="../customer.php" class="btn btn-secondary">Back to Customers</a>
         </div>

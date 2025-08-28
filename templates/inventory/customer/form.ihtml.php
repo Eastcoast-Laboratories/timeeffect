@@ -24,6 +24,8 @@
 		$customer_access_world		= substr($customer->giveValue('access'), 6, 3);
 //		$customer_logo				= $customer->giveValue('customer_logo');
 		include($GLOBALS['_PJ_root'] . '/templates/inventory/customer/options/edit.ihtml.php');
+		// Add contract management link for existing customers
+		$show_contract_link = true;
 	} else {
 		// default values
 		$active						= 'yes';

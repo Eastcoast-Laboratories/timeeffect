@@ -50,28 +50,26 @@
 			}
 		}
 		
-		// Handle invoice settings update via direct database update
-		$user_id = $_PJ_auth->giveValue('id');
-		$invoice_update_query = "UPDATE " . $GLOBALS['_PJ_auth_table'] . " SET 
-			company_name = '" . add_slashes($company_name) . "',
-			company_address = '" . add_slashes($company_address) . "',
-			company_postal_code = '" . add_slashes($company_postal_code) . "',
-			company_city = '" . add_slashes($company_city) . "',
-			company_country = '" . add_slashes($company_country) . "',
-			tax_number = '" . add_slashes($tax_number) . "',
-			vat_number = '" . add_slashes($vat_number) . "',
-			bank_name = '" . add_slashes($bank_name) . "',
-			bank_iban = '" . add_slashes($bank_iban) . "',
-			bank_bic = '" . add_slashes($bank_bic) . "',
-			invoice_number_format = '" . add_slashes($invoice_number_format) . "',
-			default_vat_rate = " . floatval($default_vat_rate) . ",
-			payment_terms_days = " . intval($payment_terms_days) . ",
-			payment_terms_text = '" . add_slashes($payment_terms_text) . "'
-			WHERE id = " . intval($user_id);
+		// Handle invoice settings update
+		$invoice_fields = [
+			'company_name', 'company_address', 'company_postal_code', 'company_city', 'company_country',
+			'tax_number', 'vat_number', 'bank_name', 'bank_iban', 'bank_bic',
+			'invoice_number_format', 'default_vat_rate', 'payment_terms_days', 'payment_terms_text'
+		];
 		
-		if($db->query($invoice_update_query)) {
-			// Refresh auth data to reflect invoice settings changes
-			$_PJ_auth->fetchAdditionalData();
+		$invoice_updates = [];
+		foreach($invoice_fields as $field) {
+			if(isset($_REQUEST[$field])) {
+				$value = add_slashes($_REQUEST[$field]);
+				$invoice_updates[] = "$field = '$value'";
+			}
+		}
+		
+		if(!empty($invoice_updates)) {
+			$db = new Database();
+			$user_id = $_PJ_auth->giveValue('id');
+			$update_query = "UPDATE " . $GLOBALS['_PJ_auth_table'] . " SET " . implode(', ', $invoice_updates) . " WHERE id = " . intval($user_id);
+			$db->query($update_query);
 		}
 		
 		// Handle regular user data updates

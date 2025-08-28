@@ -115,67 +115,142 @@
 									<TD CLASS="FormFieldName"><?php if(!empty($GLOBALS['_PJ_strings']['email'])) echo $GLOBALS['_PJ_strings']['email'] ?>:</TD>
 										<TD CLASS="FormField"><INPUT CLASS="FormField" TYPE="text" NAME="email" VALUE="<?php if(isset($email)) echo $email; ?>"></TD>
 									</TR><TR>
-									<TD CLASS="FormFieldName"><?php if(!empty($GLOBALS['_PJ_strings']['telephone'])) echo $GLOBALS['_PJ_strings']['telephone'] ?>:</TD>
-										<TD CLASS="FormField"><INPUT CLASS="FormField" TYPE="text" NAME="telephone" VALUE="<?php if(isset($telephone)) echo $telephone; ?>"></TD>
+									<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['facsimile'])) echo $GLOBALS['_PJ_strings']['facsimile'] ?>:</TD>
+										<TD CLASS="content"><INPUT CLASS="FormField" TYPE="text" NAME="facsimile" VALUE="<?php if(isset($facsimile)) echo $facsimile; ?>"></TD>
 									</TR><TR>
-									<TD CLASS="FormFieldName"><?php if(!empty($GLOBALS['_PJ_strings']['facsimile'])) echo $GLOBALS['_PJ_strings']['facsimile'] ?>:</TD>
-										<TD CLASS="FormField"><INPUT CLASS="FormField" TYPE="text" NAME="facsimile" VALUE="<?php if(isset($facsimile)) echo $facsimile; ?>"></TD>
-									</TR><TR>
-									<TD CLASS="FormFieldName">Theme:</TD>
-										<TD CLASS="FormField"><SELECT CLASS="FormField" NAME="theme_preference">
-						<OPTION VALUE="system"<?php if((!isset($user) || $user->giveValue('theme_preference') == 'system' || $user->giveValue('theme_preference') == '')) print ' SELECTED'; ?>>System Default</OPTION>
-						<OPTION VALUE="light"<?php if(isset($user) && $user->giveValue('theme_preference') == 'light') print ' SELECTED'; ?>>Light</OPTION>
-						<OPTION VALUE="dark"<?php if(isset($user) && $user->giveValue('theme_preference') == 'dark') print ' SELECTED'; ?>>Dark</OPTION>
-					</SELECT></TD>
-				</TR><TR>
-					<TD COLSPAN="2" CLASS="FormFieldName" style="padding-top: 20px; font-weight: bold; border-top: 1px solid #ccc;">Invoice Settings</TD>
-				</TR><TR>
-					<TD CLASS="FormFieldName">Company Name:</TD>
-					<TD CLASS="FormField"><INPUT CLASS="FormField" NAME="company_name" VALUE="<?php echo htmlspecialchars($user->giveValue('company_name') ?? ''); ?>"></TD>
-				</TR><TR>
-					<TD CLASS="FormFieldName">Company Address:</TD>
-					<TD CLASS="FormField"><TEXTAREA CLASS="FormField" NAME="company_address" rows="3"><?php echo htmlspecialchars($user->giveValue('company_address') ?? ''); ?></TEXTAREA></TD>
-				</TR><TR>
-					<TD CLASS="FormFieldName">Postal Code:</TD>
-					<TD CLASS="FormField"><INPUT CLASS="FormField" NAME="company_postal_code" VALUE="<?php echo htmlspecialchars($user->giveValue('company_postal_code') ?? ''); ?>"></TD>
-				</TR><TR>
-					<TD CLASS="FormFieldName">City:</TD>
-					<TD CLASS="FormField"><INPUT CLASS="FormField" NAME="company_city" VALUE="<?php echo htmlspecialchars($user->giveValue('company_city') ?? ''); ?>"></TD>
-				</TR><TR>
-					<TD CLASS="FormFieldName">Country:</TD>
-					<TD CLASS="FormField"><INPUT CLASS="FormField" NAME="company_country" VALUE="<?php echo htmlspecialchars($user->giveValue('company_country') ?? ''); ?>"></TD>
-				</TR><TR>
-					<TD CLASS="FormFieldName">Tax Number:</TD>
-					<TD CLASS="FormField"><INPUT CLASS="FormField" NAME="tax_number" VALUE="<?php echo htmlspecialchars($user->giveValue('tax_number') ?? ''); ?>"></TD>
-				</TR><TR>
-					<TD CLASS="FormFieldName">VAT Number:</TD>
-					<TD CLASS="FormField"><INPUT CLASS="FormField" NAME="vat_number" VALUE="<?php echo htmlspecialchars($user->giveValue('vat_number') ?? ''); ?>"></TD>
-				</TR><TR>
-					<TD CLASS="FormFieldName">Bank Name:</TD>
-					<TD CLASS="FormField"><INPUT CLASS="FormField" NAME="bank_name" VALUE="<?php echo htmlspecialchars($user->giveValue('bank_name') ?? ''); ?>"></TD>
-				</TR><TR>
-					<TD CLASS="FormFieldName">Bank IBAN:</TD>
-					<TD CLASS="FormField"><INPUT CLASS="FormField" NAME="bank_iban" VALUE="<?php echo htmlspecialchars($user->giveValue('bank_iban') ?? ''); ?>"></TD>
-				</TR><TR>
-					<TD CLASS="FormFieldName">Bank BIC:</TD>
-					<TD CLASS="FormField"><INPUT CLASS="FormField" NAME="bank_bic" VALUE="<?php echo htmlspecialchars($user->giveValue('bank_bic') ?? ''); ?>"></TD>
-				</TR><TR>
-					<TD CLASS="FormFieldName">Invoice Number Format:</TD>
-					<TD CLASS="FormField">
-						<INPUT CLASS="FormField" NAME="invoice_number_format" VALUE="<?php echo htmlspecialchars($user->giveValue('invoice_number_format') ?? 'R-{YYYY}-{MM}-{###}'); ?>">
-						<div style="font-size: 11px; color: #666; margin-top: 3px;">
-							Use {YYYY} for year, {MM} for month, {###} for sequential number
-						</div>
-					</TD>
-				</TR><TR>
-					<TD CLASS="FormFieldName">Default VAT Rate (%):</TD>
-					<TD CLASS="FormField"><INPUT CLASS="FormField" TYPE="number" step="0.01" NAME="default_vat_rate" VALUE="<?php echo htmlspecialchars($user->giveValue('default_vat_rate') ?? '19.00'); ?>"></TD>
-				</TR><TR>
-					<TD CLASS="FormFieldName">Payment Terms (Days):</TD>
-					<TD CLASS="FormField"><INPUT CLASS="FormField" TYPE="number" NAME="payment_terms_days" VALUE="<?php echo htmlspecialchars($user->giveValue('payment_terms_days') ?? '14'); ?>"></TD>
-				</TR><TR>
-					<TD CLASS="FormFieldName">Payment Terms Text:</TD>
-					<TD CLASS="FormField"><TEXTAREA CLASS="FormField" NAME="payment_terms_text" rows="3"><?php echo htmlspecialchars($user->giveValue('payment_terms_text') ?? ''); ?></TEXTAREA></TD>
+						<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['theme_preference'])) echo $GLOBALS['_PJ_strings']['theme_preference'] ?></TD>
+						<TD CLASS="content">
+							<select name="theme_preference" class="<?php echo $ro_css_theme_preference ?>">
+								<option value="system" <?php echo (isset($theme_preference) && $theme_preference == 'system') ? 'selected' : '' ?>>System Default</option>
+								<option value="light" <?php echo (isset($theme_preference) && $theme_preference == 'light') ? 'selected' : '' ?>>Light Mode</option>
+								<option value="dark" <?php echo (isset($theme_preference) && $theme_preference == 'dark') ? 'selected' : '' ?>>Dark Mode</option>
+							</select>
+						</TD>
+					</TR><TR>
+						<TD COLSPAN="2" CLASS="label" style="background-color: #f0f0f0; padding: 10px; font-weight: bold;">
+							Invoice Settings
+						</TD>
+					</TR><TR>
+						<TD CLASS="label">Company Name</TD>
+						<TD CLASS="content">
+							<input type="text" name="company_name" value="<?php echo htmlspecialchars($company_name ?? '') ?>" size="40" maxlength="255">
+						</TD>
+					</TR><TR>
+						<TD CLASS="label">Company Address</TD>
+						<TD CLASS="content">
+							<textarea name="company_address" rows="3" cols="40"><?php echo htmlspecialchars($company_address ?? '') ?></textarea>
+						</TD>
+					</TR><TR>
+						<TD CLASS="form" ALIGN="right"><?php echo $GLOBALS['_PJ_strings']['invoice_footer_path'] ?? 'Footer Image Path'; ?>:</TD>
+						<TD CLASS="form">
+							<INPUT TYPE="text" NAME="invoice_footer_path" VALUE="<?php echo htmlspecialchars($user->giveValue('invoice_footer_path') ?? ''); ?>" SIZE="50" MAXLENGTH="255" id="footer_path">
+							<INPUT TYPE="file" id="footer_upload" accept="image/*" style="display:none;">
+							<BUTTON TYPE="button" onclick="document.getElementById('footer_upload').click();">Upload</BUTTON>
+							<div id="footer_preview"></div>
+						</TD>
+					</TR><TR>
+						<TD CLASS="label">City</TD>
+						<TD CLASS="content">
+							<input type="text" name="company_city" value="<?php echo htmlspecialchars($company_city ?? '') ?>" size="30" maxlength="100">
+						</TD>
+					</TR><TR>
+						<TD CLASS="label">Country</TD>
+						<TD CLASS="content">
+							<input type="text" name="company_country" value="<?php echo htmlspecialchars($company_country ?? 'Deutschland') ?>" size="30" maxlength="100">
+						</TD>
+					</TR><TR>
+						<TD CLASS="label">Tax Number</TD>
+						<TD CLASS="content">
+							<input type="text" name="tax_number" value="<?php echo htmlspecialchars($tax_number ?? '') ?>" size="30" maxlength="50">
+						</TD>
+					</TR><TR>
+						<TD CLASS="label">Logo Path</TD>
+						<TD CLASS="content">
+							<input type="text" name="invoice_logo_path" value="<?php echo htmlspecialchars($invoice_logo_path ?? '') ?>" size="50" maxlength="255" id="logo_path">
+							<input type="file" id="logo_upload" accept="image/*" style="display:none;">
+							<button type="button" onclick="document.getElementById('logo_upload').click();">Upload</button>
+							<div id="logo_preview"></div>
+						</TD>
+					</TR><TR>
+						<TD CLASS="label">Letterhead Path</TD>
+						<TD CLASS="content">
+							<input type="text" name="invoice_letterhead_path" value="<?php echo htmlspecialchars($invoice_letterhead_path ?? '') ?>" size="50" maxlength="255" id="letterhead_path">
+							<input type="file" id="letterhead_upload" accept="image/*" style="display:none;">
+							<button type="button" onclick="document.getElementById('letterhead_upload').click();">Upload</button>
+							<div id="letterhead_preview"></div>
+						</TD>
+					</TR><TR>
+						<TD CLASS="label">IBAN</TD>
+						<TD CLASS="content">
+							<input type="text" name="bank_iban" value="<?php echo htmlspecialchars($bank_iban ?? '') ?>" size="30" maxlength="34" pattern="[A-Z]{2}[0-9]{2}[A-Z0-9]{4}[0-9]{7}([A-Z0-9]?){0,16}">
+						</TD>
+					</TR><TR>
+						<TD CLASS="label">BIC</TD>
+						<TD CLASS="content">
+							<input type="text" name="bank_bic" value="<?php echo htmlspecialchars($bank_bic ?? '') ?>" size="15" maxlength="11">
+						</TD>
+					</TR><TR>
+						<TD CLASS="label">Invoice Number Format</TD>
+						<TD CLASS="content">
+							<input type="text" name="invoice_number_format" value="<?php echo htmlspecialchars($invoice_number_format ?? 'R-{YYYY}-{MM}-{###}') ?>" size="30" maxlength="50">
+							<br><small>Use {YYYY} for year, {MM} for month, {###} for counter</small>
+						</TD>
+					</TR><TR>
+						<TD CLASS="label">Default VAT Rate (%)</TD>
+						<TD CLASS="content">
+							<input type="number" name="default_vat_rate" value="<?php echo htmlspecialchars($default_vat_rate ?? '19.00') ?>" step="0.01" min="0" max="100" size="10">
+						</TD>
+					</TR><TR>
+						<TD CLASS="label">Payment Terms (Days)</TD>
+						<TD CLASS="content">
+							<input type="number" name="payment_terms_days" value="<?php echo htmlspecialchars($payment_terms_days ?? '14') ?>" min="1" max="365" size="10">
+						</TD>
+					</TR><TR>
+						<TD CLASS="label">Payment Terms Text</TD>
+						<TD CLASS="content">
+							<textarea name="payment_terms_text" rows="2" cols="40"><?php echo htmlspecialchars($payment_terms_text ?? 'Zahlbar innerhalb von 14 Tagen ohne Abzug.') ?></textarea>
+						</TD>
+					</TR>
+				</TABLE>
+				
+				<script>
+				// File upload handling for branding assets
+				function setupFileUpload(uploadId, pathId, previewId, type) {
+					document.getElementById(uploadId).addEventListener('change', function(e) {
+						const file = e.target.files[0];
+						if (!file) return;
+						
+						const formData = new FormData();
+						formData.append('file', file);
+						formData.append('type', type);
+						
+						fetch('upload_handler.php', {
+							method: 'POST',
+							body: formData
+						})
+						.then(response => response.json())
+						.then(data => {
+							if (data.success) {
+								document.getElementById(pathId).value = data.path;
+								document.getElementById(previewId).innerHTML = 
+									'<img src="' + data.path + '" style="max-width:100px;max-height:50px;margin-top:5px;">';
+							} else {
+								alert('Upload failed: ' + data.error);
+							}
+						})
+						.catch(error => {
+							alert('Upload error: ' + error);
+						});
+					});
+				}
+				
+				// Initialize upload handlers
+				setupFileUpload('logo_upload', 'logo_path', 'logo_preview', 'logo');
+				setupFileUpload('letterhead_upload', 'letterhead_path', 'letterhead_preview', 'letterhead');
+				setupFileUpload('footer_upload', 'footer_path', 'footer_preview', 'footer');
+				</script>
+				
+				<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
 					<?php
 if($_PJ_auth->checkPermission('admin')) {
 	?>
