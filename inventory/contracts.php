@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     $errors[] = 'Failed to create contract';
                 }
-            } else {
+            } elseif ($action === 'update') {
                 if ($contract->updateContract($contract_id, $contract_data)) {
                     $success = true;
                     header("Location: contracts.php?customer_id={$customer_id}&success=updated");

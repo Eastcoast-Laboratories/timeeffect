@@ -35,7 +35,7 @@ include_once(__DIR__ . '/../../shared/header.ihtml.php');
             <h3><?php echo $action === 'create' ? 'Create New Contract' : 'Edit Contract'; ?></h3>
             
             <form method="POST" class="contract-form">
-                <input type="hidden" name="action" value="<?php echo $action; ?>">
+                <input type="hidden" name="action" value="<?php echo $action === 'edit' ? 'update' : $action; ?>">
                 <input type="hidden" name="customer_id" value="<?php echo $customer_id; ?>">
                 <?php if ($action === 'edit'): ?>
                     <input type="hidden" name="id" value="<?php echo $contract_id; ?>">
