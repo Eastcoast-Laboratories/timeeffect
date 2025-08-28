@@ -1,7 +1,4 @@
 <?php
-// Skip authentication for direct access
-$no_login = true;
-
 require_once(__DIR__ . "/../bootstrap.php");
 include_once(__DIR__ . "/../include/config.inc.php");
 include_once(__DIR__ . "/../include/scripts.inc.php");
@@ -165,6 +162,19 @@ $db->query($projects_query);
 $projects = [];
 while ($db->next_record()) {
     $projects[] = $db->Record;
+}
+
+// Create mock invoice data for navigation if customer_id is provided
+$invoice_data = null;
+if (!empty($_REQUEST['customer_id'])) {
+    $invoice_data = [
+        'customer_id' => $_REQUEST['customer_id'],
+        'project_id' => !empty($_REQUEST['project_id']) ? $_REQUEST['project_id'] : null,
+        'period_start' => !empty($_REQUEST['period_start']) ? $_REQUEST['period_start'] : date('Y-01-01'),
+        'period_end' => !empty($_REQUEST['period_end']) ? $_REQUEST['period_end'] : date('Y-12-31'),
+        'invoice_number' => 'New',
+        'invoice_date' => date('Y-m-d')
+    ];
 }
 
 // Set up template variables for unified layout

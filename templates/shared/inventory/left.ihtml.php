@@ -22,7 +22,11 @@
 	
 	<!-- Main Navigation Items -->
 	<div id="main_nav_items" style="padding: 0 0.5rem;">
-		<a href="<?php if(!empty($GLOBALS['_PJ_customer_inventory_script'])) echo $GLOBALS['_PJ_customer_inventory_script'] ?>" class="nav-item" style="display: flex; align-items: center; gap: 0.75rem;">
+		<a href="<?php
+		if(!empty($GLOBALS['_PJ_customer_inventory_script'])) echo $GLOBALS['_PJ_customer_inventory_script'];
+		if(!empty($_REQUEST['cid'])) echo '?cid=' . $_REQUEST['cid'];
+		if(!empty($_REQUEST['customer_id'])) echo '?cid=' . $_REQUEST['customer_id'];
+		?>" class="nav-item" style="display: flex; align-items: center; gap: 0.75rem;">
 			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 				<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
 				<circle cx="12" cy="7" r="4"/>
@@ -56,7 +60,12 @@
 		</div>
 		
 		<!-- Projects Navigation -->
-		<a href="<?php if(!empty($GLOBALS['_PJ_projects_inventory_script'])) echo $GLOBALS['_PJ_projects_inventory_script'] ?>" class="nav-item" style="display: flex; align-items: center; gap: 0.75rem;">
+		<a href="<?php
+		if(!empty($GLOBALS['_PJ_projects_inventory_script'])) echo $GLOBALS['_PJ_projects_inventory_script'];
+		if(!empty($_REQUEST['cid'])) echo '?cid=' . $_REQUEST['cid'];
+		if(!empty($_REQUEST['customer_id'])) echo '?cid=' . $_REQUEST['customer_id'];
+		if(!empty($_REQUEST['pid'])) echo ((!empty($_REQUEST['cid']) || !empty($_REQUEST['customer_id'])) ? '&' : '?') . 'pid=' . $_REQUEST['pid'];
+		?>" class="nav-item" style="display: flex; align-items: center; gap: 0.75rem;">
 			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 				<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
 				<rect x="9" y="9" width="6" height="6"/>
@@ -67,7 +76,12 @@
 		
 		<!-- Efforts Navigation -->
 		<div style="display: flex; align-items: center; gap: 0.5rem;">
-			<a href="<?php if(!empty($GLOBALS['_PJ_efforts_inventory_script'])) echo $GLOBALS['_PJ_efforts_inventory_script'] ?>" class="nav-item" style="display: flex; align-items: center; gap: 0.75rem; flex: 1;">
+			<a href="<?php
+			if(!empty($GLOBALS['_PJ_efforts_inventory_script'])) echo $GLOBALS['_PJ_efforts_inventory_script'];
+			if(!empty($_REQUEST['cid'])) echo '?cid=' . $_REQUEST['cid'];
+			if(!empty($_REQUEST['customer_id'])) echo '?cid=' . $_REQUEST['customer_id'];
+			if(!empty($_REQUEST['pid'])) echo ((!empty($_REQUEST['cid']) || !empty($_REQUEST['customer_id'])) ? '&' : '?') . 'pid=' . $_REQUEST['pid'];
+			?>" class="nav-item" style="display: flex; align-items: center; gap: 0.75rem; flex: 1;">
 				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 					<circle cx="12" cy="12" r="10"/>
 					<polyline points="12,6 12,12 16,14"/>
@@ -77,7 +91,12 @@
 		</div>
 		
 		<!-- Statistics Navigation -->
-		<a href="<?php if(!empty($GLOBALS['_PJ_projects_statistics_script'])) echo $GLOBALS['_PJ_projects_statistics_script'] ?>" class="nav-item" style="display: flex; align-items: center; gap: 0.75rem;">
+		<a href="<?php
+		if(!empty($GLOBALS['_PJ_projects_statistics_script'])) echo $GLOBALS['_PJ_projects_statistics_script'];
+		if(!empty($_REQUEST['cid'])) echo '?cid=' . $_REQUEST['cid'];
+		if(!empty($_REQUEST['customer_id'])) echo '?cid=' . $_REQUEST['customer_id'];
+		if(!empty($_REQUEST['pid'])) echo ((!empty($_REQUEST['cid']) || !empty($_REQUEST['customer_id'])) ? '&' : '?') . 'pid=' . $_REQUEST['pid'];
+		?>" class="nav-item" style="display: flex; align-items: center; gap: 0.75rem;">
 			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 				<path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
 			</svg>
@@ -85,7 +104,12 @@
 		</a>
 		
 		<!-- Reports Navigation -->
-		<a href="<?php if(!empty($GLOBALS['_PJ_reports_script'])) echo $GLOBALS['_PJ_reports_script'] ?>" class="nav-item" style="display: flex; align-items: center; gap: 0.75rem;">
+		<a href="<?php
+		if(!empty($GLOBALS['_PJ_reports_script'])) echo $GLOBALS['_PJ_reports_script'];
+		if(!empty($_REQUEST['cid'])) echo '?cid=' . $_REQUEST['cid'];
+		if(!empty($_REQUEST['customer_id'])) echo '?cid=' . $_REQUEST['customer_id'];
+		if(!empty($_REQUEST['pid'])) echo ((!empty($_REQUEST['cid']) || !empty($_REQUEST['customer_id'])) ? '&' : '?') . 'pid=' . $_REQUEST['pid'];
+		?>" class="nav-item" style="display: flex; align-items: center; gap: 0.75rem;">
 			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 				<path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
 			</svg>
