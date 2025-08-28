@@ -201,6 +201,12 @@
 	$GLOBALS['_PJ_strings']['registration_disabled']	= 'Benutzerregistrierung ist derzeit deaktiviert.';
 	$GLOBALS['_PJ_strings']['switch_to_user']			= 'Zu Benutzer wechseln';
 	$GLOBALS['_PJ_strings']['return_to_admin']			= 'Zurück zum Admin';
+	
+	// Time overlap warning strings
+	$GLOBALS['_PJ_strings']['time_overlap_warning']		= 'Zeitüberschneidung Warnung';
+	$GLOBALS['_PJ_strings']['previous_effort']			= 'Vorheriger Aufwand';
+	$GLOBALS['_PJ_strings']['no_description']			= 'Keine Beschreibung';
+	$GLOBALS['_PJ_strings']['no_project']				= 'Kein Projekt';
 	$GLOBALS['_PJ_strings']['logged_in_as_admin']		= 'Als Admin angemeldet';
 	$GLOBALS['_PJ_strings']['logo']						= 'Logo';
 	$GLOBALS['_PJ_strings']['logout']					= 'Abmelden';

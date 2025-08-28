@@ -969,6 +969,136 @@ function adjustTime(fieldName, increment) {
 	
 	// Set the new value
 	select.value = formattedValue;
+	
+	// Check for overlap if adjusting start time (hour or minute)
+	if (fieldName === 'hour' || fieldName === 'minute') {
+		checkTimeOverlap();
+	}
+}
+
+// Check for time overlap with previous efforts
+function checkTimeOverlap() {
+	var hourSelect = document.getElementsByName('hour')[0];
+	var minuteSelect = document.getElementsByName('minute')[0];
+	var daySelect = document.getElementsByName('day')[0];
+	var monthSelect = document.getElementsByName('month')[0];
+	var yearSelect = document.getElementsByName('year')[0];
+	
+	if (!hourSelect || !minuteSelect || !daySelect || !monthSelect || !yearSelect) {
+		return;
+	}
+	
+	// Get current date and time values
+	var year = yearSelect.value;
+	var month = monthSelect.value.padStart(2, '0');
+	var day = daySelect.value.padStart(2, '0');
+	var hour = hourSelect.value.padStart(2, '0');
+	var minute = minuteSelect.value.padStart(2, '0');
+	
+	if (!year || !month || !day) {
+		return;
+	}
+	
+	var currentDate = year + '-' + month + '-' + day;
+	var currentTime = hour + ':' + minute + ':00';
+	
+	// Get user ID and effort ID (if editing)
+	var userSelect = document.getElementsByName('user')[0];
+	var effortIdInput = document.getElementsByName('id')[0];
+	
+	if (!userSelect) {
+		return;
+	}
+	
+	var userId = userSelect.value;
+	var effortId = effortIdInput ? effortIdInput.value : '';
+	
+	// Build AJAX request
+	var url = '<?php echo dirname($GLOBALS['_PJ_customer_inventory_script']); ?>/ajax/get_previous_effort.php';
+	url += '?date=' + encodeURIComponent(currentDate);
+	url += '&user_id=' + encodeURIComponent(userId);
+	if (effortId) {
+		url += '&exclude_id=' + encodeURIComponent(effortId);
+	}
+	
+	// Make AJAX request
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', url, true);
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === 4) {
+			if (xhr.status === 200) {
+				try {
+					var response = JSON.parse(xhr.responseText);
+					if (response.success && response.effort) {
+						checkOverlapWithPreviousEffort(response.effort, currentTime);
+					} else {
+						hideOverlapWarning();
+					}
+				} catch (e) {
+					console.error('LOG_OVERLAP_ERROR: Failed to parse response', e);
+					hideOverlapWarning();
+				}
+			} else {
+				console.error('LOG_OVERLAP_ERROR: AJAX request failed', xhr.status);
+				hideOverlapWarning();
+			}
+		}
+	};
+	xhr.send();
+}
+
+// Check if current start time overlaps with previous effort end time
+function checkOverlapWithPreviousEffort(previousEffort, currentStartTime) {
+	if (!previousEffort.end || previousEffort.end === '00:00:00') {
+		hideOverlapWarning();
+		return;
+	}
+	
+	// Compare times (assuming same date)
+	if (currentStartTime < previousEffort.end) {
+		showOverlapWarning(previousEffort);
+	} else {
+		hideOverlapWarning();
+	}
+}
+
+// Show overlap warning with previous effort details
+function showOverlapWarning(previousEffort) {
+	var warningId = 'time-overlap-warning';
+	var existingWarning = document.getElementById(warningId);
+	
+	if (existingWarning) {
+		existingWarning.remove();
+	}
+	
+	// Find the start time row to insert warning above it
+	var hourSelect = document.getElementsByName('hour')[0];
+	if (!hourSelect) return;
+	
+	var timeRow = hourSelect.closest('tr');
+	if (!timeRow) return;
+	
+	// Create warning row
+	var warningRow = document.createElement('tr');
+	warningRow.id = warningId;
+	warningRow.innerHTML = '<td colspan="2" style="background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 8px; color: #856404;">' +
+		'<strong>⚠️ <?php echo $GLOBALS['_PJ_strings']['time_overlap_warning']; ?>:</strong><br>' +
+		'<?php echo $GLOBALS['_PJ_strings']['previous_effort']; ?>: "' + (previousEffort.description || '<?php echo $GLOBALS['_PJ_strings']['no_description']; ?>') + '"<br>' +
+		'<?php echo $GLOBALS['_PJ_strings']['customer']; ?>: ' + (previousEffort.customer_name || '<?php echo $GLOBALS['_PJ_strings']['no_customer']; ?>') + '<br>' +
+		'<?php echo $GLOBALS['_PJ_strings']['project']; ?>: ' + (previousEffort.project_name || '<?php echo $GLOBALS['_PJ_strings']['no_project']; ?>') + '<br>' +
+		'<?php echo $GLOBALS['_PJ_strings']['time']; ?>: ' + previousEffort.begin.substr(0, 5) + ' - ' + previousEffort.end.substr(0, 5) +
+		'</td>';
+	
+	// Insert warning before the time row
+	timeRow.parentNode.insertBefore(warningRow, timeRow);
+}
+
+// Hide overlap warning
+function hideOverlapWarning() {
+	var warning = document.getElementById('time-overlap-warning');
+	if (warning) {
+		warning.remove();
+	}
 }
 </script>
 

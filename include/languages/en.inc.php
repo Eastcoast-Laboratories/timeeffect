@@ -147,13 +147,18 @@
 	$GLOBALS['_PJ_strings']['password_reset_success']	= 'Your password has been successfully reset.';
 	$GLOBALS['_PJ_strings']['password_reset_error']		= 'Invalid or expired password reset token.';
 	$GLOBALS['_PJ_strings']['email_confirm_sent']		= 'A confirmation email has been sent to your email address.';
-	$GLOBALS['_PJ_strings']['unassigned_efforts']		= 'Unassigned Efforts';
 	$GLOBALS['_PJ_strings']['email_confirm_success']	= 'Email address confirmed successfully. You may now log in.';
 	$GLOBALS['_PJ_strings']['email_confirm_error']		= 'Invalid or expired confirmation token.';
 	$GLOBALS['_PJ_strings']['registration_success']		= 'Registration successful. Please check your email for confirmation instructions.';
 	$GLOBALS['_PJ_strings']['registration_disabled']	= 'User registration is currently disabled.';
 	$GLOBALS['_PJ_strings']['switch_to_user']			= 'Switch to user';
-	$GLOBALS['_PJ_strings']['return_to_admin']			= 'Return to admin';
+	$GLOBALS['_PJ_strings']['return_to_admin']			= 'Return to Admin';
+	
+	// Time overlap warning strings
+	$GLOBALS['_PJ_strings']['time_overlap_warning']		= 'Time Overlap Warning';
+	$GLOBALS['_PJ_strings']['previous_effort']			= 'Previous effort';
+	$GLOBALS['_PJ_strings']['no_description']			= 'No description';
+	$GLOBALS['_PJ_strings']['no_project']				= 'No project';
 	$GLOBALS['_PJ_strings']['logged_in_as_admin']		= 'Logged in via admin';
 	$GLOBALS['_PJ_strings']['logo']						= 'Logo';
 	$GLOBALS['_PJ_strings']['logout']					= 'logout';

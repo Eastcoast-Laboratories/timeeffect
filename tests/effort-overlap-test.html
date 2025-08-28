@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Effort Overlap Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .warning { background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 8px; color: #856404; margin: 10px 0; }
+        button { margin: 5px; padding: 5px 10px; }
+        select, input { margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Effort Time Overlap Detection Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Form</h2>
+        <p>Simulate effort form with time adjustment buttons:</p>
+        
+        <label>Date:</label>
+        <select name="year">
+            <option value="2024">2024</option>
+        </select>
+        <select name="month">
+            <option value="12">12</option>
+        </select>
+        <select name="day">
+            <option value="18">18</option>
+        </select>
+        <br>
+        
+        <label>Start Time:</label>
+        <button type="button" onclick="adjustTime('hour', -1)">−</button>
+        <select name="hour">
+            <option value="08">08</option>
+            <option value="09" selected>09</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+        </select>
+        <button type="button" onclick="adjustTime('hour', 1)">+</button>
+        
+        <button type="button" onclick="adjustTime('minute', -5)">−</button>
+        <select name="minute">
+            <option value="00" selected>00</option>
+            <option value="05">05</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+        </select>
+        <button type="button" onclick="adjustTime('minute', 5)">+</button>
+        <br>
+        
+        <label>User:</label>
+        <select name="user">
+            <option value="1" selected>Admin User</option>
+        </select>
+        
+        <input type="hidden" name="id" value="">
+        
+        <br><br>
+        <button onclick="checkTimeOverlap()">Manual Overlap Check</button>
+        <button onclick="hideOverlapWarning()">Clear Warning</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test Results</h2>
+        <div id="test-results">
+            <p>Adjust the time using the minus/plus buttons to test overlap detection.</p>
+            <p>The system will check for previous efforts on the same date and show warnings if overlaps are detected.</p>
+        </div>
+    </div>
+
+    <script>
+        // Copy the functions from the effort form
+        function adjustTime(fieldName, increment) {
+            var select = document.getElementsByName(fieldName)[0];
+            if (!select) return;
+            
+            var currentValue = parseInt(select.value) || 0;
+            var newValue = currentValue + increment;
+            
+            // Handle different field types with appropriate limits
+            if (fieldName === 'hour' || fieldName === 'hours') {
+                // Hours: 0-23
+                if (newValue < 0) newValue = 23;
+                if (newValue > 23) newValue = 0;
+            } else if (fieldName === 'minute') {
+                // Minutes: 0-59 (for start time) or 5-minute steps
+                if (newValue < 0) newValue = 55;
+                if (newValue > 59) newValue = 0;
+                // If increment is 5 or -5, ensure it's a valid 5-minute step
+                if (Math.abs(increment) === 5 && newValue % 5 !== 0) {
+                    newValue = Math.round(newValue / 5) * 5;
+                }
+            }
+            
+            // Format value with leading zero
+            var formattedValue = (newValue < 10) ? '0' + newValue : newValue.toString();
+            
+            // Set the new value
+            select.value = formattedValue;
+            
+            // Check for overlap if adjusting start time (hour or minute)
+            if (fieldName === 'hour' || fieldName === 'minute') {
+                checkTimeOverlap();
+            }
+        }
+
+        function checkTimeOverlap() {
+            var hourSelect = document.getElementsByName('hour')[0];
+            var minuteSelect = document.getElementsByName('minute')[0];
+            var daySelect = document.getElementsByName('day')[0];
+            var monthSelect = document.getElementsByName('month')[0];
+            var yearSelect = document.getElementsByName('year')[0];
+            
+            if (!hourSelect || !minuteSelect || !daySelect || !monthSelect || !yearSelect) {
+                return;
+            }
+            
+            // Get current date and time values
+            var year = yearSelect.value;
+            var month = monthSelect.value.padStart(2, '0');
+            var day = daySelect.value.padStart(2, '0');
+            var hour = hourSelect.value.padStart(2, '0');
+            var minute = minuteSelect.value.padStart(2, '0');
+            
+            if (!year || !month || !day) {
+                return;
+            }
+            
+            var currentDate = year + '-' + month + '-' + day;
+            var currentTime = hour + ':' + minute + ':00';
+            
+            // Get user ID and effort ID (if editing)
+            var userSelect = document.getElementsByName('user')[0];
+            var effortIdInput = document.getElementsByName('id')[0];
+            
+            if (!userSelect) {
+                return;
+            }
+            
+            var userId = userSelect.value;
+            var effortId = effortIdInput ? effortIdInput.value : '';
+            
+            // Build AJAX request
+            var url = '/inventory/ajax/get_previous_effort.php';
+            url += '?date=' + encodeURIComponent(currentDate);
+            url += '&user_id=' + encodeURIComponent(userId);
+            if (effortId) {
+                url += '&exclude_id=' + encodeURIComponent(effortId);
+            }
+            
+            console.log('LOG_OVERLAP_TEST: Making request to:', url);
+            
+            // Make AJAX request
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    console.log('LOG_OVERLAP_TEST: Response status:', xhr.status);
+                    console.log('LOG_OVERLAP_TEST: Response text:', xhr.responseText);
+                    
+                    if (xhr.status === 200) {
+                        try {
+                            var response = JSON.parse(xhr.responseText);
+                            console.log('LOG_OVERLAP_TEST: Parsed response:', response);
+                            
+                            if (response.success && response.effort) {
+                                checkOverlapWithPreviousEffort(response.effort, currentTime);
+                            } else {
+                                hideOverlapWarning();
+                                document.getElementById('test-results').innerHTML = 
+                                    '<p style="color: green;">✓ No previous effort found or no overlap detected.</p>';
+                            }
+                        } catch (e) {
+                            console.error('LOG_OVERLAP_ERROR: Failed to parse response', e);
+                            hideOverlapWarning();
+                            document.getElementById('test-results').innerHTML = 
+                                '<p style="color: red;">✗ Error parsing response: ' + e.message + '</p>';
+                        }
+                    } else {
+                        console.error('LOG_OVERLAP_ERROR: AJAX request failed', xhr.status);
+                        hideOverlapWarning();
+                        document.getElementById('test-results').innerHTML = 
+                            '<p style="color: red;">✗ AJAX request failed with status: ' + xhr.status + '</p>';
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        function checkOverlapWithPreviousEffort(previousEffort, currentStartTime) {
+            if (!previousEffort.end || previousEffort.end === '00:00:00') {
+                hideOverlapWarning();
+                return;
+            }
+            
+            console.log('LOG_OVERLAP_TEST: Comparing times:', currentStartTime, 'vs', previousEffort.end);
+            
+            // Compare times (assuming same date)
+            if (currentStartTime < previousEffort.end) {
+                showOverlapWarning(previousEffort);
+                document.getElementById('test-results').innerHTML = 
+                    '<p style="color: orange;">⚠️ Overlap detected! Warning displayed.</p>';
+            } else {
+                hideOverlapWarning();
+                document.getElementById('test-results').innerHTML = 
+                    '<p style="color: green;">✓ Previous effort found but no overlap.</p>';
+            }
+        }
+
+        function showOverlapWarning(previousEffort) {
+            var warningId = 'time-overlap-warning';
+            var existingWarning = document.getElementById(warningId);
+            
+            if (existingWarning) {
+                existingWarning.remove();
+            }
+            
+            // Find the start time section to insert warning
+            var testSection = document.querySelector('.test-section');
+            if (!testSection) return;
+            
+            // Create warning div
+            var warningDiv = document.createElement('div');
+            warningDiv.id = warningId;
+            warningDiv.className = 'warning';
+            warningDiv.innerHTML = '<strong>⚠️ Time Overlap Warning:</strong><br>' +
+                'Previous effort: "' + (previousEffort.description || 'No description') + '"<br>' +
+                'Customer: ' + (previousEffort.customer_name || 'No customer') + '<br>' +
+                'Project: ' + (previousEffort.project_name || 'No project') + '<br>' +
+                'Time: ' + previousEffort.begin + ' - ' + previousEffort.end;
+            
+            // Insert warning after the form
+            testSection.appendChild(warningDiv);
+        }
+
+        function hideOverlapWarning() {
+            var warning = document.getElementById('time-overlap-warning');
+            if (warning) {
+                warning.remove();
+            }
+        }
+    </script>
+</body>
+</html>
