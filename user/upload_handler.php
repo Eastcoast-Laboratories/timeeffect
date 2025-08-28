@@ -2,10 +2,19 @@
 require_once(__DIR__ . "/../bootstrap.php");
 include_once(__DIR__ . "/../include/config.inc.php");
 
-// Check authentication
-if (!$_PJ_auth->checkPermission('user')) {
+// Check authentication - users need 'admin' permission for file uploads
+if (!$_PJ_auth->checkPermission('admin')) {
     http_response_code(403);
-    echo json_encode(['error' => 'Access denied']);
+    echo json_encode([
+        'error' => 'Access denied - admin permission required for file uploads',
+        'debug' => [
+            'auth_object' => isset($_PJ_auth) ? 'exists' : 'missing',
+            'user_id' => $_PJ_auth ? $_PJ_auth->giveValue('id') : 'no auth',
+            'session_data' => session_status() === PHP_SESSION_ACTIVE ? 'active' : 'inactive',
+            'has_user_perm' => $_PJ_auth ? $_PJ_auth->checkPermission('user') : false,
+            'has_admin_perm' => $_PJ_auth ? $_PJ_auth->checkPermission('admin') : false
+        ]
+    ]);
     exit;
 }
 
@@ -60,8 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
         
         if (isset($field_map[$upload_type])) {
             $field = $field_map[$upload_type];
-            $query = "UPDATE " . $_PJ_table_prefix . "user SET " . $field . " = '" . 
-                     $db->db_addslashes($relative_path) . "' WHERE id = " . intval($user_id);
+            $query = "UPDATE " . $_PJ_table_prefix . "auth SET " . $field . " = '" . 
+                     addslashes($relative_path) . "' WHERE id = " . intval($user_id);
             $db->query($query);
             
             echo json_encode([
