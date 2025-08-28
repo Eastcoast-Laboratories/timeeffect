@@ -21,9 +21,15 @@ try {
     $period_end = $_GET['period_end'] ?? '';
     $generate_type = $_GET['generate_type'] ?? 'manual';
     $invoice_date = $_GET['invoice_date'] ?? date('Y-m-d');
+    $mode = $_GET['mode'] ?? '';
     
     if (empty($customer_id) || empty($period_start) || empty($period_end)) {
-        echo json_encode(['success' => false, 'error' => 'Missing required fields', 'debug' => [
+        if (empty($period_start)) {
+            $errormessage="Set a Month for the invoice";
+        }else {
+            $errormessage="Missing required fields";
+        }
+        echo json_encode(['success' => false, 'error' => $errormessage, 'debug' => [
             'customer_id' => $customer_id,
             'period_start' => $period_start, 
             'period_end' => $period_end,
@@ -64,6 +70,14 @@ try {
                      WHERE p.customer_id = " . intval($customer_id) . " 
                      AND e.date >= '" . $safe_period_start . "' 
                      AND e.date <= '" . $safe_period_end . "'";
+    
+    // Filter by billed status based on mode
+    if ($mode === 'billed') {
+        $efforts_query .= " AND e.billed IS NOT NULL AND e.billed != ''";
+    } else {
+        // Default: exclude already billed efforts
+        $efforts_query .= " AND (e.billed IS NULL OR e.billed = '')";
+    }
     
     if ($project_id) {
         $efforts_query .= " AND e.project_id = " . intval($project_id);

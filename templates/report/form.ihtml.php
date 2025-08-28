@@ -3,7 +3,7 @@
 	include($GLOBALS['_PJ_root'] . '/templates/report/options/edit.ihtml.php');
 	$all_users			= $_PJ_auth->listUsers();
 ?>
-	<FORM ACTION="<? print $GLOBALS['_PJ_reports_script']; ?>" METHOD="<?php if(!empty($GLOBALS['_PJ_form_method'])) echo $GLOBALS['_PJ_form_method']; ?>">
+	<FORM ACTION="<? print $GLOBALS['_PJ_reports_script']; ?>" METHOD="get">
 	<INPUT TYPE="hidden" NAME="customer_budget_currency" VALUE="<?php if(!empty($GLOBALS['_PJ_currency'])) echo $GLOBALS['_PJ_currency'] ?>">
 	<INPUT TYPE="hidden" NAME="report" VALUE="1">
 

@@ -62,13 +62,13 @@
                 <div class="form-group">
                     <label for="period_start">Period Start *</label>
                     <input type="date" name="period_start" id="period_start" required
-                           value="<?php echo $invoice_data['period_start']; ?>">
+                           value="<?php echo !empty($invoice_data['period_start']) ? $invoice_data['period_start'] : (isset($_GET['period_start']) ? $_GET['period_start'] : ''); ?>">
                 </div>
 
                 <div class="form-group">
                     <label for="period_end">Period End *</label>
                     <input type="date" name="period_end" id="period_end" required
-                           value="<?php echo $invoice_data['period_end']; ?>">
+                           value="<?php echo !empty($invoice_data['period_end']) ? $invoice_data['period_end'] : (isset($_GET['period_end']) ? $_GET['period_end'] : ''); ?>">
                 </div>
             </div>
         </div>

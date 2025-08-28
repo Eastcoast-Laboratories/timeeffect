@@ -22,6 +22,7 @@
     <?php endif; ?>
 
     <form method="POST" class="invoice-form">
+        <input type="hidden" name="mode" value="<?php echo htmlspecialchars($_GET['mode'] ?? ''); ?>">
         <div class="form-section">
             <h3>Basic Information</h3>
             
@@ -171,6 +172,12 @@ function previewInvoice() {
     const form = document.querySelector('.invoice-form');
     const formData = new FormData(form);
     const params = new URLSearchParams(formData);
+    
+    // Add mode parameter from URL if present
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('mode')) {
+        params.set('mode', urlParams.get('mode'));
+    }
     
     fetch('ajax/preview.php?' + params.toString(), {
         method: 'GET'

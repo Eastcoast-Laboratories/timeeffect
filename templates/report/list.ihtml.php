@@ -34,7 +34,7 @@ if(is_array($users)) {
 if($cid && $cid !== 'unassigned' && $_PJ_auth->checkPermission('accountant')) {
 ?>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<A CLASS="list" HREF="<?php echo $_PJ_http_root ?>/invoice/create.php?customer_id=<?php echo $cid ?><?php echo $pid ? "&project_id=$pid" : "" ?>&period_start=<?php echo "$syear-$smonth-$sday" ?>&period_end=<?php echo "$eyear-$emonth-$eday" ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/acrobat23.gif" BORDER="0" ALT="Generate Invoice" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;Generate Invoice</A>
+<A CLASS="list" HREF="<?php echo $_PJ_http_root ?>/invoice/create.php?customer_id=<?php echo $cid ?><?php echo $pid ? "&project_id=$pid" : "" ?>&period_start=<?php echo sprintf("%04d-%02d-%02d", $syear, $smonth, $sday) ?>&period_end=<?php echo sprintf("%04d-%02d-%02d", $eyear, $emonth, $eday) ?>&syear=<?php echo $syear ?>&smonth=<?php echo $smonth ?>&sday=<?php echo $sday ?>&eyear=<?php echo $eyear ?>&emonth=<?php echo $emonth ?>&eday=<?php echo $eday ?><?php echo isset($mode) && $mode == 'billed' ? '&mode=billed' : '' ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/acrobat23.gif" BORDER="0" ALT="Generate Invoice" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;Generate Invoice</A>
 <?php
 }
 ?>

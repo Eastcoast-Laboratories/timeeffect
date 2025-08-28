@@ -14,6 +14,24 @@ CREATE TABLE IF NOT EXISTS `<%db_prefix%>auth` (
   `confirmation_token` varchar(64) default NULL,
   `reset_token` varchar(64) default NULL,
   `reset_expires` datetime default NULL,
+  `theme_preference` varchar(10) default 'system',
+  `company_name` varchar(255) NULL,
+  `company_address` text NULL,
+  `company_postal_code` varchar(20) NULL,
+  `company_city` varchar(100) NULL,
+  `company_country` varchar(100) NULL,
+  `tax_number` varchar(50) NULL,
+  `vat_number` varchar(50) NULL,
+  `bank_name` varchar(100) NULL,
+  `bank_iban` varchar(34) NULL,
+  `bank_bic` varchar(11) NULL,
+  `invoice_logo_path` varchar(255) NULL,
+  `invoice_letterhead_path` varchar(255) NULL,
+  `invoice_footer_path` varchar(255) NULL,
+  `invoice_number_format` varchar(50) default 'R-{YYYY}-{MM}-{###}',
+  `default_vat_rate` decimal(5,2) default '19.00',
+  `payment_terms_days` int(11) default '14',
+  `payment_terms_text` text NULL,
   PRIMARY KEY  (`id`),
   KEY `gids` (`gids`),
   KEY `username` (`username`,`password`),
@@ -21,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `<%db_prefix%>auth` (
   KEY `reset_token` (`reset_token`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
-INSERT INTO `<%db_prefix%>auth` VALUES (1, 'admin', '', 1, '<%admin_user%>', '<%admin_password%>', '', 'Administrator', '', '', '', 1, NULL, NULL, NULL);
+INSERT INTO `<%db_prefix%>auth` VALUES (1, 'admin', '', 1, '<%admin_user%>', '<%admin_password%>', '', 'Administrator', '', '', '', 1, NULL, NULL, NULL, 'system', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'R-{YYYY}-{MM}-{###}', 19.00, 14, NULL);
 
 CREATE TABLE IF NOT EXISTS `<%db_prefix%>customer` (
   `id` int(32) unsigned NOT NULL auto_increment,
@@ -140,3 +158,105 @@ CREATE TABLE IF NOT EXISTS `<%db_prefix%>login_attempts` (
   KEY `username_time` (`username`, `attempt_time`),
   KEY `attempt_time` (`attempt_time`)
 ) ENGINE=MyISAM COMMENT='Tracks login attempts for brute force protection';
+
+CREATE TABLE IF NOT EXISTS `<%db_prefix%>customer_contracts` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `customer_id` int(11) NOT NULL,
+  `project_id` int(11) NULL,
+  `contract_type` enum('hourly','fixed','retainer') NOT NULL default 'hourly',
+  `hourly_rate` decimal(10,2) NULL,
+  `fixed_amount` decimal(10,2) NULL,
+  `fixed_hours` decimal(8,2) NULL,
+  `description` text NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NULL,
+  `active` tinyint(1) NOT NULL default '1',
+  `created_at` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`),
+  KEY `idx_customer_id` (`customer_id`),
+  KEY `idx_project_id` (`project_id`),
+  KEY `idx_active` (`active`),
+  KEY `idx_dates` (`start_date`, `end_date`)
+) ENGINE=MyISAM AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `<%db_prefix%>invoices` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `invoice_number` varchar(50) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `project_id` int(11) NULL,
+  `invoice_date` date NOT NULL,
+  `period_start` date NOT NULL,
+  `period_end` date NOT NULL,
+  `contract_type` enum('hourly','fixed_monthly') NOT NULL default 'hourly',
+  `fixed_amount` decimal(10,2) NULL,
+  `fixed_hours` decimal(8,2) NULL,
+  `total_hours` decimal(8,2) NOT NULL,
+  `total_amount` decimal(10,2) NOT NULL,
+  `vat_rate` decimal(5,2) NOT NULL default '19.00',
+  `vat_amount` decimal(10,2) NOT NULL,
+  `gross_amount` decimal(10,2) NOT NULL,
+  `carryover_previous` decimal(8,2) NOT NULL default '0',
+  `carryover_current` decimal(8,2) NOT NULL default '0',
+  `description` text,
+  `status` enum('draft','sent','paid','cancelled') NOT NULL default 'draft',
+  `created_at` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `invoice_number` (`invoice_number`)
+) ENGINE=MyISAM AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `<%db_prefix%>invoice_items` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `invoice_id` int(11) NOT NULL,
+  `description` text NOT NULL,
+  `quantity` decimal(8,2) NOT NULL,
+  `unit_price` decimal(10,2) NOT NULL,
+  `total_amount` decimal(10,2) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `<%db_prefix%>invoice_efforts` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `invoice_id` int(11) NOT NULL,
+  `effort_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `<%db_prefix%>hour_carryovers` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `customer_id` int(11) NOT NULL,
+  `project_id` int(11) NULL,
+  `period_year` int(11) NOT NULL,
+  `period_month` int(11) NOT NULL,
+  `contracted_hours` decimal(8,2) NOT NULL,
+  `actual_hours` decimal(8,2) NOT NULL,
+  `carryover_hours` decimal(8,2) NOT NULL,
+  `cumulative_carryover` decimal(8,2) NOT NULL,
+  `invoice_id` int(11) NULL,
+  `created_at` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `unique_period` (`customer_id`, `project_id`, `period_year`, `period_month`)
+) ENGINE=MyISAM AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `<%db_prefix%>invoice_payments` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `invoice_id` int(11) NOT NULL,
+  `payment_date` date NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `payment_method` varchar(50) NULL,
+  `notes` text NULL,
+  `created_at` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS `<%db_prefix%>payment_reminders` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `invoice_id` int(11) NOT NULL,
+  `reminder_type` enum('first','second','final') NOT NULL,
+  `sent_date` date NULL,
+  `due_date` date NULL,
+  `reminder_text` text NULL,
+  `status` enum('pending','sent','cancelled') NOT NULL default 'pending',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1;

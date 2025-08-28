@@ -167,30 +167,25 @@ class Contract {
      */
     public function hasOverlappingContract($customer_id, $project_id, $start_date, $end_date, $exclude_id = null) {
         $sql = "SELECT id FROM " . $GLOBALS['_PJ_table_prefix'] . "customer_contracts 
-                WHERE customer_id = ? AND active = 1";
-        $params = [$customer_id];
+                WHERE customer_id = " . intval($customer_id) . " AND active = 1";
         
         if ($project_id) {
-            $sql .= " AND project_id = ?";
-            $params[] = $project_id;
+            $sql .= " AND project_id = " . intval($project_id);
         } else {
             $sql .= " AND project_id IS NULL";
         }
         
-        $sql .= " AND ((start_date <= ? AND (end_date IS NULL OR end_date >= ?))
-                      OR (start_date <= ? AND (end_date IS NULL OR end_date >= ?)))";
-        $params[] = $start_date;
-        $params[] = $start_date;
-        $params[] = $end_date ?: '9999-12-31';
-        $params[] = $end_date ?: '9999-12-31';
+        $safe_start_date = addslashes($start_date);
+        $safe_end_date = $end_date ? addslashes($end_date) : '9999-12-31';
+        
+        $sql .= " AND ((start_date <= '" . $safe_start_date . "' AND (end_date IS NULL OR end_date >= '" . $safe_start_date . "'))
+                      OR (start_date <= '" . $safe_end_date . "' AND (end_date IS NULL OR end_date >= '" . $safe_end_date . "')))";
         
         if ($exclude_id) {
-            $sql .= " AND id != ?";
-            $params[] = $exclude_id;
+            $sql .= " AND id != " . intval($exclude_id);
         }
         
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute($params);
-        return $stmt->fetchColumn() !== false;
+        $this->db->query($sql);
+        return $this->db->next_record();
     }
 }

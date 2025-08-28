@@ -77,17 +77,17 @@
                 
                 <div class="summary-row">
                     <span>Net Amount:</span>
-                    <span><?php echo number_format($invoice_data['total_amount'], 2); ?>€</span>
+                    <span><?php echo number_format(floatval($invoice_data['total_amount']), 2); ?>€</span>
                 </div>
                 
                 <div class="summary-row">
-                    <span>VAT (<?php echo number_format($invoice_data['vat_rate'], 1); ?>%):</span>
-                    <span><?php echo number_format($invoice_data['vat_amount'], 2); ?>€</span>
+                    <span>VAT (<?php echo number_format(floatval($invoice_data['vat_rate']), 1); ?>%):</span>
+                    <span><?php echo number_format(floatval($invoice_data['vat_amount']), 2); ?>€</span>
                 </div>
                 
                 <div class="summary-row total">
                     <span><strong>Total Amount:</strong></span>
-                    <span><strong><?php echo number_format($invoice_data['gross_amount'], 2); ?>€</strong></span>
+                    <span><strong><?php echo number_format(floatval($invoice_data['gross_amount']), 2); ?>€</strong></span>
                 </div>
             </div>
         </div>
@@ -288,6 +288,7 @@
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    color: #333;
 }
 
 .invoice-header {
@@ -301,6 +302,7 @@
 
 .invoice-info h2 {
     margin: 0 0 10px 0;
+    color: #333;
 }
 
 .status-badge {
@@ -349,6 +351,7 @@
 .customer-info div,
 .invoice-dates div {
     margin-bottom: 8px;
+    color: #333;
 }
 
 .invoice-summary {
@@ -362,6 +365,7 @@
     justify-content: space-between;
     padding: 8px 0;
     border-bottom: 1px solid #ddd;
+    color: #333;
 }
 
 .summary-row:last-child {
@@ -386,6 +390,7 @@
     padding: 10px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+    color: #333;
 }
 
 .data-table th {
@@ -409,6 +414,7 @@
 .add-payment h4 {
     margin-top: 0;
     margin-bottom: 15px;
+    color: #333;
 }
 
 .form-row {
@@ -426,6 +432,7 @@
 .form-group label {
     font-weight: bold;
     margin-bottom: 5px;
+    color: #333;
 }
 
 .form-group input,
@@ -433,6 +440,8 @@
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
+    background: white;
+    color: #333;
 }
 
 .description {
@@ -440,6 +449,72 @@
     padding: 15px;
     border-radius: 4px;
     border-left: 4px solid #007bff;
+    color: #333;
+}
+
+/* Dark mode styles for invoice view */
+html[data-theme="dark"] .invoice-details {
+    background: var(--surface-color) !important;
+    color: var(--text-primary) !important;
+}
+
+html[data-theme="dark"] .invoice-header {
+    background: #334155 !important;
+    border-color: var(--border-color) !important;
+}
+
+html[data-theme="dark"] .invoice-info h2,
+html[data-theme="dark"] .section h3,
+html[data-theme="dark"] .add-payment h4 {
+    color: var(--text-primary) !important;
+}
+
+html[data-theme="dark"] .customer-info div,
+html[data-theme="dark"] .invoice-dates div,
+html[data-theme="dark"] .summary-row,
+html[data-theme="dark"] .description {
+    color: var(--text-primary) !important;
+}
+
+html[data-theme="dark"] .invoice-summary,
+html[data-theme="dark"] .add-payment,
+html[data-theme="dark"] .status-form {
+    background: #334155 !important;
+}
+
+html[data-theme="dark"] .data-table th,
+html[data-theme="dark"] .data-table td {
+    background: var(--surface-color) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+html[data-theme="dark"] .data-table th,
+html[data-theme="dark"] .data-table tfoot td {
+    background: #475569 !important;
+}
+
+html[data-theme="dark"] .form-group label {
+    color: var(--text-primary) !important;
+}
+
+html[data-theme="dark"] .form-group input,
+html[data-theme="dark"] .form-group select {
+    background: var(--surface-color) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+html[data-theme="dark"] .summary-row {
+    border-color: var(--border-color) !important;
+}
+
+html[data-theme="dark"] .summary-row.total {
+    border-color: var(--text-primary) !important;
+}
+
+html[data-theme="dark"] .section {
+    border-color: var(--border-color) !important;
 }
 
 @media (max-width: 768px) {

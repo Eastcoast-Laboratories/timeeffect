@@ -8,12 +8,14 @@
 
 class MigrationManager {
     private $db;
-    private $current_version = 6; // Current target version - increment for new migrations
+    private $current_version = 7; // Current target version - increment for new migrations
     private $migrations_table;
 
     public function __construct() {
         global $db;
         if (!isset($db)) {
+            require_once(__DIR__ . '/functions.inc.php');
+            require_once(__DIR__ . '/db_mysql.inc.php');
             $db = new DB_Sql();
             $db->connect();
         }
@@ -144,6 +146,14 @@ class MigrationManager {
             if ($this->runMigration6()) {
                 $migrations_run[] = 'Complete invoice system with all tables';
                 $this->recordMigration(6, 'Complete invoice system with all tables');
+            }
+        }
+        
+        // Migration 7: Fix customer_contracts table schema
+        if ($current_version < 7) {
+            if ($this->runMigration7()) {
+                $migrations_run[] = 'Fix customer_contracts table schema';
+                $this->recordMigration(7, 'Fix customer_contracts table schema');
             }
         }
         
@@ -571,6 +581,79 @@ class MigrationManager {
         }
         
         return $history;
+    }
+
+    /**
+     * Migration 7: Fix customer_contracts table schema
+     */
+    private function runMigration7() {
+        try {
+            $contracts_table = $GLOBALS['_PJ_table_prefix'] . 'customer_contracts';
+            
+            // Check if table exists first
+            $query = "SHOW TABLES LIKE '$contracts_table'";
+            $this->db->query($query);
+            if (!$this->db->next_record()) {
+                // Table doesn't exist, create it with correct schema
+                $query = "CREATE TABLE $contracts_table (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    customer_id INT NOT NULL,
+                    project_id INT NULL,
+                    contract_type ENUM('hourly', 'fixed', 'retainer') DEFAULT 'hourly',
+                    hourly_rate DECIMAL(10,2) NULL,
+                    fixed_amount DECIMAL(10,2) NULL,
+                    fixed_hours DECIMAL(8,2) NULL,
+                    description TEXT NULL,
+                    start_date DATE NOT NULL,
+                    end_date DATE NULL,
+                    active TINYINT(1) DEFAULT 1,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    INDEX idx_customer_id (customer_id),
+                    INDEX idx_project_id (project_id),
+                    INDEX idx_active (active),
+                    INDEX idx_dates (start_date, end_date)
+                ) ENGINE=MyISAM";
+                
+                return $this->db->query($query);
+            }
+            
+            // Table exists, check and add missing columns
+            $columns_to_check = array(
+                'fixed_hours' => "ALTER TABLE $contracts_table ADD COLUMN fixed_hours DECIMAL(8,2) NULL AFTER fixed_amount",
+                'description' => "ALTER TABLE $contracts_table ADD COLUMN description TEXT NULL AFTER fixed_hours"
+            );
+            
+            foreach ($columns_to_check as $column_name => $alter_statement) {
+                $check_query = "SHOW COLUMNS FROM $contracts_table LIKE '$column_name'";
+                $this->db->query($check_query);
+                
+                if (!$this->db->next_record()) {
+                    // Column doesn't exist, add it
+                    if (!$this->db->query($alter_statement)) {
+                        debugLog("MIGRATION_7", "Failed to add column $column_name to $contracts_table");
+                        return false;
+                    }
+                }
+            }
+            
+            // Remove retainer_hours column if it exists (was incorrectly added in migration 5)
+            $check_query = "SHOW COLUMNS FROM $contracts_table LIKE 'retainer_hours'";
+            $this->db->query($check_query);
+            if ($this->db->next_record()) {
+                $drop_query = "ALTER TABLE $contracts_table DROP COLUMN retainer_hours";
+                if (!$this->db->query($drop_query)) {
+                    debugLog("MIGRATION_7", "Failed to drop retainer_hours column from $contracts_table");
+                    // Don't fail the migration for this, just log it
+                }
+            }
+            
+            return true;
+            
+        } catch (Exception $e) {
+            debugLog("MIGRATION_7", "Migration 7 failed: " . $e->getMessage());
+            return false;
+        }
     }
 }
 

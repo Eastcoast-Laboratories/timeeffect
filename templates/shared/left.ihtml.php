@@ -13,6 +13,9 @@
 		case $GLOBALS['_PJ_reports_script']:
 			include("$_PJ_root/templates/shared/report/left.ihtml.php");
 			break;
+		case strpos($GLOBALS['PHP_SELF'], '/invoice/') !== false:
+			include("$_PJ_root/templates/shared/invoice/left.ihtml.php");
+			break;
 		default:
 			include("$_PJ_root/templates/shared/empty/left.ihtml.php");
 			break;

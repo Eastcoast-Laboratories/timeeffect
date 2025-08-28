@@ -15,7 +15,4 @@
 
 5.
 
-
-Fatal error: Uncaught Error: Call to undefined method DB_Sql::prepare() in /var/www/html/include/contract.class.php:192 Stack trace: #0 /var/www/html/inventory/contracts.php(62): Contract->hasOverlappingContract('5', NULL, '2025-08-28', NULL, NULL) #1 {main} thrown in /var/www/html/include/contract.class.php on line 192
-
-@contract.class.php#L192-194 benutze hier die selbe alte  db zugang wie sonst in timeeffect berall
+@list.ihtml.php#L37 format im format YYYY--MM-DD@list.ihtml.php#L37 hier auch, im moment ist der monat ohne führende n 0

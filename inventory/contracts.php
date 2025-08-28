@@ -42,13 +42,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'create' || $action === 'update') {
         $contract_data = [
             'customer_id' => $customer_id,
-            'project_id' => $_POST['project_id'] ?: null,
+            'project_id' => ($_POST['project_id'] ?? '') ?: null,
             'contract_type' => $_POST['contract_type'] ?? 'hourly',
-            'fixed_amount' => $_POST['fixed_amount'] ?: null,
-            'fixed_hours' => $_POST['fixed_hours'] ?: null,
-            'hourly_rate' => $_POST['hourly_rate'] ?: null,
+            'fixed_amount' => ($_POST['fixed_amount'] ?? '') ?: null,
+            'fixed_hours' => ($_POST['fixed_hours'] ?? '') ?: null,
+            'hourly_rate' => ($_POST['hourly_rate'] ?? '') ?: null,
             'start_date' => $_POST['start_date'] ?? '',
-            'end_date' => $_POST['end_date'] ?: null,
+            'end_date' => ($_POST['end_date'] ?? '') ?: null,
             'description' => $_POST['description'] ?? '',
             'active' => isset($_POST['active']) ? 1 : 0
         ];

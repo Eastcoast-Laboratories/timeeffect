@@ -30,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $invoice_date = $_POST['invoice_date'] ?? date('Y-m-d');
     $description = $_POST['description'] ?? '';
     $generate_type = $_POST['generate_type'] ?? 'manual';
+    $mode = $_POST['mode'] ?? $_GET['mode'] ?? '';
     
     // Validation
     if (empty($customer_id)) {
@@ -63,6 +64,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                              AND e.date >= '" . $safe_period_start . "' 
                              AND e.date <= '" . $safe_period_end . "'";
             
+            // Filter by billed status based on mode
+            if ($mode === 'billed') {
+                $efforts_query .= " AND e.billed IS NOT NULL AND e.billed != ''";
+            } else {
+                // Default: exclude already billed efforts
+                $efforts_query .= " AND (e.billed IS NULL OR e.billed = '')";
+            }
+            
             if ($project_id) {
                 $efforts_query .= " AND e.project_id = " . intval($project_id);
             }
@@ -73,7 +82,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $efforts[] = $db->Record;
             }
             
-            $total_hours = array_sum(array_column($efforts, 'hours'));
+            // Calculate total hours from begin/end time difference
+            $total_minutes = 0;
+            foreach ($efforts as $effort) {
+                $begin_time = strtotime($effort['begin']);
+                $end_time = strtotime($effort['end']);
+                $minutes = ($end_time - $begin_time) / 60;
+                $total_minutes += $minutes;
+            }
+            $total_hours = round($total_minutes / 60, 2);
             
             // Get hourly rate from contract or default
             $activeContract = $contract->getActiveContract($customer_id, $project_id);
@@ -90,6 +107,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             
             $totals = $invoice->calculateInvoiceTotals($net_amount, $vat_rate);
+            
+            // Add debug logging for hourly invoice creation
+            $GLOBALS['_PJ_debug'] = true;
+            debugLog('INVOICE_CREATE', 'Hourly invoice - Total hours: ' . $total_hours . ', Rate: ' . $hourly_rate . ', Net amount: ' . $net_amount);
+            debugLog('INVOICE_CREATE', 'VAT rate: ' . $vat_rate . ', Totals: ' . json_encode($totals));
             
             $invoice_data = [
                 'invoice_number' => $invoice->generateInvoiceNumber($user_id),
