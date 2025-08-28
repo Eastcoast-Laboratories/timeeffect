@@ -229,6 +229,23 @@
 	$GLOBALS['_PJ_strings']['customer_report']			= 'Kundenbericht';
 	$GLOBALS['_PJ_strings']['view_project']				= 'Projekt anzeigen';
 	$GLOBALS['_PJ_strings']['period_efforts']			= 'Zeitraumaufwände';
+
+	// PDF strings
+	$GLOBALS['_PJ_strings']['net_amount']				= 'Nettobetrag';
+	$GLOBALS['_PJ_strings']['invoice_no']				= 'Rechnungsnr';
+	$GLOBALS['_PJ_strings']['hours_worked_period']		= 'Arbeitsstunden in diesem Zeitraum';
+	$GLOBALS['_PJ_strings']['previous_carryover']		= 'Vorheriger Übertrag';
+	$GLOBALS['_PJ_strings']['current_carryover']		= 'Aktueller Übertrag';
+	$GLOBALS['_PJ_strings']['fixed']					= 'Fest';
+	$GLOBALS['_PJ_strings']['payment_information']		= 'Zahlungsinformationen';
+	$GLOBALS['_PJ_strings']['bank_details']				= 'Bankdaten';
+	$GLOBALS['_PJ_strings']['tax_no']					= 'Steuernr';
+	$GLOBALS['_PJ_strings']['vat_no']					= 'USt-IdNr';
+	$GLOBALS['_PJ_strings']['hours']					= 'Stunden';
+	$GLOBALS['_PJ_strings']['rate']						= 'Tarif';
+	$GLOBALS['_PJ_strings']['amount']					= 'Betrag';
+	$GLOBALS['_PJ_strings']['payment_due_within']		= 'Zahlung fällig innerhalb von';
+	$GLOBALS['_PJ_strings']['days_of_invoice_date']		= 'Tagen ab Rechnungsdatum';
 	$GLOBALS['_PJ_strings']['bulk_edit_select_all']		= 'Alle auswählen';
 	$GLOBALS['_PJ_strings']['bulk_edit_selected']		= 'Ausgewählte bearbeiten';
 	$GLOBALS['_PJ_strings']['bulk_edit_clear']			= 'Auswahl löschen';

@@ -14,7 +14,3 @@
 4. index.php: "Improve project profitability analysis"  ist vielleicht noch irreführend
 
 5.
-im invoice PDF ist "Net Amount:" und die beiden zeilen darunter zu weit rechts und ragt aus dem pdf heraus 
-
-6. 
-das pdfmuss noch lokalisierrt werden

@@ -75,8 +75,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
             echo json_encode(['error' => 'Invalid upload type']);
         }
     } else {
+        $error_msg = error_get_last();
         http_response_code(500);
-        echo json_encode(['error' => 'Failed to save file']);
+        echo json_encode([
+            'error' => 'Failed to save file to: ' . $filepath,
+            'details' => 'Check directory permissions. Upload dir: ' . $upload_dir,
+            'php_error' => $error_msg ? $error_msg['message'] : 'Unknown error'
+        ]);
     }
 } else {
     http_response_code(400);

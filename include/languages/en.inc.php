@@ -229,6 +229,23 @@
 	$GLOBALS['_PJ_strings']['customer_report']			= 'Customer Report';
 	$GLOBALS['_PJ_strings']['view_project']				= 'View Project';
 	$GLOBALS['_PJ_strings']['period_efforts']			= 'Period Efforts';
+
+	// PDF strings
+	$GLOBALS['_PJ_strings']['net_amount']				= 'Net Amount';
+	$GLOBALS['_PJ_strings']['invoice_no']				= 'Invoice No';
+	$GLOBALS['_PJ_strings']['hours_worked_period']		= 'Hours worked this period';
+	$GLOBALS['_PJ_strings']['previous_carryover']		= 'Previous carryover';
+	$GLOBALS['_PJ_strings']['current_carryover']		= 'Current carryover';
+	$GLOBALS['_PJ_strings']['fixed']					= 'Fixed';
+	$GLOBALS['_PJ_strings']['payment_information']		= 'Payment Information';
+	$GLOBALS['_PJ_strings']['bank_details']				= 'Bank Details';
+	$GLOBALS['_PJ_strings']['tax_no']					= 'Tax No';
+	$GLOBALS['_PJ_strings']['vat_no']					= 'VAT No';
+	$GLOBALS['_PJ_strings']['hours']					= 'Hours';
+	$GLOBALS['_PJ_strings']['rate']						= 'Rate';
+	$GLOBALS['_PJ_strings']['amount']					= 'Amount';
+	$GLOBALS['_PJ_strings']['payment_due_within']		= 'Payment due within';
+	$GLOBALS['_PJ_strings']['days_of_invoice_date']		= 'days of invoice date';
 	$GLOBALS['_PJ_strings']['bulk_edit_select_all']		= 'Select All';
 	$GLOBALS['_PJ_strings']['bulk_edit_selected']		= 'Edit Selected';
 	$GLOBALS['_PJ_strings']['bulk_edit_clear']			= 'Clear Selection';

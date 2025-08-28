@@ -136,7 +136,7 @@ class InvoicePDFGenerator {
             'company_country' => $user_data['company_country'] ?: '',
             'tax_number' => $user_data['tax_number'] ?: '',
             'vat_number' => $user_data['vat_number'] ?: '',
-            'invoice_title' => 'INVOICE',
+            'invoice_title' => !empty($GLOBALS['_PJ_strings']['invoice']) ? strtoupper($GLOBALS['_PJ_strings']['invoice']) : 'INVOICE',
             'invoice_number' => $invoice['invoice_number'],
             'invoice_date' => date('d.m.Y', strtotime($invoice['invoice_date'])),
             'invoice_period' => date('d.m.Y', strtotime($invoice['period_start'])) . ' - ' . date('d.m.Y', strtotime($invoice['period_end']))
@@ -171,12 +171,12 @@ class InvoicePDFGenerator {
         if ($header_content['tax_number']) {
             $this->pdf->SetFont('Arial', '', 9);
             $this->pdf->SetX($this->pdf->GetPageWidth() - 200);
-            $this->pdf->Cell(170, 12, mb_convert_encoding('Tax No: ' . $header_content['tax_number'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'R');
+            $this->pdf->Cell(170, 12, mb_convert_encoding((!empty($GLOBALS['_PJ_strings']['tax_no']) ? $GLOBALS['_PJ_strings']['tax_no'] : 'Tax No') . ': ' . $header_content['tax_number'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'R');
         }
         
         if ($header_content['vat_number']) {
             $this->pdf->SetX($this->pdf->GetPageWidth() - 200);
-            $this->pdf->Cell(170, 12, mb_convert_encoding('VAT No: ' . $header_content['vat_number'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'R');
+            $this->pdf->Cell(170, 12, mb_convert_encoding((!empty($GLOBALS['_PJ_strings']['vat_no']) ? $GLOBALS['_PJ_strings']['vat_no'] : 'VAT No') . ': ' . $header_content['vat_number'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'R');
         }
         
         // Add some space
@@ -189,14 +189,14 @@ class InvoicePDFGenerator {
         
         $this->pdf->SetFont('Arial', 'B', 12);
         $this->pdf->SetX(30);
-        $this->pdf->Cell(200, 18, mb_convert_encoding('Invoice No: ' . $header_content['invoice_number'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
+        $this->pdf->Cell(200, 18, mb_convert_encoding((!empty($GLOBALS['_PJ_strings']['invoice_no']) ? $GLOBALS['_PJ_strings']['invoice_no'] : 'Invoice No') . ': ' . $header_content['invoice_number'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
         
         $this->pdf->SetFont('Arial', '', 10);
         $this->pdf->SetX(30);
-        $this->pdf->Cell(200, 15, mb_convert_encoding('Date: ' . $header_content['invoice_date'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
+        $this->pdf->Cell(200, 15, mb_convert_encoding((!empty($GLOBALS['_PJ_strings']['date']) ? $GLOBALS['_PJ_strings']['date'] : 'Date') . ': ' . $header_content['invoice_date'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
         
         $this->pdf->SetX(30);
-        $this->pdf->Cell(200, 15, mb_convert_encoding('Period: ' . $header_content['invoice_period'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
+        $this->pdf->Cell(200, 15, mb_convert_encoding((!empty($GLOBALS['_PJ_strings']['period']) ? $GLOBALS['_PJ_strings']['period'] : 'Period') . ': ' . $header_content['invoice_period'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
     }
     
     /**
@@ -204,7 +204,7 @@ class InvoicePDFGenerator {
      */
     private function generateCustomerInfo($invoice) {
         $customer_content = array(
-            'bill_to_label' => 'Bill To:',
+            'bill_to_label' => (!empty($GLOBALS['_PJ_strings']['bill_to']) ? $GLOBALS['_PJ_strings']['bill_to'] : 'Bill To') . ':',
             'customer_name' => $invoice['customer_name'],
             'customer_address' => $invoice['customer_address'] ?: '',
             'project_name' => $invoice['project_name'] ?: ''
@@ -246,35 +246,35 @@ class InvoicePDFGenerator {
         
         if ($invoice['contract_type'] === 'fixed_monthly') {
             // Fixed contract line
-            $description = $invoice['description'] ?: 'Fixed monthly contract';
+            $description = $invoice['description'] ?: (!empty($GLOBALS['_PJ_strings']['fixed_monthly_contract']) ? $GLOBALS['_PJ_strings']['fixed_monthly_contract'] : 'Fixed monthly contract');
             
             $table_data[] = array(
                 'description' => $description,
                 'hours' => number_format($invoice['fixed_hours'], 2),
-                'rate' => 'Fixed',
-                'amount' => number_format($invoice['total_amount'], 2) . ' €'
+                'rate' => !empty($GLOBALS['_PJ_strings']['fixed']) ? $GLOBALS['_PJ_strings']['fixed'] : 'Fixed',
+                'amount' => number_format($invoice['total_amount'], 2) . ' ' . ($GLOBALS['_PJ_currency'] ?? '€')
             );
             
         } else {
             // Hourly billing
             $hourly_rate = $invoice['total_hours'] > 0 ? $invoice['total_amount'] / $invoice['total_hours'] : 0;
-            $description = $invoice['description'] ?: 'Professional services';
+            $description = $invoice['description'] ?: (!empty($GLOBALS['_PJ_strings']['professional_services']) ? $GLOBALS['_PJ_strings']['professional_services'] : 'Professional services');
             
             $table_data[] = array(
                 'description' => $description,
                 'hours' => number_format($invoice['total_hours'], 2),
-                'rate' => number_format($hourly_rate, 2) . ' €',
-                'amount' => number_format($invoice['total_amount'], 2) . ' €'
+                'rate' => number_format($hourly_rate, 2) . ' ' . ($GLOBALS['_PJ_currency'] ?? '€'),
+                'amount' => number_format($invoice['total_amount'], 2) . ' ' . ($GLOBALS['_PJ_currency'] ?? '€')
             );
         }
         
         $details_content = array(
             'table_data' => $table_data,
             'table_headers' => array(
-                'description' => 'Description',
-                'hours' => 'Hours',
-                'rate' => 'Rate',
-                'amount' => 'Amount'
+                'description' => (!empty($GLOBALS['_PJ_strings']['description']) ? $GLOBALS['_PJ_strings']['description'] : 'Description'),
+                'hours' => (!empty($GLOBALS['_PJ_strings']['hours']) ? $GLOBALS['_PJ_strings']['hours'] : 'Hours'),
+                'rate' => (!empty($GLOBALS['_PJ_strings']['rate']) ? $GLOBALS['_PJ_strings']['rate'] : 'Rate'),
+                'amount' => (!empty($GLOBALS['_PJ_strings']['amount']) ? $GLOBALS['_PJ_strings']['amount'] : 'Amount')
             ),
             'carryover_info' => array()
         );
@@ -306,13 +306,13 @@ class InvoicePDFGenerator {
         
         // Header row
         $this->pdf->SetX($col_positions[0]);
-        $this->pdf->Cell($col_widths[0], 15, mb_convert_encoding('Description', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
+        $this->pdf->Cell($col_widths[0], 15, mb_convert_encoding((!empty($GLOBALS['_PJ_strings']['description']) ? $GLOBALS['_PJ_strings']['description'] : 'Description'), 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
         $this->pdf->SetX($col_positions[1]);
-        $this->pdf->Cell($col_widths[1], 15, mb_convert_encoding('Hours', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+        $this->pdf->Cell($col_widths[1], 15, mb_convert_encoding((!empty($GLOBALS['_PJ_strings']['hours']) ? $GLOBALS['_PJ_strings']['hours'] : 'Hours'), 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
         $this->pdf->SetX($col_positions[2]);
-        $this->pdf->Cell($col_widths[2], 15, mb_convert_encoding('Rate', 'ISO-8859-1', 'UTF-8'), 1, 0, 'R', true);
+        $this->pdf->Cell($col_widths[2], 15, mb_convert_encoding((!empty($GLOBALS['_PJ_strings']['rate']) ? $GLOBALS['_PJ_strings']['rate'] : 'Rate'), 'ISO-8859-1', 'UTF-8'), 1, 0, 'R', true);
         $this->pdf->SetX($col_positions[3]);
-        $this->pdf->Cell($col_widths[3], 15, mb_convert_encoding('Amount', 'ISO-8859-1', 'UTF-8'), 1, 1, 'R', true);
+        $this->pdf->Cell($col_widths[3], 15, mb_convert_encoding((!empty($GLOBALS['_PJ_strings']['amount']) ? $GLOBALS['_PJ_strings']['amount'] : 'Amount'), 'ISO-8859-1', 'UTF-8'), 1, 1, 'R', true);
         
         // Data rows
         $this->pdf->SetFillColor(255, 255, 255);
@@ -334,11 +334,11 @@ class InvoicePDFGenerator {
             $this->pdf->Ln(5);
             $this->pdf->SetFont('Arial', '', 9);
             $this->pdf->SetX(30);
-            $this->pdf->Cell(200, 12, mb_convert_encoding('Hours worked this period: ' . $details_content['carryover_info']['hours_worked'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
+            $this->pdf->Cell(200, 12, mb_convert_encoding((!empty($GLOBALS['_PJ_strings']['hours_worked_period']) ? $GLOBALS['_PJ_strings']['hours_worked_period'] : 'Hours worked this period') . ': ' . $details_content['carryover_info']['hours_worked'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
             $this->pdf->SetX(30);
-            $this->pdf->Cell(200, 12, mb_convert_encoding('Previous carryover: ' . $details_content['carryover_info']['previous_carryover'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
+            $this->pdf->Cell(200, 12, mb_convert_encoding((!empty($GLOBALS['_PJ_strings']['previous_carryover']) ? $GLOBALS['_PJ_strings']['previous_carryover'] : 'Previous carryover') . ': ' . $details_content['carryover_info']['previous_carryover'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
             $this->pdf->SetX(30);
-            $this->pdf->Cell(200, 12, mb_convert_encoding('Current carryover: ' . $details_content['carryover_info']['current_carryover'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
+            $this->pdf->Cell(200, 12, mb_convert_encoding((!empty($GLOBALS['_PJ_strings']['current_carryover']) ? $GLOBALS['_PJ_strings']['current_carryover'] : 'Current carryover') . ': ' . $details_content['carryover_info']['current_carryover'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
         }
     }
     
@@ -346,11 +346,12 @@ class InvoicePDFGenerator {
      * Generate summary with totals
      */
     private function generateSummary($invoice) {
-        // Summary data
+        // Summary data with localization
+        $currency = $GLOBALS['_PJ_currency'] ?? '€';
         $summary_data = array(
-            array('label' => 'Net Amount:', 'amount' => number_format($invoice['total_amount'], 2) . ' €'),
-            array('label' => 'VAT (' . number_format($invoice['vat_rate'], 1) . '%):', 'amount' => number_format($invoice['vat_amount'], 2) . ' €'),
-            array('label' => 'Total Amount:', 'amount' => number_format($invoice['gross_amount'], 2) . ' €')
+            array('label' => (!empty($GLOBALS['_PJ_strings']['net_amount']) ? $GLOBALS['_PJ_strings']['net_amount'] : 'Net Amount') . ':', 'amount' => number_format($invoice['total_amount'], 2) . ' ' . $currency),
+            array('label' => (!empty($GLOBALS['_PJ_strings']['vat']) ? $GLOBALS['_PJ_strings']['vat'] : 'VAT') . ' (' . number_format($invoice['vat_rate'], 1) . '%):', 'amount' => number_format($invoice['vat_amount'], 2) . ' ' . $currency),
+            array('label' => (!empty($GLOBALS['_PJ_strings']['total_amount']) ? $GLOBALS['_PJ_strings']['total_amount'] : 'Total Amount') . ':', 'amount' => number_format($invoice['gross_amount'], 2) . ' ' . $currency)
         );
         
         $summary_content = array(
@@ -373,9 +374,9 @@ class InvoicePDFGenerator {
         $this->pdf->SetFillColor(200, 200, 200);
         $this->pdf->SetFont('Arial', '', 10);
         
-        $summary_x = 460; // Right side position
-        $label_width = 120;
-        $amount_width = 80;
+        $summary_x = 380; // Adjusted position to fit within page margins
+        $label_width = 100;
+        $amount_width = 70;
         
         foreach ($summary_data as $row) {
             $this->pdf->SetX($summary_x);
@@ -453,8 +454,8 @@ class InvoicePDFGenerator {
         $payment_days = $user_data['payment_terms_days'] ?: 14;
         
         $footer_content = array(
-            'payment_info_title' => 'Payment Information',
-            'payment_terms' => 'Payment due within ' . $payment_days . ' days of invoice date.',
+            'payment_info_title' => (!empty($GLOBALS['_PJ_strings']['payment_information']) ? $GLOBALS['_PJ_strings']['payment_information'] : 'Payment Information'),
+            'payment_terms' => (!empty($GLOBALS['_PJ_strings']['payment_due_within']) ? $GLOBALS['_PJ_strings']['payment_due_within'] : 'Payment due within') . ' ' . $payment_days . ' ' . (!empty($GLOBALS['_PJ_strings']['days_of_invoice_date']) ? $GLOBALS['_PJ_strings']['days_of_invoice_date'] : 'days of invoice date') . '.',
             'payment_terms_text' => $user_data['payment_terms_text'] ?: '',
             'bank_details' => array(
                 'bank_name' => $user_data['bank_name'] ?: '',

@@ -229,6 +229,23 @@
 	$GLOBALS['_PJ_strings']['customer_report']			= 'Rapport Client';
 	$GLOBALS['_PJ_strings']['view_project']				= 'Voir le Projet';
 	$GLOBALS['_PJ_strings']['period_efforts']			= 'Efforts de Période';
+
+	// PDF strings
+	$GLOBALS['_PJ_strings']['net_amount']				= 'Montant Net';
+	$GLOBALS['_PJ_strings']['invoice_no']				= 'N° Facture';
+	$GLOBALS['_PJ_strings']['hours_worked_period']		= 'Heures travaillées cette période';
+	$GLOBALS['_PJ_strings']['previous_carryover']		= 'Report précédent';
+	$GLOBALS['_PJ_strings']['current_carryover']		= 'Report actuel';
+	$GLOBALS['_PJ_strings']['fixed']					= 'Fixe';
+	$GLOBALS['_PJ_strings']['payment_information']		= 'Informations de Paiement';
+	$GLOBALS['_PJ_strings']['bank_details']				= 'Détails Bancaires';
+	$GLOBALS['_PJ_strings']['tax_no']					= 'N° Fiscal';
+	$GLOBALS['_PJ_strings']['vat_no']					= 'N° TVA';
+	$GLOBALS['_PJ_strings']['hours']					= 'Heures';
+	$GLOBALS['_PJ_strings']['rate']						= 'Tarif';
+	$GLOBALS['_PJ_strings']['amount']					= 'Montant';
+	$GLOBALS['_PJ_strings']['payment_due_within']		= 'Paiement d\u00fb sous';
+	$GLOBALS['_PJ_strings']['days_of_invoice_date']		= 'jours \u00e0 compter de la date de facture';
 	$GLOBALS['_PJ_strings']['data']						= 'Donn&eacute;es';
 	$GLOBALS['_PJ_strings']['date']						= 'Date';
 	$GLOBALS['_PJ_strings']['day']						= 'Jour';
