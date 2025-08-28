@@ -223,6 +223,12 @@
 	$GLOBALS['_PJ_strings']['reminder_not_found']		= 'Erinnerung nicht gefunden';
 	$GLOBALS['_PJ_strings']['missing_invoice_id']		= 'Rechnungs-ID fehlt';
 	$GLOBALS['_PJ_strings']['reminders_already_scheduled'] = 'Erinnerungen für diese Rechnung bereits geplant';
+
+	// Navigation strings
+	$GLOBALS['_PJ_strings']['view_customer']			= 'Kunde anzeigen';
+	$GLOBALS['_PJ_strings']['customer_report']			= 'Kundenbericht';
+	$GLOBALS['_PJ_strings']['view_project']				= 'Projekt anzeigen';
+	$GLOBALS['_PJ_strings']['period_efforts']			= 'Zeitraumaufwände';
 	$GLOBALS['_PJ_strings']['bulk_edit_select_all']		= 'Alle auswählen';
 	$GLOBALS['_PJ_strings']['bulk_edit_selected']		= 'Ausgewählte bearbeiten';
 	$GLOBALS['_PJ_strings']['bulk_edit_clear']			= 'Auswahl löschen';

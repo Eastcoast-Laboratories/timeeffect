@@ -223,6 +223,12 @@
 	$GLOBALS['_PJ_strings']['reminder_not_found']		= 'Rappel non trouvé';
 	$GLOBALS['_PJ_strings']['missing_invoice_id']		= 'ID de facture manquant';
 	$GLOBALS['_PJ_strings']['reminders_already_scheduled'] = 'Rappels déjà programmés pour cette facture';
+
+	// Navigation strings
+	$GLOBALS['_PJ_strings']['view_customer']			= 'Voir le Client';
+	$GLOBALS['_PJ_strings']['customer_report']			= 'Rapport Client';
+	$GLOBALS['_PJ_strings']['view_project']				= 'Voir le Projet';
+	$GLOBALS['_PJ_strings']['period_efforts']			= 'Efforts de Période';
 	$GLOBALS['_PJ_strings']['data']						= 'Donn&eacute;es';
 	$GLOBALS['_PJ_strings']['date']						= 'Date';
 	$GLOBALS['_PJ_strings']['day']						= 'Jour';

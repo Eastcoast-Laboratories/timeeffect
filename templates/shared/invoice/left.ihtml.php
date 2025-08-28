@@ -28,21 +28,21 @@
 			<!-- Customer Navigation -->
 			<?php if($invoice_data['customer_id']): ?>
 			<TR>
-				<TD><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/customer.gif" WIDTH="16" HEIGHT="16" BORDER="0" ALIGN="absmiddle">&nbsp;<A CLASS="left" HREF="<?= $GLOBALS['_PJ_customer_inventory_script'] ?>?edit=1&cid=<?= $invoice_data['customer_id'] ?>">View Customer</A>&nbsp;</TD>
+				<TD><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/customer.gif" WIDTH="16" HEIGHT="16" BORDER="0" ALIGN="absmiddle">&nbsp;<A CLASS="left" HREF="<?= $GLOBALS['_PJ_customer_inventory_script'] ?>?edit=1&cid=<?= $invoice_data['customer_id'] ?>"><?php if(!empty($GLOBALS['_PJ_strings']['view_customer'])) echo $GLOBALS['_PJ_strings']['view_customer']; else echo 'View Customer'; ?></A>&nbsp;</TD>
 			</TR><TR>
-				<TD><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/acrobat.gif" WIDTH="16" HEIGHT="16" BORDER="0" ALIGN="absmiddle">&nbsp;<A CLASS="left" HREF="<?= $GLOBALS['_PJ_reports_script'] ?>?cid=<?= $invoice_data['customer_id'] ?>&syear=<?= date('Y', strtotime($invoice_data['period_start'])) ?>&smonth=<?= date('n', strtotime($invoice_data['period_start'])) ?>&sday=<?= date('j', strtotime($invoice_data['period_start'])) ?>&eyear=<?= date('Y', strtotime($invoice_data['period_end'])) ?>&emonth=<?= date('n', strtotime($invoice_data['period_end'])) ?>&eday=<?= date('j', strtotime($invoice_data['period_end'])) ?>">Customer Report</A>&nbsp;</TD>
+				<TD><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/acrobat.gif" WIDTH="16" HEIGHT="16" BORDER="0" ALIGN="absmiddle">&nbsp;<A CLASS="left" HREF="<?= $GLOBALS['_PJ_reports_script'] ?>?cid=<?= $invoice_data['customer_id'] ?>&syear=<?= date('Y', strtotime($invoice_data['period_start'])) ?>&smonth=<?= date('n', strtotime($invoice_data['period_start'])) ?>&sday=<?= date('j', strtotime($invoice_data['period_start'])) ?>&eyear=<?= date('Y', strtotime($invoice_data['period_end'])) ?>&emonth=<?= date('n', strtotime($invoice_data['period_end'])) ?>&eday=<?= date('j', strtotime($invoice_data['period_end'])) ?>"><?php if(!empty($GLOBALS['_PJ_strings']['customer_report'])) echo $GLOBALS['_PJ_strings']['customer_report']; else echo 'Customer Report'; ?></A>&nbsp;</TD>
 			</TR>
 			
 			<!-- Project Navigation (if project is set) -->
 			<?php if($invoice_data['project_id']): ?>
 			<TR>
-				<TD><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/project.gif" WIDTH="16" HEIGHT="16" BORDER="0" ALIGN="absmiddle">&nbsp;<A CLASS="left" HREF="<?= $GLOBALS['_PJ_projects_inventory_script'] ?>?edit=1&pid=<?= $invoice_data['project_id'] ?>">View Project</A>&nbsp;</TD>
+				<TD><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/project.gif" WIDTH="16" HEIGHT="16" BORDER="0" ALIGN="absmiddle">&nbsp;<A CLASS="left" HREF="<?= $GLOBALS['_PJ_projects_inventory_script'] ?>?edit=1&pid=<?= $invoice_data['project_id'] ?>"><?php if(!empty($GLOBALS['_PJ_strings']['view_project'])) echo $GLOBALS['_PJ_strings']['view_project']; else echo 'View Project'; ?></A>&nbsp;</TD>
 			</TR>
 			<?php endif; ?>
 			
 			<!-- Efforts for this period -->
 			<TR>
-				<TD><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/effort.gif" WIDTH="16" HEIGHT="16" BORDER="0" ALIGN="absmiddle">&nbsp;<A CLASS="left" HREF="<?= $GLOBALS['_PJ_efforts_inventory_script'] ?>?cid=<?= $invoice_data['customer_id'] ?><?= $invoice_data['project_id'] ? '&pid=' . $invoice_data['project_id'] : '' ?>&syear=<?= date('Y', strtotime($invoice_data['period_start'])) ?>&smonth=<?= date('n', strtotime($invoice_data['period_start'])) ?>&sday=<?= date('j', strtotime($invoice_data['period_start'])) ?>&eyear=<?= date('Y', strtotime($invoice_data['period_end'])) ?>&emonth=<?= date('n', strtotime($invoice_data['period_end'])) ?>&eday=<?= date('j', strtotime($invoice_data['period_end'])) ?>">Period Efforts</A>&nbsp;</TD>
+				<TD><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/effort.gif" WIDTH="16" HEIGHT="16" BORDER="0" ALIGN="absmiddle">&nbsp;<A CLASS="left" HREF="<?= $GLOBALS['_PJ_efforts_inventory_script'] ?>?cid=<?= $invoice_data['customer_id'] ?><?= $invoice_data['project_id'] ? '&pid=' . $invoice_data['project_id'] : '' ?>&syear=<?= date('Y', strtotime($invoice_data['period_start'])) ?>&smonth=<?= date('n', strtotime($invoice_data['period_start'])) ?>&sday=<?= date('j', strtotime($invoice_data['period_start'])) ?>&eyear=<?= date('Y', strtotime($invoice_data['period_end'])) ?>&emonth=<?= date('n', strtotime($invoice_data['period_end'])) ?>&eday=<?= date('j', strtotime($invoice_data['period_end'])) ?>"><?php if(!empty($GLOBALS['_PJ_strings']['period_efforts'])) echo $GLOBALS['_PJ_strings']['period_efforts']; else echo 'Period Efforts'; ?></A>&nbsp;</TD>
 			</TR>
 			<?php endif; ?>
 			<?php endif; ?>

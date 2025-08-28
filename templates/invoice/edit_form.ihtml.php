@@ -50,7 +50,15 @@
 
                 <div class="form-group">
                     <label><?php if(!empty($GLOBALS['_PJ_strings']['contract_type'])) echo $GLOBALS['_PJ_strings']['contract_type']; else echo 'Contract Type'; ?></label>
-                    <input type="text" value="<?php echo ucfirst(str_replace('_', ' ', $invoice_data['contract_type'])); ?>" readonly class="readonly">
+                    <input type="text" value="<?php 
+                        if ($invoice_data['contract_type'] === 'hourly') {
+                            echo !empty($GLOBALS['_PJ_strings']['hourly']) ? $GLOBALS['_PJ_strings']['hourly'] : 'Hourly';
+                        } elseif ($invoice_data['contract_type'] === 'fixed_monthly') {
+                            echo !empty($GLOBALS['_PJ_strings']['fixed_monthly']) ? $GLOBALS['_PJ_strings']['fixed_monthly'] : 'Fixed Monthly';
+                        } else {
+                            echo ucfirst(str_replace('_', ' ', $invoice_data['contract_type']));
+                        }
+                    ?>" readonly class="readonly-input">
                 </div>
             </div>
         </div>

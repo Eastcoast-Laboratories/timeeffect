@@ -47,6 +47,30 @@ body {
     min-height: 100vh;
 }
 
+/* Readonly input field styling to prevent size changes */
+.readonly-input {
+    background-color: #f8f9fa !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-secondary) !important;
+    cursor: default !important;
+    pointer-events: none !important;
+    resize: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+    transition: none !important;
+}
+
+.readonly-input:focus,
+.readonly-input:active,
+.readonly-input:hover {
+    background-color: #f8f9fa !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: none !important;
+    transform: none !important;
+    outline: none !important;
+}
+
 #logout {
     font-size: 1.5rem;
     color: #334155;

@@ -14,13 +14,7 @@
 4. index.php: "Improve project profitability analysis"  ist vielleicht noch irreführend
 
 5.
-jetzt so, jetzt schau dir funktionierende dateien an, wie z.b. @form.ihtml.php#L120 
-mache alles genau so wie dort in den neuen dateien seit dem commit
+im invoice PDF ist "Net Amount:" und die beiden zeilen darunter zu weit rechts und ragt aus dem pdf heraus 
 
-und dann :
-@copilot-instructions.md#L1-295 ergänze hier, wie man die lokalisierungsdateien richtig einbindet
-
-
-benutze möglichst besteehende lokalize strings (z.b. "Customer" ist ja schon ) und  lokalisiere alle neuen dateien seit commit 0b3fe983
-
-hre nicht auf, bis nidcht alle dateien lokalisiert sind, wen nötig, mache in dev/ ein log file, in dem du abhakst, welche du fertig klokalisiert hast komplett
+6. 
+das pdfmuss noch lokalisierrt werden

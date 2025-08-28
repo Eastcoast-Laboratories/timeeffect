@@ -4,6 +4,7 @@ include_once("../include/config.inc.php");
 include_once($_PJ_include_path . '/scripts.inc.php');
 require_once('../include/invoice.class.php');
 require_once('../include/contract.class.php');
+require_once('../include/carryover.class.php');
 
 $invoice_id = $_GET['id'] ?? 0;
 
@@ -90,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Get customers for dropdown
-$customers_query = "SELECT id, name FROM " . $GLOBALS['_PJ_customer_table'] . " ORDER BY name";
+$customers_query = "SELECT id, customer_name as name FROM " . $GLOBALS['_PJ_customer_table'] . " ORDER BY customer_name";
 $db->query($customers_query);
 $customers = [];
 while ($db->next_record()) {
@@ -98,7 +99,7 @@ while ($db->next_record()) {
 }
 
 // Get projects for dropdown
-$projects_query = "SELECT id, customer_id, name FROM " . $GLOBALS['_PJ_project_table'] . " ORDER BY name";
+$projects_query = "SELECT id, customer_id, project_name as name FROM " . $GLOBALS['_PJ_project_table'] . " ORDER BY project_name";
 $db->query($projects_query);
 $projects = [];
 while ($db->next_record()) {

@@ -223,6 +223,12 @@
 	$GLOBALS['_PJ_strings']['reminder_not_found']		= 'Reminder not found';
 	$GLOBALS['_PJ_strings']['missing_invoice_id']		= 'Missing invoice ID';
 	$GLOBALS['_PJ_strings']['reminders_already_scheduled'] = 'Reminders already scheduled for this invoice';
+
+	// Navigation strings
+	$GLOBALS['_PJ_strings']['view_customer']			= 'View Customer';
+	$GLOBALS['_PJ_strings']['customer_report']			= 'Customer Report';
+	$GLOBALS['_PJ_strings']['view_project']				= 'View Project';
+	$GLOBALS['_PJ_strings']['period_efforts']			= 'Period Efforts';
 	$GLOBALS['_PJ_strings']['bulk_edit_select_all']		= 'Select All';
 	$GLOBALS['_PJ_strings']['bulk_edit_selected']		= 'Edit Selected';
 	$GLOBALS['_PJ_strings']['bulk_edit_clear']			= 'Clear Selection';
