@@ -9,7 +9,7 @@ include_once(__DIR__ . '/../../shared/header.ihtml.php');
         <h1><?php echo $page_title; ?></h1>
         <!-- inventory/customer/contracts/list.ihtml - START -->
         <div class="actions">
-            <a href="../customer.php" class="btn btn-secondary">Back to Customers</a>
+            <a href="../customer.php" class="btn btn-secondary"><?php if(!empty($GLOBALS['_PJ_strings']['back'])) echo $GLOBALS['_PJ_strings']['back'] ?></a>
         </div>
     </div>
 
@@ -25,14 +25,14 @@ include_once(__DIR__ . '/../../shared/header.ihtml.php');
 
     <?php if (isset($_GET['success'])): ?>
         <div class="alert alert-success">
-            Contract <?php echo htmlspecialchars($_GET['success']); ?> successfully!
+            <?php if(!empty($GLOBALS['_PJ_strings']['contract'])) echo $GLOBALS['_PJ_strings']['contract'] ?> <?php echo htmlspecialchars($_GET['success']); ?> <?php if(!empty($GLOBALS['_PJ_strings']['successfully'])) echo $GLOBALS['_PJ_strings']['successfully'] ?>!
         </div>
     <?php endif; ?>
 
     <!-- Contract Form -->
     <?php if ($action === 'create' || $action === 'edit'): ?>
         <div class="form-section">
-            <h3><?php echo $action === 'create' ? 'Create New Contract' : 'Edit Contract'; ?></h3>
+            <h3><?php if($action === 'create') { if(!empty($GLOBALS['_PJ_strings']['create'])) echo $GLOBALS['_PJ_strings']['create']; echo ' '; if(!empty($GLOBALS['_PJ_strings']['new'])) echo $GLOBALS['_PJ_strings']['new']; echo ' '; if(!empty($GLOBALS['_PJ_strings']['contract'])) echo $GLOBALS['_PJ_strings']['contract']; } else { if(!empty($GLOBALS['_PJ_strings']['edit'])) echo $GLOBALS['_PJ_strings']['edit']; echo ' '; if(!empty($GLOBALS['_PJ_strings']['contract'])) echo $GLOBALS['_PJ_strings']['contract']; } ?></h3>
             
             <form method="POST" class="contract-form">
                 <input type="hidden" name="action" value="<?php echo $action === 'edit' ? 'update' : $action; ?>">
@@ -43,9 +43,9 @@ include_once(__DIR__ . '/../../shared/header.ihtml.php');
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="project_id">Project</label>
+                        <label for="project_id"><?php if(!empty($GLOBALS['_PJ_strings']['project'])) echo $GLOBALS['_PJ_strings']['project'] ?></label>
                         <select name="project_id" id="project_id">
-                            <option value="">All Projects</option>
+                            <option value=""><?php if(!empty($GLOBALS['_PJ_strings']['all'])) echo $GLOBALS['_PJ_strings']['all'] ?> <?php if(!empty($GLOBALS['_PJ_strings']['projects'])) echo $GLOBALS['_PJ_strings']['projects'] ?></option>
                             <?php foreach ($projects as $project): ?>
                                 <option value="<?php echo $project['id']; ?>" 
                                         <?php echo (isset($contract_data) && $contract_data['project_id'] == $project['id']) ? 'selected' : ''; ?>>
@@ -56,17 +56,17 @@ include_once(__DIR__ . '/../../shared/header.ihtml.php');
                     </div>
 
                     <div class="form-group">
-                        <label for="contract_type">Contract Type *</label>
+                        <label for="contract_type"><?php if(!empty($GLOBALS['_PJ_strings']['contract'])) echo $GLOBALS['_PJ_strings']['contract'] ?> <?php if(!empty($GLOBALS['_PJ_strings']['type'])) echo $GLOBALS['_PJ_strings']['type'] ?> *</label>
                         <select name="contract_type" id="contract_type" required onchange="toggleContractFields()">
-                            <option value="hourly" <?php echo (isset($contract_data) && $contract_data['contract_type'] === 'hourly') ? 'selected' : ''; ?>>Hourly</option>
-                            <option value="fixed_monthly" <?php echo (isset($contract_data) && $contract_data['contract_type'] === 'fixed_monthly') ? 'selected' : ''; ?>>Fixed Monthly</option>
+                            <option value="hourly" <?php echo (isset($contract_data) && $contract_data['contract_type'] === 'hourly') ? 'selected' : ''; ?>><?php if(!empty($GLOBALS['_PJ_strings']['hourly'])) echo $GLOBALS['_PJ_strings']['hourly'] ?></option>
+                            <option value="fixed_monthly" <?php echo (isset($contract_data) && $contract_data['contract_type'] === 'fixed_monthly') ? 'selected' : ''; ?>><?php if(!empty($GLOBALS['_PJ_strings']['fixed_monthly'])) echo $GLOBALS['_PJ_strings']['fixed_monthly'] ?></option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-row" id="hourly_fields">
                     <div class="form-group">
-                        <label for="hourly_rate">Hourly Rate (€) *</label>
+                        <label for="hourly_rate"><?php if(!empty($GLOBALS['_PJ_strings']['hourly_rate'])) echo $GLOBALS['_PJ_strings']['hourly_rate'] ?> (€) *</label>
                         <input type="number" step="0.01" name="hourly_rate" id="hourly_rate"
                                value="<?php echo isset($contract_data) ? number_format($contract_data['hourly_rate'], 2) : ''; ?>">
                     </div>
@@ -74,13 +74,13 @@ include_once(__DIR__ . '/../../shared/header.ihtml.php');
 
                 <div class="form-row" id="fixed_fields" style="display: none;">
                     <div class="form-group">
-                        <label for="fixed_amount">Fixed Amount (€) *</label>
+                        <label for="fixed_amount"><?php if(!empty($GLOBALS['_PJ_strings']['fixed_amount'])) echo $GLOBALS['_PJ_strings']['fixed_amount'] ?> (€) *</label>
                         <input type="number" step="0.01" name="fixed_amount" id="fixed_amount"
                                value="<?php echo isset($contract_data) ? number_format($contract_data['fixed_amount'], 2) : ''; ?>">
                     </div>
 
                     <div class="form-group">
-                        <label for="fixed_hours">Fixed Hours *</label>
+                        <label for="fixed_hours"><?php if(!empty($GLOBALS['_PJ_strings']['fixed_hours'])) echo $GLOBALS['_PJ_strings']['fixed_hours'] ?> *</label>
                         <input type="number" step="0.01" name="fixed_hours" id="fixed_hours"
                                value="<?php echo isset($contract_data) ? number_format($contract_data['fixed_hours'], 2) : ''; ?>">
                     </div>
@@ -88,20 +88,20 @@ include_once(__DIR__ . '/../../shared/header.ihtml.php');
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="start_date">Start Date *</label>
+                        <label for="start_date"><?php if(!empty($GLOBALS['_PJ_strings']['start_date'])) echo $GLOBALS['_PJ_strings']['start_date'] ?> *</label>
                         <input type="date" name="start_date" id="start_date" required
                                value="<?php echo isset($contract_data) ? $contract_data['start_date'] : ''; ?>">
                     </div>
 
                     <div class="form-group">
-                        <label for="end_date">End Date</label>
+                        <label for="end_date"><?php if(!empty($GLOBALS['_PJ_strings']['end_date'])) echo $GLOBALS['_PJ_strings']['end_date'] ?></label>
                         <input type="date" name="end_date" id="end_date"
                                value="<?php echo isset($contract_data) ? $contract_data['end_date'] : ''; ?>">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="description">Description</label>
+                    <label for="description"><?php if(!empty($GLOBALS['_PJ_strings']['description'])) echo $GLOBALS['_PJ_strings']['description'] ?></label>
                     <textarea name="description" id="description" rows="3"><?php echo isset($contract_data) ? htmlspecialchars($contract_data['description']) : ''; ?></textarea>
                 </div>
 
@@ -109,15 +109,15 @@ include_once(__DIR__ . '/../../shared/header.ihtml.php');
                     <label>
                         <input type="checkbox" name="active" value="1" 
                                <?php echo (isset($contract_data) && $contract_data['active']) || !isset($contract_data) ? 'checked' : ''; ?>>
-                        Active
+                        <?php if(!empty($GLOBALS['_PJ_strings']['active'])) echo $GLOBALS['_PJ_strings']['active'] ?>
                     </label>
                 </div>
 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">
-                        <?php echo $action === 'create' ? 'Create Contract' : 'Update Contract'; ?>
+                        <?php if($action === 'create') { if(!empty($GLOBALS['_PJ_strings']['create'])) echo $GLOBALS['_PJ_strings']['create']; echo ' '; if(!empty($GLOBALS['_PJ_strings']['contract'])) echo $GLOBALS['_PJ_strings']['contract']; } else { if(!empty($GLOBALS['_PJ_strings']['update'])) echo $GLOBALS['_PJ_strings']['update']; echo ' '; if(!empty($GLOBALS['_PJ_strings']['contract'])) echo $GLOBALS['_PJ_strings']['contract']; } ?>
                     </button>
-                    <a href="contracts.php?customer_id=<?php echo $customer_id; ?>" class="btn btn-secondary">Cancel</a>
+                    <a href="contracts.php?customer_id=<?php echo $customer_id; ?>" class="btn btn-secondary"><?php if(!empty($GLOBALS['_PJ_strings']['cancel'])) echo $GLOBALS['_PJ_strings']['cancel'] ?></a>
                 </div>
             </form>
         </div>
@@ -125,31 +125,31 @@ include_once(__DIR__ . '/../../shared/header.ihtml.php');
         <!-- Contract List -->
         <div class="contracts-section">
             <div class="section-header">
-                <h3>Contracts</h3>
-                <a href="contracts.php?customer_id=<?php echo $customer_id; ?>&action=create" class="btn btn-primary">New Contract</a>
+                <h3><?php if(!empty($GLOBALS['_PJ_strings']['contracts'])) echo $GLOBALS['_PJ_strings']['contracts'] ?></h3>
+                <a href="contracts.php?customer_id=<?php echo $customer_id; ?>&action=create" class="btn btn-primary"><?php if(!empty($GLOBALS['_PJ_strings']['new'])) echo $GLOBALS['_PJ_strings']['new'] ?> <?php if(!empty($GLOBALS['_PJ_strings']['contract'])) echo $GLOBALS['_PJ_strings']['contract'] ?></a>
             </div>
 
             <?php if (empty($contracts)): ?>
                 <div class="no-data">
-                    <p>No contracts found for this customer.</p>
-                    <a href="contracts.php?customer_id=<?php echo $customer_id; ?>&action=create" class="btn btn-primary">Create first contract</a>
+                    <p><?php if(!empty($GLOBALS['_PJ_strings']['no_contracts_found'])) echo $GLOBALS['_PJ_strings']['no_contracts_found'] ?></p>
+                    <a href="contracts.php?customer_id=<?php echo $customer_id; ?>&action=create" class="btn btn-primary"><?php if(!empty($GLOBALS['_PJ_strings']['create_first_contract'])) echo $GLOBALS['_PJ_strings']['create_first_contract'] ?></a>
                 </div>
             <?php else: ?>
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>Project</th>
-                            <th>Type</th>
-                            <th>Rate/Amount</th>
-                            <th>Period</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th><?php if(!empty($GLOBALS['_PJ_strings']['project'])) echo $GLOBALS['_PJ_strings']['project'] ?></th>
+                            <th><?php if(!empty($GLOBALS['_PJ_strings']['type'])) echo $GLOBALS['_PJ_strings']['type'] ?></th>
+                            <th><?php if(!empty($GLOBALS['_PJ_strings']['rate_amount'])) echo $GLOBALS['_PJ_strings']['rate_amount'] ?></th>
+                            <th><?php if(!empty($GLOBALS['_PJ_strings']['period'])) echo $GLOBALS['_PJ_strings']['period'] ?></th>
+                            <th><?php if(!empty($GLOBALS['_PJ_strings']['status'])) echo $GLOBALS['_PJ_strings']['status'] ?></th>
+                            <th><?php if(!empty($GLOBALS['_PJ_strings']['actions'])) echo $GLOBALS['_PJ_strings']['actions'] ?></th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($contracts as $contract_item): ?>
                             <tr class="<?php echo $contract_item['active'] ? 'active' : 'inactive'; ?>">
-                                <td><?php echo htmlspecialchars($contract_item['project_name'] ?? 'All Projects'); ?></td>
+                                <td><?php echo htmlspecialchars($contract_item['project_name'] ?? ((!empty($GLOBALS['_PJ_strings']['all']) ? $GLOBALS['_PJ_strings']['all'] : '') . ' ' . (!empty($GLOBALS['_PJ_strings']['projects']) ? $GLOBALS['_PJ_strings']['projects'] : ''))); ?></td>
                                 <td><?php echo ucfirst(str_replace('_', ' ', $contract_item['contract_type'])); ?></td>
                                 <td>
                                     <?php if ($contract_item['contract_type'] === 'fixed_monthly'): ?>
@@ -164,24 +164,24 @@ include_once(__DIR__ . '/../../shared/header.ihtml.php');
                                     <?php if ($contract_item['end_date']): ?>
                                         - <?php echo date('d.m.Y', strtotime($contract_item['end_date'])); ?>
                                     <?php else: ?>
-                                        - ongoing
+                                        - <?php if(!empty($GLOBALS['_PJ_strings']['ongoing'])) echo $GLOBALS['_PJ_strings']['ongoing'] ?>
                                     <?php endif; ?>
                                 </td>
                                 <td>
                                     <span class="status-badge <?php echo $contract_item['active'] ? 'status-active' : 'status-inactive'; ?>">
-                                        <?php echo $contract_item['active'] ? 'Active' : 'Inactive'; ?>
+                                        <?php echo $contract_item['active'] ? (!empty($GLOBALS['_PJ_strings']['active']) ? $GLOBALS['_PJ_strings']['active'] : '') : (!empty($GLOBALS['_PJ_strings']['inactive']) ? $GLOBALS['_PJ_strings']['inactive'] : ''); ?>
                                     </span>
                                 </td>
                                 <td class="actions">
                                     <a href="contracts.php?customer_id=<?php echo $customer_id; ?>&action=edit&id=<?php echo $contract_item['id']; ?>" 
-                                       class="btn btn-sm btn-warning">Edit</a>
+                                       class="btn btn-sm btn-warning"><?php if(!empty($GLOBALS['_PJ_strings']['edit'])) echo $GLOBALS['_PJ_strings']['edit'] ?></a>
                                     <?php if ($contract_item['active']): ?>
                                         <form method="POST" style="display: inline;">
                                             <input type="hidden" name="action" value="deactivate">
                                             <input type="hidden" name="customer_id" value="<?php echo $customer_id; ?>">
                                             <input type="hidden" name="id" value="<?php echo $contract_item['id']; ?>">
                                             <button type="submit" class="btn btn-sm btn-danger" 
-                                                    onclick="return confirm('Deactivate this contract?')">Deactivate</button>
+                                                    onclick="return confirm('<?php if(!empty($GLOBALS['_PJ_strings']['confirm_deactivate_contract'])) echo $GLOBALS['_PJ_strings']['confirm_deactivate_contract'] ?>')"><?php if(!empty($GLOBALS['_PJ_strings']['deactivate'])) echo $GLOBALS['_PJ_strings']['deactivate'] ?></button>
                                         </form>
                                     <?php endif; ?>
                                 </td>

@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $contract_data['end_date'], 
                 $exclude_id
             )) {
-                $errors[] = 'Contract period overlaps with existing contract';
+                $errors[] = $GLOBALS['_PJ_strings']['contract_period_overlap'];
             }
         }
         
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     header("Location: contracts.php?customer_id={$customer_id}&success=created");
                     exit;
                 } else {
-                    $errors[] = 'Failed to create contract';
+                    $errors[] = $GLOBALS['_PJ_strings']['failed_to_create_contract'];
                 }
             } elseif ($action === 'update') {
                 if ($contract->updateContract($contract_id, $contract_data)) {
@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     header("Location: contracts.php?customer_id={$customer_id}&success=updated");
                     exit;
                 } else {
-                    $errors[] = 'Failed to update contract';
+                    $errors[] = $GLOBALS['_PJ_strings']['failed_to_update_contract'];
                 }
             }
         }
@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: contracts.php?customer_id={$customer_id}&success=deactivated");
             exit;
         } else {
-            $errors[] = 'Failed to deactivate contract';
+            $errors[] = $GLOBALS['_PJ_strings']['failed_to_deactivate_contract'];
         }
     }
 }
@@ -123,7 +123,7 @@ if ($action === 'edit' && $contract_id) {
 
 // Set up template variables for unified layout
 $center_template = "inventory/customer/contracts";
-$center_title = 'Contract Management - ' . $customer_data['name'];
+$center_title = $GLOBALS['_PJ_strings']['contract_management'] . ' - ' . $customer_data['name'];
 
 include("$_PJ_root/templates/list.ihtml.php");
 include_once("$_PJ_include_path/degestiv.inc.php");

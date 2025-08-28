@@ -205,8 +205,44 @@
 	// Time overlap warning strings
 	$GLOBALS['_PJ_strings']['time_overlap_warning']		= 'Zeitüberschneidung Warnung';
 	$GLOBALS['_PJ_strings']['previous_effort']			= 'Vorheriger Aufwand';
-	$GLOBALS['_PJ_strings']['no_description']			= 'Keine Beschreibung';
-	$GLOBALS['_PJ_strings']['no_project']				= 'Kein Projekt';
+	
+	// Contract management strings
+	$GLOBALS['_PJ_strings']['contract']					= 'Vertrag';
+	$GLOBALS['_PJ_strings']['new_contract']					= 'Neuer Vertrag';
+	$GLOBALS['_PJ_strings']['contracts']				= 'Verträge';
+	$GLOBALS['_PJ_strings']['contract_management']		= 'Vertragsverwaltung';
+	$GLOBALS['_PJ_strings']['contract_period_overlap']	= 'Vertragszeitraum überschneidet sich mit bestehendem Vertrag';
+	$GLOBALS['_PJ_strings']['failed_to_create_contract'] = 'Vertrag konnte nicht erstellt werden';
+	$GLOBALS['_PJ_strings']['failed_to_update_contract'] = 'Vertrag konnte nicht aktualisiert werden';
+	$GLOBALS['_PJ_strings']['failed_to_deactivate_contract'] = 'Vertrag konnte nicht deaktiviert werden';
+	
+	// Additional contract template strings
+	$GLOBALS['_PJ_strings']['all']					= 'Alle';
+	$GLOBALS['_PJ_strings']['type']					= 'Typ';
+	$GLOBALS['_PJ_strings']['hourly']					= 'Stündlich';
+	$GLOBALS['_PJ_strings']['fixed_monthly']			= 'Monatlich fest';
+	$GLOBALS['_PJ_strings']['hourly_rate']				= 'Stundensatz';
+	$GLOBALS['_PJ_strings']['fixed_amount']				= 'Fester Betrag';
+	$GLOBALS['_PJ_strings']['fixed_hours']				= 'Feste Stunden';
+	$GLOBALS['_PJ_strings']['end_date']					= 'Enddatum';
+	$GLOBALS['_PJ_strings']['successfully']				= 'erfolgreich';
+	$GLOBALS['_PJ_strings']['rate_amount']				= 'Satz/Betrag';
+	$GLOBALS['_PJ_strings']['period']					= 'Zeitraum';
+	$GLOBALS['_PJ_strings']['ongoing']					= 'laufend';
+	$GLOBALS['_PJ_strings']['inactive']					= 'Inaktiv';
+	$GLOBALS['_PJ_strings']['deactivate']				= 'Deaktivieren';
+	$GLOBALS['_PJ_strings']['no_contracts_found']		= 'Keine Verträge für diesen Kunden gefunden.';
+	$GLOBALS['_PJ_strings']['create_first_contract']	= 'Ersten Vertrag erstellen';
+	$GLOBALS['_PJ_strings']['confirm_deactivate_contract'] = 'Diesen Vertrag deaktivieren?';
+	
+	// Missing basic UI strings
+	$GLOBALS['_PJ_strings']['back']					= 'Zurück';
+	$GLOBALS['_PJ_strings']['new']						= 'Neu';
+	$GLOBALS['_PJ_strings']['edit']						= 'Bearbeiten';
+	$GLOBALS['_PJ_strings']['update']					= 'Aktualisieren';
+	$GLOBALS['_PJ_strings']['cancel']					= 'Abbrechen';
+	$GLOBALS['_PJ_strings']['actions']					= 'Aktionen';
+	$GLOBALS['_PJ_strings']['status']					= 'Status';
 	$GLOBALS['_PJ_strings']['logged_in_as_admin']		= 'Als Admin angemeldet';
 	$GLOBALS['_PJ_strings']['logo']						= 'Logo';
 	$GLOBALS['_PJ_strings']['logout']					= 'Abmelden';

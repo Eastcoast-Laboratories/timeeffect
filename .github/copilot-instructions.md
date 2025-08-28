@@ -293,3 +293,53 @@ if (!$no_login) {
 - **Check**: Web server user has access to application files
 
 Always validate that EVERY command works before adding it to your development workflow. If a command does not work in your environment, document the limitation and provide alternative approaches.
+
+## Localization Integration
+
+### Standard Localization Pattern
+All user-facing strings must use the standard TimeEffect localization pattern:
+
+```php
+<?php if(!empty($GLOBALS['_PJ_strings']['key'])) echo $GLOBALS['_PJ_strings']['key'] ?>
+```
+
+### Language Files Structure
+- **Location**: `/include/languages/`
+- **Files**: `de.inc.php`, `en.inc.php`, `fr.inc.php`
+- **Format**: `$GLOBALS['_PJ_strings']['key'] = 'Localized Text';`
+
+### Implementation Rules
+1. **Always check for existing strings** before creating new ones
+2. **Use consistent key naming**: lowercase with underscores (e.g., `new_contract`, `hourly_rate`)
+3. **Add strings to all language files** (de, en, fr)
+4. **Never use hardcoded text** in templates or user-facing PHP files
+
+### Common Localization Keys
+```php
+// Basic UI elements
+'back' => 'Zurück'
+'new' => 'Neu'
+'edit' => 'Bearbeiten'
+'delete' => 'Löschen'
+'save' => 'Speichern'
+'cancel' => 'Abbrechen'
+'create' => 'Erstellen'
+'update' => 'Aktualisieren'
+
+// Status and actions
+'active' => 'Aktiv'
+'inactive' => 'Inaktiv'
+'status' => 'Status'
+'actions' => 'Aktionen'
+
+// Common entities
+'customer' => 'Kunde'
+'project' => 'Projekt'
+'contract' => 'Vertrag'
+'effort' => 'Aufwand'
+```
+
+### Testing Localization
+1. **Check language loading**: Verify `$GLOBALS['_PJ_strings']` is populated
+2. **Test all languages**: Switch between de/en/fr in user settings
+3. **Validate fallbacks**: Ensure graceful handling of missing strings

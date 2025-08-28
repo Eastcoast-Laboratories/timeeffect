@@ -159,6 +159,44 @@
 	$GLOBALS['_PJ_strings']['previous_effort']			= 'Previous effort';
 	$GLOBALS['_PJ_strings']['no_description']			= 'No description';
 	$GLOBALS['_PJ_strings']['no_project']				= 'No project';
+	
+	// Contract management strings
+	$GLOBALS['_PJ_strings']['contract']					= 'Contract';
+	$GLOBALS['_PJ_strings']['new_contract']				= 'New Contract';
+	$GLOBALS['_PJ_strings']['contracts']				= 'Contracts';
+	$GLOBALS['_PJ_strings']['contract_management']		= 'Contract Management';
+	$GLOBALS['_PJ_strings']['contract_period_overlap']	= 'Contract period overlaps with existing contract';
+	$GLOBALS['_PJ_strings']['failed_to_create_contract'] = 'Failed to create contract';
+	$GLOBALS['_PJ_strings']['failed_to_update_contract'] = 'Failed to update contract';
+	$GLOBALS['_PJ_strings']['failed_to_deactivate_contract'] = 'Failed to deactivate contract';
+	
+	// Additional contract template strings
+	$GLOBALS['_PJ_strings']['all']					= 'All';
+	$GLOBALS['_PJ_strings']['type']					= 'Type';
+	$GLOBALS['_PJ_strings']['hourly']					= 'Hourly';
+	$GLOBALS['_PJ_strings']['fixed_monthly']			= 'Fixed Monthly';
+	$GLOBALS['_PJ_strings']['hourly_rate']				= 'Hourly Rate';
+	$GLOBALS['_PJ_strings']['fixed_amount']				= 'Fixed Amount';
+	$GLOBALS['_PJ_strings']['fixed_hours']				= 'Fixed Hours';
+	$GLOBALS['_PJ_strings']['end_date']					= 'End Date';
+	$GLOBALS['_PJ_strings']['successfully']				= 'successfully';
+	$GLOBALS['_PJ_strings']['rate_amount']				= 'Rate/Amount';
+	$GLOBALS['_PJ_strings']['period']					= 'Period';
+	$GLOBALS['_PJ_strings']['ongoing']					= 'ongoing';
+	$GLOBALS['_PJ_strings']['inactive']					= 'Inactive';
+	$GLOBALS['_PJ_strings']['deactivate']				= 'Deactivate';
+	$GLOBALS['_PJ_strings']['no_contracts_found']		= 'No contracts found for this customer.';
+	$GLOBALS['_PJ_strings']['create_first_contract']	= 'Create first contract';
+	$GLOBALS['_PJ_strings']['confirm_deactivate_contract'] = 'Deactivate this contract?';
+	
+	// Missing basic UI strings
+	$GLOBALS['_PJ_strings']['back']					= 'Back';
+	$GLOBALS['_PJ_strings']['new']						= 'New';
+	$GLOBALS['_PJ_strings']['edit']						= 'Edit';
+	$GLOBALS['_PJ_strings']['update']					= 'Update';
+	$GLOBALS['_PJ_strings']['cancel']					= 'Cancel';
+	$GLOBALS['_PJ_strings']['actions']					= 'Actions';
+	$GLOBALS['_PJ_strings']['status']					= 'Status';
 	$GLOBALS['_PJ_strings']['logged_in_as_admin']		= 'Logged in via admin';
 	$GLOBALS['_PJ_strings']['logo']						= 'Logo';
 	$GLOBALS['_PJ_strings']['logout']					= 'logout';
