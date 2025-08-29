@@ -3,7 +3,7 @@
 ?>
 <!-- inventory/effort/row.ihtml - START -->
 					<TR>
-						<TD COLSPAN="<?php echo (empty($cid) ? 1 : 0) + (empty($pid) ? 1 : 0) + 9; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
+						<TD COLSPAN="<?php echo (empty($cid) ? 1 : 0) + (empty($pid) ? 1 : 0) + 9; ?>"><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
 					</TR>
 					<TR HEIGHT="25">
 						<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>" WIDTH="60" ALIGN="center">
@@ -51,8 +51,8 @@ if($effort->checkUserAccess('write') && ($effort->giveValue('user') == $_PJ_auth
 if($effort->giveValue('note') != '') {
 ?>
 					<TR>
-						<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
-						<TD COLSPAN="<?php echo (empty($cid) ? 1 : 0) + (empty($pid) ? 1 : 0) + 6; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/light-gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
+						<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>"><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
+						<TD COLSPAN="<?php echo (empty($cid) ? 1 : 0) + (empty($pid) ? 1 : 0) + 6; ?>"><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/light-gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
 					</TR><TR>
 						<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>"></TD>
 						<TD COLSPAN="<?php echo (empty($cid) ? 1 : 0) + (empty($pid) ? 1 : 0) + 6; ?>" CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>"><TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">

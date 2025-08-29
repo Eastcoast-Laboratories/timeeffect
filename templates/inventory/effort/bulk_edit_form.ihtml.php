@@ -51,7 +51,7 @@
 					</TD>
 				</TR>
 				<TR>
-					<TD COLSPAN="2"><IMG src="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" HEIGHT="10" WIDTH="1" BORDER="0"></TD>
+					<TD COLSPAN="2"><IMG src="<?php echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" HEIGHT="10" WIDTH="1" BORDER="0"></TD>
 				</TR>
 				
 				<!-- Access Rights Section -->
@@ -423,7 +423,7 @@
 				</TR>
 				
 				<TR>
-					<TD COLSPAN="2"><IMG src="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" HEIGHT="20" WIDTH="1" BORDER="0"></TD>
+					<TD COLSPAN="2"><IMG src="<?php echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" HEIGHT="20" WIDTH="1" BORDER="0"></TD>
 				</TR>
 				
 				<!-- Submit Buttons -->

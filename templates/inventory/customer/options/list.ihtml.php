@@ -11,7 +11,7 @@ if (!isset($pid)) {
 	$pid = '';
 }
 ?>
-		<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0" WIDTH="100%" BACKGROUND="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/option-bg.gif">
+		<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0" WIDTH="100%" BACKGROUND="<?php echo $GLOBALS['_PJ_image_path'] ?>/option-bg.gif">
 			<TR>
 				<TD VALIGN="top">
 				<!-- Modern Tab Navigation -->

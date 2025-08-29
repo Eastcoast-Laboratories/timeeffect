@@ -17,7 +17,7 @@
 		@$sum_customer_remaining_budget	+= (float)$remaining_budget;
 ?>
 	<TR>
-		<TD COLSPAN="10"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="2" BORDER="0" ALIGN="absmiddle"></TD>
+		<TD COLSPAN="10"><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="2" BORDER="0" ALIGN="absmiddle"></TD>
 	</TR><TR HEIGHT="25">
 		<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>"><?php
 		if($customer->count() && $customer->checkUserAccess('read')) {
@@ -27,7 +27,7 @@
 		?><A CLASS="list" HREF="<?= $GLOBALS['_PJ_customer_statistics_script'] . "?cid=".@$cid.'&pid='.@$pid.'&eid='.@$eid."&exc=" . $customer->giveValue('id') ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/triangle-l.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle"></A><?php
 			}
 		} else {
-		?><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle"><?php
+		?><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle"><?php
 		}
 		?>&nbsp;<IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/customer<?php if($customer->giveValue('active') == 'no') print 'i' ?>.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;<?php if($customer->checkUserAccess('read')) { ?><A CLASS="list" HREF="<?= $GLOBALS['_PJ_projects_statistics_script'] . "?list=1&cid=" . $customer->giveValue('id') ?>"><?php } ?><?= $customer->giveValue('customer_name') ?></A></TD>
 		<TD CLASS="listDetail<?php if(isset($rowclass)) echo $rowclass; ?>">&nbsp;</TD>

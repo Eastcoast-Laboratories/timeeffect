@@ -23,7 +23,7 @@ if($cid && $customer->checkUserAccess('new')) {
 					</TR><TR>
 						<TD>&nbsp;</TD>
 					</TR><TR>
-						<TD COLSPAN="3" BGCOLOR="#DDDDDD"><IMG src="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" HEIGHT="1" WIDTH="1" BORDER="0"></TD>
+						<TD COLSPAN="3" BGCOLOR="#DDDDDD"><IMG src="<?php echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" HEIGHT="1" WIDTH="1" BORDER="0"></TD>
 					</TR><TR>
 						<TD>&nbsp;</TD>
 					</TR>
@@ -48,13 +48,13 @@ if($cid && $customer->checkUserAccess('new')) {
 	if(isset($expanded)) unset($expanded['pid']['all']);
 ?>
 					<TR>
-						<TD COLSPAN="10"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
+						<TD COLSPAN="10"><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
 					</TR>
 				</TABLE></TD>
 			</TR><TR>
 				<TD ALIGN="center"><TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="90%">
 					<TR>
-						<TD COLSPAN="2"><IMG src="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" HEIGHT="3" WIDTH="1" BORDER="0"></TD>
+						<TD COLSPAN="2"><IMG src="<?php echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" HEIGHT="3" WIDTH="1" BORDER="0"></TD>
 					</TR><TR>
 						<TD ALIGN="left"><?php
 if(empty($shown['cp'])) {

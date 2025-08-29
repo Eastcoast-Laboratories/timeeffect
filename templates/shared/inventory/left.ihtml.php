@@ -12,7 +12,7 @@
 <div class="modern-nav animate-float">
 	<!-- Logo Section -->
 	<div style="padding: 1.5rem; text-align: center; border-bottom: 1px solid #e5e7eb; margin-bottom: 1rem;">
-		<img src="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/logo_te_150.png" width="120" height="15" border="0" class="animate-glow" style="filter: brightness(1.1);">
+		<img src="<?php echo $GLOBALS['_PJ_image_path'] ?>/logo_te_150.png" width="120" height="15" border="0" class="animate-glow" style="filter: brightness(1.1);">
 	</div>
 	
 	<!-- Navigation Header - Removed per user request -->

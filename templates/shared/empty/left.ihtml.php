@@ -16,23 +16,23 @@
 
 			<TR>
 
-				<TD CLASS="headFrame" COLSPAN="2" HEIGHT="150" VALIGN="top"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/logo_te_150.png" WIDTH="150" HEIGHT="19" BORDER="0" HSPACE="5" VSPACE="0"></TD>
+				<TD CLASS="headFrame" COLSPAN="2" HEIGHT="150" VALIGN="top"><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/logo_te_150.png" WIDTH="150" HEIGHT="19" BORDER="0" HSPACE="5" VSPACE="0"></TD>
 
 			</TR><TR>
 
-				<TD><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="1" HEIGHT="20" BORDER="0"></TD>
+				<TD><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="1" HEIGHT="20" BORDER="0"></TD>
 
 			</TR>
 			<?php if (isset($_PJ_auth) && is_object($_PJ_auth)) { ?>
 			<TR>
 
-				<TD WIDTH="10" ROWSPAN="30"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="10" HEIGHT="1" BORDER="0"></TD>
+				<TD WIDTH="10" ROWSPAN="30"><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="10" HEIGHT="1" BORDER="0"></TD>
 
 				<TD CLASS="leftHead"><?=$GLOBALS['_PJ_strings']['navigation']?></TD>
 
 			</TR><TR>
 
-				<TD><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="<?php if(isset($nav_width)) echo $nav_width; ?>" HEIGHT="1" BORDER="0"></TD>
+				<TD><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="<?php if(isset($nav_width)) echo $nav_width; ?>" HEIGHT="1" BORDER="0"></TD>
 
 			</TR>
 

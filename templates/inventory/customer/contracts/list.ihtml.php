@@ -19,15 +19,15 @@ function translateContractType($type) {
     </TR>
 </TABLE>
 
-<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0" WIDTH="100%" BACKGROUND="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/option-bg.gif">
+<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0" WIDTH="100%" BACKGROUND="<?php echo $GLOBALS['_PJ_image_path'] ?>/option-bg.gif">
     <TR>
         <TD VALIGN="top">
             <TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0">
                 <TR HEIGHT="24">
-                    <TD WIDTH="40"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="40" HEIGHT="1" BORDER="0"></TD>
-                    <TD BACKGROUND="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/option-sb.gif"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/option-bs.gif" BORDER="0"></TD>
-                    <TD CLASS="option" BACKGROUND="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/option-sb.gif">&nbsp;&nbsp;<A CLASS="option" HREF="<?= $GLOBALS['_PJ_customer_inventory_script'] ?>"><?php if(!empty($GLOBALS['_PJ_strings']['back'])) echo $GLOBALS['_PJ_strings']['back'] ?> <?php if(!empty($GLOBALS['_PJ_strings']['to'])) echo $GLOBALS['_PJ_strings']['to'] ?> <?php if(!empty($GLOBALS['_PJ_strings']['customers'])) echo $GLOBALS['_PJ_strings']['customers'] ?></A>&nbsp;&nbsp;</TD>
-                    <TD CLASS="option" BACKGROUND="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/option-sb.gif">&nbsp;&nbsp;<A CLASS="option" HREF="contracts.php?customer_id=<?= $customer_id ?>&action=create"><?php if(!empty($GLOBALS['_PJ_strings']['new_contract'])) echo $GLOBALS['_PJ_strings']['new_contract'] ?></A>&nbsp;&nbsp;</TD>
+                    <TD WIDTH="40"><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="40" HEIGHT="1" BORDER="0"></TD>
+                    <TD BACKGROUND="<?php echo $GLOBALS['_PJ_image_path'] ?>/option-sb.gif"><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/option-bs.gif" BORDER="0"></TD>
+                    <TD CLASS="option" BACKGROUND="<?php echo $GLOBALS['_PJ_image_path'] ?>/option-sb.gif">&nbsp;&nbsp;<A CLASS="option" HREF="<?= $GLOBALS['_PJ_customer_inventory_script'] ?>"><?php if(!empty($GLOBALS['_PJ_strings']['back'])) echo $GLOBALS['_PJ_strings']['back'] ?> <?php if(!empty($GLOBALS['_PJ_strings']['to'])) echo $GLOBALS['_PJ_strings']['to'] ?> <?php if(!empty($GLOBALS['_PJ_strings']['customers'])) echo $GLOBALS['_PJ_strings']['customers'] ?></A>&nbsp;&nbsp;</TD>
+                    <TD CLASS="option" BACKGROUND="<?php echo $GLOBALS['_PJ_image_path'] ?>/option-sb.gif">&nbsp;&nbsp;<A CLASS="option" HREF="contracts.php?customer_id=<?= $customer_id ?>&action=create"><?php if(!empty($GLOBALS['_PJ_strings']['new_contract'])) echo $GLOBALS['_PJ_strings']['new_contract'] ?></A>&nbsp;&nbsp;</TD>
                     <TD>&nbsp;</TD>
                 </TR>
             </TABLE>
@@ -37,7 +37,7 @@ function translateContractType($type) {
 
 <TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0" WIDTH="100%">
     <TR>
-        <TD WIDTH="40"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="40" HEIGHT="1" BORDER="0"></TD>
+        <TD WIDTH="40"><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="40" HEIGHT="1" BORDER="0"></TD>
         <TD VALIGN="top">
 
             <?php if (!empty($errors)): ?>

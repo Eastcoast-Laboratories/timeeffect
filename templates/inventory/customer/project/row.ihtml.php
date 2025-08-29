@@ -1,9 +1,9 @@
 <!-- inventory/customer/project/row.ihtml - START -->
 	<TR>
-		<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
-		<TD COLSPAN="10"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/light-gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
+		<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>"><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
+		<TD COLSPAN="10"><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/light-gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
 	</TR><TR HEIGHT="25">
-		<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;<?php
+		<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>"><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;<?php
 		if($project->count(@$GLOBALS['shown']['be']) && $project->checkUserAccess('read')) {
 			if(isset($expanded) && (!empty($expanded['pid'][$project->giveValue('id')]) || !empty($expanded['cid']['all']))) {
 		?><A CLASS="list" HREF="<?= $GLOBALS['_PJ_customer_inventory_script'] . "?cid=".@$cid.'&pid='.@$pid.'&eid='.@$eid."&cop=" . $project->giveValue('id') ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/triangle-d.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle"></A><?php
@@ -11,7 +11,7 @@
 		?><A CLASS="list" HREF="<?= $GLOBALS['_PJ_customer_inventory_script'] . "?cid=".@$cid.'&pid='.@$pid.'&eid='.@$eid."&exp=" . $project->giveValue('id') ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/triangle-l.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle"></A><?php
 			}
 		} else {
-		?><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle"><?php
+		?><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle"><?php
 		}
 		?>&nbsp;<?php if($project->checkUserAccess('write')) { ?><A CLASS="list" HREF="<?= $GLOBALS['_PJ_projects_inventory_script'] . "?edit=1&cid=" . $project->giveValue('customer_id') . "&pid=" . $project->giveValue('id') ?>"><?php } ?><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/project.gif" BORDER="0" WIDTH="16" HEIGHT="16" ALIGN="absmiddle">&nbsp;<?= $project->giveValue('project_name') ?></A></TD>
 		<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>">&nbsp;</TD>

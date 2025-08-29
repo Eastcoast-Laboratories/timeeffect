@@ -7,14 +7,14 @@
 	<TR>
 		<TD VALIGN="top" CLASS="leftNavi"><TABLE CELLPADDING="3" CELLSPACING="0" BORDER="0">
 			<TR HEIGHT="150">
-				<TD CLASS="headFrame" COLSPAN="2" VALIGN="top"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/logo_te_150.png" WIDTH="150" HEIGHT="19" BORDER="0" HSPACE="5" VSPACE="0"></TD>
+				<TD CLASS="headFrame" COLSPAN="2" VALIGN="top"><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/logo_te_150.png" WIDTH="150" HEIGHT="19" BORDER="0" HSPACE="5" VSPACE="0"></TD>
 			</TR><TR>
-				<TD><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="1" HEIGHT="20" BORDER="0"></TD>
+				<TD><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="1" HEIGHT="20" BORDER="0"></TD>
 			</TR><TR>
-				<TD WIDTH="10" ROWSPAN="30"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="10" HEIGHT="1" BORDER="0"></TD>
+				<TD WIDTH="10" ROWSPAN="30"><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="10" HEIGHT="1" BORDER="0"></TD>
 				<TD CLASS="leftHead"><?=$GLOBALS['_PJ_strings']['navigation']?></TD>
 			</TR><TR>
-				<TD><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="<?php if(isset($nav_width)) echo $nav_width; ?>" HEIGHT="1" BORDER="0"></TD>
+				<TD><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="<?php if(isset($nav_width)) echo $nav_width; ?>" HEIGHT="1" BORDER="0"></TD>
 			</TR>
 			
 			<?php if(isset($invoice_data) && $invoice_data): ?>
@@ -22,7 +22,7 @@
 			<TR>
 				<TD CLASS="leftHead">Invoice #<?= $invoice_data['invoice_number'] ?></TD>
 			</TR><TR>
-				<TD><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="<?php if(isset($nav_width)) echo $nav_width; ?>" HEIGHT="1" BORDER="0"></TD>
+				<TD><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="<?php if(isset($nav_width)) echo $nav_width; ?>" HEIGHT="1" BORDER="0"></TD>
 			</TR>
 			
 			<!-- Customer Navigation -->
@@ -49,14 +49,14 @@
 
 			<!-- Spacer -->
 			<TR>
-				<TD><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="1" HEIGHT="30" BORDER="0"></TD>
+				<TD><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="1" HEIGHT="30" BORDER="0"></TD>
 			</TR>
 
 			<!-- General Navigation -->
 			<TR>
 				<TD CLASS="leftHead"><?php if(!empty($GLOBALS['_PJ_strings']['inventory'])) echo $GLOBALS['_PJ_strings']['inventory'] ?></TD>
 			</TR><TR>
-				<TD><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="<?php if(isset($nav_width)) echo $nav_width; ?>" HEIGHT="1" BORDER="0"></TD>
+				<TD><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="<?php if(isset($nav_width)) echo $nav_width; ?>" HEIGHT="1" BORDER="0"></TD>
 			</TR><TR>
 				<TD><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/customer.gif" WIDTH="16" HEIGHT="16" BORDER="0" ALIGN="absmiddle">&nbsp;<A CLASS="left" HREF="<?= $GLOBALS['_PJ_customer_inventory_script'] ?><?= (isset($invoice_data) && $invoice_data['customer_id']) ? '?cid=' . $invoice_data['customer_id'] : '' ?>"><?php if(!empty($GLOBALS['_PJ_strings']['customers'])) echo $GLOBALS['_PJ_strings']['customers'] ?></A>&nbsp;</TD>
 			</TR><TR>

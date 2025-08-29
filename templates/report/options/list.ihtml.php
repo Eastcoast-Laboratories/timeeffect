@@ -5,11 +5,11 @@
 				<TD class="path"><?php include($GLOBALS['_PJ_root'] . '/templates/shared/path.ihtml.php'); ?></TD>
 			</TR>
 		</TABLE>
-		<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0" WIDTH="100%" BACKGROUND="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/option-bg.gif">
+		<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0" WIDTH="100%" BACKGROUND="<?php echo $GLOBALS['_PJ_image_path'] ?>/option-bg.gif">
 			<TR>
 				<TD VALIGN="top"><TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0">
 					<TR HEIGHT="24">
-						<TD WIDTH="40"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="1" HEIGHT="1" BORDER="0"></TD>
+						<TD WIDTH="40"><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="1" HEIGHT="1" BORDER="0"></TD>
 					</TR>
 				</TABLE></TD>
 			</TR>

@@ -6,15 +6,15 @@
     </TR>
 </TABLE>
 
-<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0" WIDTH="100%" BACKGROUND="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/option-bg.gif">
+<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0" WIDTH="100%" BACKGROUND="<?php echo $GLOBALS['_PJ_image_path'] ?>/option-bg.gif">
     <TR>
         <TD VALIGN="top">
             <TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0">
                 <TR HEIGHT="24">
-                    <TD WIDTH="40"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="40" HEIGHT="1" BORDER="0"></TD>
-                    <TD BACKGROUND="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/option-sb.gif"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/option-bs.gif" BORDER="0"></TD>
-                    <TD CLASS="option" BACKGROUND="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/option-sb.gif">&nbsp;&nbsp;<A CLASS="option" HREF="create.php"><?php if(!empty($GLOBALS['_PJ_strings']['new_invoice'])) echo $GLOBALS['_PJ_strings']['new_invoice']; else echo 'New Invoice'; ?></A>&nbsp;&nbsp;</TD>
-                    <TD CLASS="option" BACKGROUND="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/option-sb.gif">&nbsp;&nbsp;<A CLASS="option" HREF="../index.php"><?php if(!empty($GLOBALS['_PJ_strings']['back_to_main'])) echo $GLOBALS['_PJ_strings']['back_to_main']; else echo 'Back to Main'; ?></A>&nbsp;&nbsp;</TD>
+                    <TD WIDTH="40"><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="40" HEIGHT="1" BORDER="0"></TD>
+                    <TD BACKGROUND="<?php echo $GLOBALS['_PJ_image_path'] ?>/option-sb.gif"><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/option-bs.gif" BORDER="0"></TD>
+                    <TD CLASS="option" BACKGROUND="<?php echo $GLOBALS['_PJ_image_path'] ?>/option-sb.gif">&nbsp;&nbsp;<A CLASS="option" HREF="create.php"><?php if(!empty($GLOBALS['_PJ_strings']['new_invoice'])) echo $GLOBALS['_PJ_strings']['new_invoice']; else echo 'New Invoice'; ?></A>&nbsp;&nbsp;</TD>
+                    <TD CLASS="option" BACKGROUND="<?php echo $GLOBALS['_PJ_image_path'] ?>/option-sb.gif">&nbsp;&nbsp;<A CLASS="option" HREF="../index.php"><?php if(!empty($GLOBALS['_PJ_strings']['back_to_main'])) echo $GLOBALS['_PJ_strings']['back_to_main']; else echo 'Back to Main'; ?></A>&nbsp;&nbsp;</TD>
                     <TD>&nbsp;</TD>
                 </TR>
             </TABLE>
@@ -24,7 +24,7 @@
 
 <TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0" WIDTH="100%">
     <TR>
-        <TD WIDTH="40"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="40" HEIGHT="1" BORDER="0"></TD>
+        <TD WIDTH="40"><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" WIDTH="40" HEIGHT="1" BORDER="0"></TD>
         <TD VALIGN="top">
 
             <!-- Filters -->

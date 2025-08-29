@@ -32,7 +32,7 @@ print PJAuth::assembleFormFields(NULL, NULL, array('password', 'username'));
 	<div class="card">
 		<div class="card-header">
 			<h1 class="card-title" style="text-align: center; display: flex; align-items: center; justify-content: center; gap: 1rem;">
-				<img src="<?php if(!empty($GLOBALS['_PJ_image_path'])) echo $GLOBALS['_PJ_image_path'] ?>/login-welcome.gif" height="40" id="welcomeImage" width="36" border="0" style="display: none;">
+				<img src="<?php echo $GLOBALS['_PJ_image_path'] ?>/login-welcome.gif" height="40" id="welcomeImage" width="36" border="0" style="display: none;">
 				<?=$GLOBALS['_PJ_strings']['login-welcome']?>
 			</h1>
 		</div>
