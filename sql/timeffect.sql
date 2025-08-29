@@ -69,6 +69,7 @@ CREATE TABLE `customer` (
   `active` enum('yes','no') NOT NULL default 'yes',
   `customer_name` varchar(64) NOT NULL default '',
   `customer_desc` text,
+  `customer_address` text NULL,
   `customer_budget` int(10) unsigned NOT NULL default '0',
   `customer_budget_currency` enum('$','EUR','USD') NOT NULL default '$',
   `customer_logo` varchar(255) default NULL,
@@ -218,11 +219,30 @@ CREATE TABLE `rate` (
 # --------------------------------------------------------
 
 #
+# Tabellenstruktur fuer Tabelle `login_attempts`
+#
+
+DROP TABLE IF EXISTS `<%db_prefix%>login_attempts`;
+CREATE TABLE `<%db_prefix%>login_attempts` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `ip_address` varchar(45) NOT NULL COMMENT 'IP address of the attempt (IPv4 or IPv6)',
+  `username` varchar(50) NOT NULL default '' COMMENT 'Username attempted',
+  `attempt_time` timestamp NOT NULL default CURRENT_TIMESTAMP COMMENT 'When the attempt occurred',
+  `success` tinyint(1) NOT NULL default 0 COMMENT '1 for successful login, 0 for failed',
+  PRIMARY KEY  (`id`),
+  KEY `ip_time` (`ip_address`, `attempt_time`),
+  KEY `username_time` (`username`, `attempt_time`),
+  KEY `attempt_time` (`attempt_time`)
+) ENGINE=MyISAM COMMENT='Tracks login attempts for brute force protection';
+
+# --------------------------------------------------------
+
+#
 # Tabellenstruktur fuer Tabelle `customer_contracts`
 #
 
-DROP TABLE IF EXISTS `customer_contracts`;
-CREATE TABLE `customer_contracts` (
+DROP TABLE IF EXISTS `<%db_prefix%>customer_contracts`;
+CREATE TABLE `<%db_prefix%>customer_contracts` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `customer_id` int(11) unsigned NOT NULL,
   `project_id` int(11) unsigned NULL,

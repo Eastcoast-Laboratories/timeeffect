@@ -147,6 +147,20 @@ class InvoicePDFGenerator {
             return;
         }
         
+        // Add logo if available
+        if (!empty($user_data['invoice_logo_path']) && file_exists($_SERVER['DOCUMENT_ROOT'] . $user_data['invoice_logo_path'])) {
+            $logo_path = $_SERVER['DOCUMENT_ROOT'] . $user_data['invoice_logo_path'];
+            $this->pdf->Image($logo_path, 30, $this->pdf->GetY(), 50, 0); // Auto height, max width 50
+            $this->pdf->Ln(30); // Space after logo
+        }
+        
+        // Add letterhead if available
+        if (!empty($user_data['invoice_letterhead_path']) && file_exists($_SERVER['DOCUMENT_ROOT'] . $user_data['invoice_letterhead_path'])) {
+            $letterhead_path = $_SERVER['DOCUMENT_ROOT'] . $user_data['invoice_letterhead_path'];
+            $this->pdf->Image($letterhead_path, 30, $this->pdf->GetY(), 0, 40); // Auto width, max height 40
+            $this->pdf->Ln(45); // Space after letterhead
+        }
+        
         // PDF generation code using FPDF
         $this->pdf->SetFont('Arial', 'B', 16);
         $this->pdf->SetX($this->pdf->GetPageWidth() - 200);
@@ -508,6 +522,13 @@ class InvoicePDFGenerator {
                 $this->pdf->SetX(30);
                 $this->pdf->Cell(200, 12, mb_convert_encoding('BIC: ' . $footer_content['bank_details']['bank_bic'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
             }
+        }
+        
+        // Add footer image if available
+        if (!empty($user_data['invoice_footer_path']) && file_exists($_SERVER['DOCUMENT_ROOT'] . $user_data['invoice_footer_path'])) {
+            $footer_path = $_SERVER['DOCUMENT_ROOT'] . $user_data['invoice_footer_path'];
+            $this->pdf->Ln(10); // Space before footer image
+            $this->pdf->Image($footer_path, 30, $this->pdf->GetY(), 0, 30); // Auto width, max height 30
         }
     }
     
