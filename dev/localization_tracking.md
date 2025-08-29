@@ -12,28 +12,28 @@ keine fallbacks!!!
 
 ### PHP Files with User-Facing Text:
 - ✅ inventory/contracts.php
-- ❌ inventory/projects.php  
-- ❌ invoice/create.php
-- ❌ invoice/edit.php
-- ❌ invoice/index.php
-- ❌ invoice/reminders.php
-- ❌ invoice/view.php
-- ❌ user/settings.php
+- ✅ inventory/projects.php  
+- ✅ invoice/create.php
+- ✅ invoice/edit.php
+- ✅ invoice/index.php
+- ✅ invoice/reminders.php
+- ✅ invoice/view.php
+- ✅ user/settings.php
 
 ### Template Files:
 - ✅ templates/inventory/customer/contracts.ihtml.php
-- ❌ templates/invoice/edit_form.ihtml.php
-- ❌ templates/invoice/form.ihtml.php
-- ❌ templates/invoice/list.ihtml.php
-- ❌ templates/invoice/reminders.ihtml.php
-- ❌ templates/invoice/view.ihtml.php
+- ✅ templates/invoice/edit_form.ihtml.php
+- ✅ templates/invoice/form.ihtml.php
+- ✅ templates/invoice/list.ihtml.php
+- ✅ templates/invoice/reminders.ihtml.php
+- ✅ templates/invoice/view.ihtml.php
 - ❌ templates/report/list.ihtml.php
-- ❌ templates/user/form.ihtml.php
+- ✅ templates/user/form.ihtml.php
 
 ### AJAX Files:
-- ❌ invoice/ajax/preview.php
-- ❌ invoice/ajax/reminder_preview.php
-- ❌ invoice/ajax/schedule_reminders.php
+- ✅ invoice/ajax/preview.php
+- ✅ invoice/ajax/reminder_preview.php
+- ✅ invoice/ajax/schedule_reminders.php
 
 ### Test Files (Lower Priority):
 not needed

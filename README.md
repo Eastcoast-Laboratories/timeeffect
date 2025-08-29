@@ -1,53 +1,101 @@
 TIMEEFFECT
 ==========
 
-TIMEEFFECT is a PHP/MySQL based, multi user time tracking system for recording time
-employees spent on different projects. It includes facilities to manage agents,
-customers and projects.
-Users may generate reports and statistics as well as accounting reports in CSV 
-and PDF format. This project has been refactored to PHP 8 and has moved to 
-GitHub from Sourceforge, where you can see some sample 
-images: https://sourceforge.net/projects/timeeffect/
+**Modern PHP 8.4 Time Tracking & Project Management System**
 
-The aim of TIMEEFECT is to provide project participants with time recording possibilities.
+TIMEEFFECT is a comprehensive, multi-user time tracking and project management system designed for teams and businesses. Built with modern PHP 8.4 and featuring a responsive web interface, it provides complete solutions for time tracking, customer management, invoicing, and reporting.
 
- - First: project workers are able to track their personal
-   efforts spent on the several projects they are involved.
- - Second: project managers are able to view statistics about
-   the amount of efforts spent on specific projects/customers.
- - Third: project accounters are able to extract accounting
-   information about the projects for creation of invoices.
+## Key Features
 
-# 1. Dependencies
-To run TIMEEFFECT you need a working MySQL database server (version 3.23 or higher).
+### 🕒 **Time Tracking**
+- Start/stop time tracking with precise effort logging
+- Bulk editing capabilities for multiple time entries
+- Project-based time allocation and categorization
+- Real-time tracking with automatic calculations
 
-Furthermore you need a running a webserver with PHP 8.4 or use docker.
+### 👥 **Multi-User Management**
+- Role-based access control (admin, user, agent permissions)
+- Team and group management with hierarchical permissions
+- Individual user settings and preferences
+- Secure authentication with brute force protection
 
-# 2. Preparation
-## 2.1 MySQL
-Before you actually install the TIMEEFFECT package you have to create a new
-database and a database user with SELECT, INSERT, UPDATE and DELETE rights on
-the created database within your MySQL system.
-By default the prepared database name is `timeffect_db`, the appropriate user
-is `timeeffect` with the password `very_unsecure_timeeffect_PW1`. If you stick
-to those parameters you won't have to change the data during the installation of
-the system but it is recommended to select a secure password before you go live.
+### 📊 **Project & Customer Management**
+- Complete customer database with contact information
+- Project management with contracts and rate definitions
+- Customer-specific billing rates and terms
+- Project profitability analysis and tracking
 
-## 2.2	 PHP
-To have TIMEEFFECT running you need to set the value of the directive
-`short_open_tag` in your php.ini to `On` (`short_open_tag = On`). You can figure
-out where your `php.ini` is located by creating a php script with the following
-content: `<?php phpinfo(); ?>`.
-By opening this script in your browser you will get a detailed overview of your
-PHP settings.
+### 🧾 **Professional Invoicing**
+- Automated PDF invoice generation with custom branding
+- Multi-language invoice support (German, English, French)
+- Automated payment reminders and follow-up system
+- Customizable invoice templates with logo and letterhead
 
-# 3. Installation
-extract the contents of this repository in a directory which is located under
-the document root of your web server. Then follow [DEPLOYMENT.md](../DEPLOYMENT.md)
+### 📈 **Reporting & Analytics**
+- Comprehensive time reports in CSV and PDF formats
+- Project profitability and performance analytics
+- Team productivity insights and statistics
+- Customizable reporting periods and filters
 
-# 4. Customizing
-After Installation you can further edit the generated file `include/config.inc.php` and `.env`
-which is located in the root directory.
+### 🌐 **Modern Interface**
+- Responsive design for desktop, tablet, and mobile
+- Dark mode support with automatic theme switching
+- Multi-language interface (DE, EN, FR)
+- Modern CSS with accessibility features
+
+### 🔒 **Enterprise Security**
+- Session-based authentication with configurable timeout
+- Brute force protection with progressive delays
+- Role-based access control for data protection
+- Secure password reset and user registration
+
+## Quick Start
+
+### 🐳 **Docker (Recommended)**
+```bash
+git clone https://github.com/rubo77/timeeffect.git
+cd docker
+docker-compose up -d
+```
+
+Install with https://localhost/install/
+
+Then access at: https://localhost (admin/admin)
+
+### 📋 **Manual Installation**
+1. **Requirements**: PHP 8.4+, MySQL 5.7+, Apache/Nginx
+2. **Setup**: Copy `.env.example` to `.env` and configure database
+3. **Install**: Run web installer at `/install/` or use `migrate.php`
+4. **Configure**: Edit `.env` for production settings
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed installation instructions.
+
+## System Requirements
+
+- **PHP**: 8.4+ with extensions: mysqli, gd, mbstring, json
+- **Database**: MySQL 5.7+ or MariaDB 10.3+
+- **Web Server**: Apache 2.4+ or Nginx 1.18+
+- **Browser**: Modern browsers with JavaScript enabled
+
+## Configuration
+
+### Environment Variables (`.env`)
+```bash
+# Database Configuration
+DB_HOST=localhost
+DB_NAME=timeeffect_db
+DB_USER=timeeffect
+DB_PASS=your_secure_password
+
+# Application Settings
+APP_ENV=production
+APP_DEBUG=false
+CURRENCY=EUR
+TIMEZONE=Europe/Berlin
+```
+
+### PHP Configuration
+Ensure `short_open_tag = On` in your `php.ini` for legacy template compatibility.
 
 -----
 

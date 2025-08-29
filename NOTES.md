@@ -1,3 +1,49 @@
+# TIMEEFFECT Release Notes
+
+## Current Version: Modern PHP 8.4 Release
+
+**Major Modernization Update** - This version represents a complete modernization of the TIMEEFFECT codebase:
+
+### 🚀 **Modern Infrastructure**
+- **PHP 8.4 Compatibility**: Full upgrade from legacy PHP versions
+- **Composer Dependencies**: Modern dependency management with Doctrine DBAL, Symfony components
+- **Docker Support**: Complete containerization with docker-compose setup
+- **Environment Configuration**: `.env` file-based configuration system
+
+### 🎨 **User Interface Overhaul**
+- **Responsive Design**: Mobile-first responsive interface
+- **Dark Mode Support**: Automatic and manual theme switching
+- **Modern CSS**: Updated styling with CSS custom properties
+- **Accessibility**: Improved accessibility features and ARIA support
+
+### 🔧 **New Features**
+- **Professional Invoicing**: Complete PDF invoice system with custom branding
+- **Automated Reminders**: Payment reminder system with scheduling
+- **Bulk Operations**: Bulk editing capabilities for time entries
+- **Multi-language Support**: German, English, and French localization
+- **Advanced Security**: Brute force protection and enhanced authentication
+
+### 🛠 **Technical Improvements**
+- **Database Migrations**: Automated migration system for schema updates
+- **Modern Authentication**: Session-based auth with configurable security
+- **Logging System**: Comprehensive logging with Monolog
+- **Performance Optimization**: Improved database queries and caching
+
+### 📊 **Enhanced Reporting**
+- **PDF Reports**: Professional PDF generation with custom layouts
+- **CSV Export**: Enhanced CSV export functionality
+- **Statistics Dashboard**: Improved analytics and reporting interface
+- **Project Analytics**: Detailed project profitability analysis
+
+---
+
+## Legacy Release History
+
+*The following are historical release notes from the original TIMEEFFECT versions (1.1.x series). These are preserved for reference but are no longer applicable to the current modern version.*
+
+### Historical Note
+All versions prior to the current PHP 8.4 release are considered legacy and are no longer supported. The modern version includes all features from previous releases plus significant new functionality and security improvements.
+
 NOTES.1_1_0_13.
 =================
 

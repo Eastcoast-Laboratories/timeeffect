@@ -7,11 +7,12 @@ This document provides a comprehensive overview of the TimeEffect application st
 TimeEffect is a **PHP/MySQL-based multi-user time tracking system** designed for recording time employees spend on different projects. The application has been modernized from legacy PEAR code to **PHP 8.4** with modern **Composer dependencies** while maintaining backward compatibility.
 
 ### Core Functionality
-- **Time Tracking**: Record time spent on projects with detailed effort logging
-- **Project Management**: Manage customers, projects, and team assignments
-- **User Management**: Multi-user system with role-based access control
-- **Reporting**: Generate CSV and PDF reports for billing and analysis
-- **Statistics**: View project statistics and time analytics
+- **Time Tracking**: Precise time tracking with start/stop functionality and bulk editing capabilities
+- **Project Management**: Complete customer and project management with contracts and rate definitions
+- **User Management**: Multi-user system with role-based access control and team management
+- **Professional Invoicing**: Automated PDF invoice generation with custom branding and payment reminders
+- **Reporting & Analytics**: Comprehensive reports and statistics in CSV and PDF formats
+- **Modern Interface**: Responsive design with dark mode support and multi-language localization
 
 ## Directory Structure
 
@@ -28,6 +29,7 @@ timeeffect/
 ├── 📁 include/               # Core PHP libraries and compatibility layers
 ├── 📁 install/               # Installation wizard and database setup
 ├── 📁 inventory/             # Core business logic (customers, projects, efforts)
+├── 📁 invoice/               # Professional invoicing system with PDF generation
 ├── 📁 js/                    # JavaScript files and client-side logic
 ├── 📁 report/                # Report generation functionality
 ├── 📁 sql/                   # Database migrations and schema files
