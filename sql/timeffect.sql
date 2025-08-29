@@ -5,8 +5,8 @@
 # Tabellenstruktur fuer Tabelle `auth`
 #
 
-DROP TABLE IF EXISTS `auth`;
-CREATE TABLE `auth` (
+DROP TABLE IF EXISTS `<%db_prefix%>auth`;
+CREATE TABLE `<%db_prefix%>auth` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `permissions` varchar(255) NOT NULL default '',
   `gids` varchar(255) NOT NULL default '',
@@ -22,6 +22,24 @@ CREATE TABLE `auth` (
   `confirmation_token` varchar(64) default NULL,
   `reset_token` varchar(64) default NULL,
   `reset_expires` datetime default NULL,
+  `theme_preference` varchar(10) default 'system',
+  `company_name` varchar(255) NULL,
+  `company_address` text NULL,
+  `company_postal_code` varchar(20) NULL,
+  `company_city` varchar(100) NULL,
+  `company_country` varchar(100) NULL,
+  `tax_number` varchar(50) NULL,
+  `vat_number` varchar(50) NULL,
+  `bank_name` varchar(100) NULL,
+  `bank_iban` varchar(34) NULL,
+  `bank_bic` varchar(11) NULL,
+  `invoice_logo_path` varchar(255) NULL,
+  `invoice_letterhead_path` varchar(255) NULL,
+  `invoice_footer_path` varchar(255) NULL,
+  `invoice_number_format` varchar(50) default 'R-{YYYY}-{MM}-{###}',
+  `default_vat_rate` decimal(5,2) default '19.00',
+  `payment_terms_days` int(11) default '14',
+  `payment_terms_text` text NULL,
   PRIMARY KEY  (`id`),
   KEY `gids` (`gids`),
   KEY `username` (`username`,`password`),
@@ -33,7 +51,7 @@ CREATE TABLE `auth` (
 # Daten fuer Tabelle `auth`
 #
 
-INSERT INTO `auth` VALUES (1, 'admin,agent', '', 1, '<%admin_user%>', '<%admin_password%>', 'Administrator', '', '', '', '');
+INSERT INTO `<%db_prefix%>auth` VALUES (1, 'admin,agent', '', 1, '<%admin_user%>', '<%admin_password%>', 'Administrator', '', '', '', '', 1, NULL, NULL, NULL, 'system', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'R-{YYYY}-{MM}-{###}', 19.00, 14, NULL);
 
 # --------------------------------------------------------
 

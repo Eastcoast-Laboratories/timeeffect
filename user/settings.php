@@ -54,7 +54,8 @@
 		$invoice_fields = [
 			'company_name', 'company_address', 'company_postal_code', 'company_city', 'company_country',
 			'tax_number', 'vat_number', 'bank_name', 'bank_iban', 'bank_bic',
-			'invoice_number_format', 'default_vat_rate', 'payment_terms_days', 'payment_terms_text'
+			'invoice_number_format', 'default_vat_rate', 'payment_terms_days', 'payment_terms_text',
+			'invoice_logo_path', 'invoice_letterhead_path', 'invoice_footer_path'
 		];
 		
 		$invoice_updates = [];

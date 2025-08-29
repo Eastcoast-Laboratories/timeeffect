@@ -146,7 +146,11 @@
 							<INPUT TYPE="text" NAME="invoice_footer_path" VALUE="<?php echo htmlspecialchars($user->giveValue('invoice_footer_path') ?? ''); ?>" SIZE="50" MAXLENGTH="255" id="footer_path">
 							<INPUT TYPE="file" id="footer_upload" accept="image/*" style="display:none;">
 							<BUTTON TYPE="button" onclick="document.getElementById('footer_upload').click();"><?php if(!empty($GLOBALS['_PJ_strings']['upload'])) echo $GLOBALS['_PJ_strings']['upload']; else echo 'Upload'; ?></BUTTON>
-							<div id="footer_preview"></div>
+							<div id="footer_preview">
+								<?php if($user->giveValue('invoice_footer_path')): ?>
+									<img src="<?php echo htmlspecialchars($user->giveValue('invoice_footer_path')); ?>" style="max-width:100px;max-height:50px;margin-top:5px;">
+								<?php endif; ?>
+							</div>
 						</TD>
 					</TR><TR>
 						<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['city'])) echo $GLOBALS['_PJ_strings']['city']; else echo 'City'; ?></TD>
@@ -166,18 +170,26 @@
 					</TR><TR>
 						<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['logo_path'])) echo $GLOBALS['_PJ_strings']['logo_path']; else echo 'Logo Path'; ?></TD>
 						<TD CLASS="content">
-							<input type="text" name="invoice_logo_path" value="<?php echo htmlspecialchars($invoice_logo_path ?? '') ?>" size="50" maxlength="255" id="logo_path">
+							<input type="text" name="invoice_logo_path" value="<?php echo htmlspecialchars($user->giveValue('invoice_logo_path') ?? '') ?>" size="50" maxlength="255" id="logo_path">
 							<input type="file" id="logo_upload" accept="image/*" style="display:none;">
 							<button type="button" onclick="document.getElementById('logo_upload').click();"><?php if(!empty($GLOBALS['_PJ_strings']['upload'])) echo $GLOBALS['_PJ_strings']['upload']; else echo 'Upload'; ?></button>
-							<div id="logo_preview"></div>
+							<div id="logo_preview">
+								<?php if($user->giveValue('invoice_logo_path')): ?>
+									<img src="<?php echo htmlspecialchars($user->giveValue('invoice_logo_path')); ?>" style="max-width:100px;max-height:50px;margin-top:5px;">
+								<?php endif; ?>
+							</div>
 						</TD>
 					</TR><TR>
 						<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['letterhead_path'])) echo $GLOBALS['_PJ_strings']['letterhead_path']; else echo 'Letterhead Path'; ?></TD>
 						<TD CLASS="content">
-							<input type="text" name="invoice_letterhead_path" value="<?php echo htmlspecialchars($invoice_letterhead_path ?? '') ?>" size="50" maxlength="255" id="letterhead_path">
+							<input type="text" name="invoice_letterhead_path" value="<?php echo htmlspecialchars($user->giveValue('invoice_letterhead_path') ?? '') ?>" size="50" maxlength="255" id="letterhead_path">
 							<input type="file" id="letterhead_upload" accept="image/*" style="display:none;">
 							<button type="button" onclick="document.getElementById('letterhead_upload').click();"><?php if(!empty($GLOBALS['_PJ_strings']['upload'])) echo $GLOBALS['_PJ_strings']['upload']; else echo 'Upload'; ?></button>
-							<div id="letterhead_preview"></div>
+							<div id="letterhead_preview">
+								<?php if($user->giveValue('invoice_letterhead_path')): ?>
+									<img src="<?php echo htmlspecialchars($user->giveValue('invoice_letterhead_path')); ?>" style="max-width:100px;max-height:50px;margin-top:5px;">
+								<?php endif; ?>
+							</div>
 						</TD>
 					</TR><TR>
 						<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['iban'])) echo $GLOBALS['_PJ_strings']['iban']; else echo 'IBAN'; ?></TD>

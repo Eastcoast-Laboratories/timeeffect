@@ -130,7 +130,7 @@ class InvoicePDFGenerator {
      */
     private function generateHeader($user_data, $invoice) {
         $header_content = array(
-            'company_name' => $user_data['company_name'] ?: $user_data['name'] ?: 'Company Name',
+            'company_name' => $user_data['company_name'] ?: (($user_data['firstname'] ?? '') . ' ' . ($user_data['lastname'] ?? '')) ?: 'Company Name',
             'company_address' => $user_data['company_address'] ?: '',
             'company_location' => trim(($user_data['company_postal_code'] ?: '') . ' ' . ($user_data['company_city'] ?: '')),
             'company_country' => $user_data['company_country'] ?: '',
