@@ -27,7 +27,7 @@ keine fallbacks!!!
 - ✅ templates/invoice/list.ihtml.php
 - ✅ templates/invoice/reminders.ihtml.php
 - ✅ templates/invoice/view.ihtml.php
-- ❌ templates/report/list.ihtml.php
+- ✅ templates/report/list.ihtml.php
 - ✅ templates/user/form.ihtml.php
 
 ### AJAX Files:
