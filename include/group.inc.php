@@ -183,26 +183,6 @@ class Group {
     }
 
     function save() {
-        // Debug-Logging für Request und Session
-        $log_dir = __DIR__ . '/../logs';
-        if (!is_dir($log_dir)) {
-            mkdir($log_dir, 0755, true);
-        }
-        
-        $log_file = $log_dir . '/group_debug.log';
-        $timestamp = date('Y-m-d H:i:s');
-        $log_data = [
-            'POST' => $_POST,
-            'GET' => $_GET,
-            'REQUEST' => $_REQUEST,
-            'this_data' => $this->data,
-            'session_status' => session_status(),
-            'session_id' => session_id(),
-            'cookies' => $_COOKIE
-        ];
-        $log_entry = "[$timestamp] Group save() method called | " . json_encode($log_data, JSON_UNESCAPED_SLASHES) . "\n";
-        file_put_contents($log_file, $log_entry, FILE_APPEND);
-        
         // Versuch, Daten aus dem Request direkt zu holen, wenn sie nicht in $this->data sind
         if ((!isset($this->data['name']) || $this->data['name'] == '') && isset($_REQUEST['name']) && $_REQUEST['name'] != '') {
             $this->data['name'] = $_REQUEST['name'];

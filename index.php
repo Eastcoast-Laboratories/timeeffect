@@ -1,4 +1,63 @@
 <?php
+    // Check if Composer dependencies are installed
+    if (!is_dir(__DIR__ . '/vendor') || !file_exists(__DIR__ . '/vendor/autoload.php')) {
+        ?>
+        <!DOCTYPE html>
+        <html lang="de">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>TimeEffect - Dependencies Missing</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+                .error-container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+                .error-header { color: #d32f2f; font-size: 24px; margin-bottom: 20px; }
+                .command-box { background: #f8f8f8; border: 1px solid #ddd; padding: 15px; border-radius: 4px; font-family: monospace; margin: 15px 0; }
+                .warning { background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 15px; border-radius: 4px; margin: 15px 0; }
+            </style>
+        </head>
+        <body>
+            <div class="error-container">
+                <div class="error-header">⚠️ TimeEffect - Composer Dependencies Missing</div>
+                
+                <div class="warning">
+                    <strong>Missing Dependencies:</strong> The <code>vendor/</code> directory is missing or incomplete.
+                    TimeEffect requires Composer dependencies to function properly.
+                </div>
+                
+                <h3>Required Action:</h3>
+                <p>Please run the following command in the TimeEffect directory:</p>
+                
+                <div class="command-box">
+                    composer install --no-dev --optimize-autoloader
+                </div>
+                
+                <h3>Installation Steps:</h3>
+                <ol>
+                    <li>Navigate to your TimeEffect directory:
+                        <div class="command-box">cd <?= __DIR__ ?></div>
+                    </li>
+                    <li>Install Composer dependencies:
+                        <div class="command-box">composer install --no-dev --optimize-autoloader</div>
+                    </li>
+                    <li>Refresh this page</li>
+                </ol>
+                
+                <h3>If Composer is not installed:</h3>
+                <div class="command-box">
+                    # Install Composer<br>
+                    curl -sS https://getcomposer.org/installer | php<br>
+                    mv composer.phar /usr/local/bin/composer
+                </div>
+                
+                <p><strong>Note:</strong> This is a one-time setup required for TimeEffect to function properly.</p>
+            </div>
+        </body>
+        </html>
+        <?php
+        exit;
+    }
+
     require_once(__DIR__ . "/bootstrap.php");
 	$no_login = true; // Disable automatic login requirement
 	include_once("include/config.inc.php");
