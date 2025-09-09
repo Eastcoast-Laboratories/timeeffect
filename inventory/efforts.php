@@ -19,12 +19,41 @@
 		// Get all open efforts for the current user
 		$open_efforts = new OpenEfforts($_PJ_auth);
 		$stopped_count = 0;
+		$stopped_efforts_details = [];
 		
 		if($open_efforts->effortCount() > 0) {
 			$open_efforts->reset();
 			while($open_efforts->nextEffort()) {
 				$open_effort = $open_efforts->giveEffort();
 				if($open_effort->checkUserAccess('write')) {
+					// Collect effort details before stopping
+					$effort_id = $open_effort->giveValue('id');
+					$effort_description = $open_effort->giveValue('description');
+					// Get project and customer names safely
+					$project_id = $open_effort->giveValue('project_id');
+					
+					$customer_name = 'Kein Kunde';
+					$project_name = 'Kein Projekt';
+					
+					if($project_id && $project_id > 0) {
+						$project = new Project($project_id, $_PJ_auth);
+						$project_name = $project->giveValue('project_name');
+						
+						// Get customer from project
+						$customer_id = $project->giveValue('customer_id');
+						if($customer_id && $customer_id > 0) {
+							$customer = new Customer($customer_id, $_PJ_auth);
+							$customer_name = $customer->giveValue('customer_name');
+						}
+					}
+					
+					$stopped_efforts_details[] = [
+						'id' => $effort_id,
+						'description' => $effort_description,
+						'customer' => $customer_name,
+						'project' => $project_name
+					];
+					
 					$open_effort->stop();
 					$stopped_count++;
 				}
@@ -35,9 +64,32 @@
 		$favicon = '/images/stop.png';
 		// Use modern template structure
 		$center_title = $GLOBALS['_PJ_strings']['activities_stopped'];
-		if ($stopped_count==0) $info_message = $GLOBALS['_PJ_strings']['no_activities_stopped'];
-		else if ($stopped_count==1) $success_message = $GLOBALS['_PJ_strings']['one_activity_stopped'];
-		else $success_message = sprintf($GLOBALS['_PJ_strings']['multiple_activities_stopped'], $stopped_count);
+		
+		if ($stopped_count == 0) {
+			$info_message = $GLOBALS['_PJ_strings']['no_activities_stopped'];
+		} else {
+			if ($stopped_count == 1) {
+				$success_message = $GLOBALS['_PJ_strings']['one_activity_stopped'];
+			} else {
+				$success_message = sprintf($GLOBALS['_PJ_strings']['multiple_activities_stopped'], $stopped_count);
+			}
+			
+			// Add detailed list of stopped efforts
+			$success_message .= '<br><br><strong>' . $GLOBALS['_PJ_strings']['stopped_efforts_details'] . ':</strong><ul>';
+			foreach($stopped_efforts_details as $effort) {
+				$edit_link = "efforts.php?edit=1&eid=" . $effort['id'];
+				$success_message .= '<li>';
+				$success_message .= '<a href="' . $edit_link . '" style="text-decoration: none; color: #007bff;">';
+				$success_message .= '<strong>' . htmlspecialchars($effort['customer'] ?? '') . ' - ' . htmlspecialchars($effort['project'] ?? '') . '</strong>';
+				$success_message .= '</a>';
+				if (!empty($effort['description'])) {
+					$success_message .= ': ' . htmlspecialchars($effort['description']);
+				}
+				$success_message .= ' <small style="color: #666;">(' . $GLOBALS['_PJ_strings']['click_to_edit'] . ')</small>';
+				$success_message .= '</li>';
+			}
+			$success_message .= '</ul>';
+		}
 
 		include("$_PJ_root/templates/note.ihtml.php");
 		include_once("$_PJ_include_path/degestiv.inc.php");

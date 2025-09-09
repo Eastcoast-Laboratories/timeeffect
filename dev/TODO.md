@@ -12,3 +12,12 @@
 4. index.php: "Improve project profitability analysis"  ist vielleicht noch irreführend
 
 5. Invoice verbessern
+
+6. 
+bei http://localhost/inventory/efforts.php?stop_all=1
+
+auch die beschreibungen  auflisten mit links zum bearbeiten ders efforts , welche efforts gestoppt wurden (localized)@efforts.php#L17-45 
+
+7.
+
+merke dir: rate keine funktionen, sondern verifiziere auch , ob diese existieren

@@ -48,6 +48,8 @@
 	$GLOBALS['_PJ_strings']['customer_list']			= 'Liste de clients';
 	$GLOBALS['_PJ_strings']['customer_rates_data']		= 'Taux';
 	$GLOBALS['_PJ_strings']['customers']				= 'Clients';
+	$GLOBALS['_PJ_strings']['stopped_efforts_details']	= 'Activités arrêtées';
+	$GLOBALS['_PJ_strings']['click_to_edit']			= 'Cliquer pour modifier';
 	$GLOBALS['_PJ_strings']['customer_required']		= 'Client requis';
 	$GLOBALS['_PJ_strings']['period_start_required']	= 'Début de période requis';
 	$GLOBALS['_PJ_strings']['period_end_required']		= 'Fin de période requise';

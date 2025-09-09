@@ -48,6 +48,9 @@
 	$GLOBALS['_PJ_strings']['customer_list']			= 'Kundenliste';
 	$GLOBALS['_PJ_strings']['customer_rates_data']		= 'Tarife';
 	$GLOBALS['_PJ_strings']['customers']				= 'Kunden';
+	$GLOBALS['_PJ_strings']['stopped_efforts_details']	= 'Gestoppte Aktivitäten';
+	$GLOBALS['_PJ_strings']['click_to_edit']			= 'Zum Bearbeiten klicken';
+	$GLOBALS['_PJ_strings']['no_project']				= 'Kein Projekt';
 	$GLOBALS['_PJ_strings']['customer_required']		= 'Kunde ist erforderlich';
 	$GLOBALS['_PJ_strings']['period_start_required']	= 'Zeitraum Start ist erforderlich';
 	$GLOBALS['_PJ_strings']['period_end_required']		= 'Zeitraum Ende ist erforderlich';

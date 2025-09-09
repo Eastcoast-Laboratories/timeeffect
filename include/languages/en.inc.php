@@ -48,6 +48,8 @@
 	$GLOBALS['_PJ_strings']['customer_list']			= 'Customer list';
 	$GLOBALS['_PJ_strings']['customer_rates_data']		= 'Rates';
 	$GLOBALS['_PJ_strings']['customers']				= 'Customers';
+	$GLOBALS['_PJ_strings']['stopped_efforts_details']	= 'Stopped Activities';
+	$GLOBALS['_PJ_strings']['click_to_edit']			= 'Click to edit';
 	$GLOBALS['_PJ_strings']['customer_required']		= 'Customer is required';
 	$GLOBALS['_PJ_strings']['period_start_required']	= 'Period start is required';
 	$GLOBALS['_PJ_strings']['period_end_required']		= 'Period end is required';
