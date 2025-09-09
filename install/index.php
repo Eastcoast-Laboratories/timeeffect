@@ -28,6 +28,13 @@ if($step > 1) {
 	$thousands_seperator = $_POST['thousands_seperator'] ?? '.';
 	$session_length = $_POST['session_length'] ?? '36000';
 	$allow_delete = $_POST['allow_delete'] ?? '1';
+	
+	// Extract registration variables from POST data
+	$allow_registration = $_POST['allow_registration'] ?? 'false';
+	$registration_email_confirm = $_POST['registration_email_confirm'] ?? 'false';
+	$allow_password_recovery = $_POST['allow_password_recovery'] ?? 'true';
+	$registration_secure_defaults = $_POST['registration_secure_defaults'] ?? 'true';
+	$registration_default_access = $_POST['registration_default_access'] ?? 'rwxr-----';
 	$db->Halt_On_Error = 'no';
 	$db->Database	= $db_name;
 	$db->Host		= $db_host;
