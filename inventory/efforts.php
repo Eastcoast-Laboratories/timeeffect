@@ -22,6 +22,10 @@
 		$stopped_efforts_details = [];
 		
 		if($open_efforts->effortCount() > 0) {
+			// Get database connection for customer/project names
+			$db = new Database();
+			$db->connect();
+			
 			$open_efforts->reset();
 			while($open_efforts->nextEffort()) {
 				$open_effort = $open_efforts->giveEffort();
@@ -29,21 +33,23 @@
 					// Collect effort details before stopping
 					$effort_id = $open_effort->giveValue('id');
 					$effort_description = $open_effort->giveValue('description');
-					// Get project and customer names safely
 					$project_id = $open_effort->giveValue('project_id');
 					
 					$customer_name = 'Kein Kunde';
 					$project_name = 'Kein Projekt';
 					
+					// Get project and customer names via database query like in line 421-424
 					if($project_id && $project_id > 0) {
-						$project = new Project($project_id, $_PJ_auth);
-						$project_name = $project->giveValue('project_name');
+						$safe_project_id = DatabaseSecurity::escapeString($project_id, $db->Link_ID);
+						$query = "SELECT p.project_name, p.customer_id, c.customer_name 
+								  FROM " . $GLOBALS['_PJ_project_table'] . " p 
+								  INNER JOIN " . $GLOBALS['_PJ_customer_table'] . " c ON p.customer_id = c.id 
+								  WHERE p.id = '$safe_project_id'";
 						
-						// Get customer from project
-						$customer_id = $project->giveValue('customer_id');
-						if($customer_id && $customer_id > 0) {
-							$customer = new Customer($customer_id, $_PJ_auth);
-							$customer_name = $customer->giveValue('customer_name');
+						$db->query($query);
+						if($db->next_record()) {
+							$project_name = $db->Record['project_name'];
+							$customer_name = $db->Record['customer_name'];
 						}
 					}
 					
@@ -75,17 +81,16 @@
 			}
 			
 			// Add detailed list of stopped efforts
-			$success_message .= '<br><br><strong>' . $GLOBALS['_PJ_strings']['stopped_efforts_details'] . ':</strong><ul>';
+			$success_message .= '<br><br><strong>' . $GLOBALS['_PJ_strings']['stopped_efforts_details'] . ':</strong><ul class="stop-efforts-list">';
 			foreach($stopped_efforts_details as $effort) {
 				$edit_link = "efforts.php?edit=1&eid=" . $effort['id'];
 				$success_message .= '<li>';
-				$success_message .= '<a href="' . $edit_link . '" style="text-decoration: none; color: #007bff;">';
-				$success_message .= '<strong>' . htmlspecialchars($effort['customer'] ?? '') . ' - ' . htmlspecialchars($effort['project'] ?? '') . '</strong>';
-				$success_message .= '</a>';
+				$success_message .= '<a href="' . $edit_link . '" style="text-decoration: none; color: #007bff;" target="_blank" title="' . $GLOBALS['_PJ_strings']['click_to_edit'] . '">';
+				$success_message .= '<strong>' . htmlspecialchars($effort['customer'] ?? '') . ' - ' . htmlspecialchars($effort['project'] ?? '') . '</strong><span class="stop-efforts-list-effort-description">';
 				if (!empty($effort['description'])) {
 					$success_message .= ': ' . htmlspecialchars($effort['description']);
 				}
-				$success_message .= ' <small style="color: #666;">(' . $GLOBALS['_PJ_strings']['click_to_edit'] . ')</small>';
+				$success_message .= '</span></a>';
 				$success_message .= '</li>';
 			}
 			$success_message .= '</ul>';

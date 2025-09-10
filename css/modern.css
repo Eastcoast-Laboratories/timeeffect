@@ -717,6 +717,28 @@ select {
     padding: 1rem;
 }
 
+.stop-efforts-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    font-size:12px;
+}
+
+a.stop-efforts-list {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 13px;
+}
+
+.stop-efforts-list li {
+    margin-bottom: 0.25rem;
+    margin-top: 0.25rem;
+}
+
+.stop-efforts-list-effort-description {
+    color: #64748b;
+}
+
 /* Modern responsive design */
 @media (max-width: 768px) {
     .btn {

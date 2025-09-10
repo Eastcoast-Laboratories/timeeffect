@@ -11,7 +11,7 @@ BODY {
 }
 
 TD {
-	font-size:			11px;
+	font-size:			13px;
 }
 
 TD.headFrame {
@@ -163,7 +163,7 @@ TD.noteHead {
 
 TD.path {
 	font-weight:		normal;
-	font-size:			11px;
+	font-size:			13px;
 	color:				#000063;
 	padding:			5px;
 	text-align:			left;
@@ -191,7 +191,7 @@ TD.error {
 
 TH.list {
 	font-weight:		bold;
-	font-size:			11px;
+	font-size:			13px;
 	color:				#000063;
 	padding:			5px;
 	text-align:			left;
@@ -199,7 +199,7 @@ TH.list {
 
 TH.listNumeric {
 	font-weight:		bold;
-	font-size:			11px;
+	font-size:			13px;
 	color:				#000063;
 	padding:			5px;
 	text-align:			right;
@@ -207,7 +207,7 @@ TH.listNumeric {
 
 TH.note {
 	font-weight:		bold;
-	font-size:			11px;
+	font-size:			13px;
 	color:				#000063;
 	padding:			5px;
 	text-align:			left;
@@ -218,7 +218,7 @@ TH.note {
 }
 
 A {
-	font-size:			11px;
+	font-size:			13px;
 	text-decoration:	none;
 }
 
@@ -257,7 +257,7 @@ A.left {
 A.note {
 	color:				#DD7000;
 	font-weight:		bold;
-	font-size:			11px;
+	font-size:			13px;
 }
 
 A.topNav {
@@ -266,14 +266,14 @@ A.topNav {
 
 .FormSubmit {
 	font-family:		Verdana,Arial,sans-serif;
-	font-size:			11px;
+	font-size:			13px;
 	font-weight:		normal;
 	font-style:			normal;
 }
 
 .FormField {
 	font-family:		Verdana,Arial,sans-serif;
-	font-size:			11px;
+	font-size:			13px;
 	font-weight:		normal;
 	font-style:			normal;
 	text-align:			left;
@@ -281,7 +281,7 @@ A.topNav {
 
 .FormSelect {
 	font-family:		Verdana,Arial,sans-serif;
-	font-size:			11px;
+	font-size:			13px;
 	font-weight:		normal;
 	font-style:			normal;
 }

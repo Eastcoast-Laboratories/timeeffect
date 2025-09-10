@@ -27,7 +27,13 @@ include_once(__DIR__ . '/shared/header.ihtml.php');
 		if (isset($success_message) && $success_message != '') {
 			echo '<div class="alert alert-success" style="background-color: #d4edda; color: #155724; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">';
 			echo '<h2 style="margin: 0 0 0.5rem 0;">✅ ' . htmlspecialchars($GLOBALS['_PJ_strings']['success']) . '</h2>';
-			echo '<p style="margin: 0; font-size: 1.1rem;">' . htmlspecialchars($success_message) . '</p>';
+			echo '<p style="margin: 0; font-size: 1.1rem;">';
+			if(stristr($success_message, "edit=1")) {
+				echo $success_message;
+			} else {
+				echo htmlspecialchars($success_message);
+			}
+			echo '</p>';
 			echo '</div>';
 		} elseif (isset($error_message) && $error_message != '') {
 			echo '<div class="alert alert-error" style="background-color: #f8d7da; color: #721c24; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">';
