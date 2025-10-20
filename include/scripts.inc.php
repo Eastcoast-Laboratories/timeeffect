@@ -1,5 +1,19 @@
 <?php
-	$GLOBALS['_PJ_timeeffect_version']			= '2.0';
+/**
+ * scripts.inc.php
+ * 
+ * Central configuration file for TimeEffect application
+ * Defines version information and global script paths/URLs for all modules
+ * 
+ * This file sets up:
+ * - Application version, revision and date
+ * - URL paths to inventory scripts (customers, projects, efforts)
+ * - URL paths to statistics scripts (customer, project, effort, CSV, PDF)
+ * - URL paths to admin, billing, user, and group management scripts
+ * - URL aliases for backward compatibility
+ */
+
+	$GLOBALS['_PJ_timeeffect_version']			= '2.1';
 	$GLOBALS['_PJ_timeeffect_revision']			= '24';
 	$GLOBALS['_PJ_timeeffect_date']				= '07/25/2025 15:14:32';
 
