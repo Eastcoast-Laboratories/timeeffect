@@ -486,8 +486,11 @@
 				$query .= "'" . $date . "', ";
 				$query .= "'" . $b_time . "', ";
 				$query .= "'" . $e_time . "', ";
-				$query .= "'" . $this->data['description'] . "', ";
-				$query .= "'" . $this->data['note'] . "', ";
+				// Use DatabaseSecurity::escapeString() for proper SQL escaping
+				$safeDescriptionSplit = DatabaseSecurity::escapeString($this->data['description'], $this->db->Link_ID);
+				$query .= "'" . $safeDescriptionSplit . "', ";
+				$safeNoteSplit = DatabaseSecurity::escapeString($this->data['note'], $this->db->Link_ID);
+				$query .= "'" . $safeNoteSplit . "', ";
 				$query .= "'" . $this->data['rate'] . "', ";
 				$query .= "'" . $this->data['user'] . "', ";
 				$query .= $this->data['billed'] . ", ";
@@ -519,8 +522,11 @@
 			$query .= "'" . $this->data['date'] . "', ";
 			$query .= "'" . $b_time . "', ";
 			$query .= "'" . $e_time . "', ";
-			$query .= "'" . addslashes($this->data['description']) . "', ";
-			$query .= "'" . $this->data['note'] . "', ";
+			// Use DatabaseSecurity::escapeString() for proper SQL escaping without adding backslashes
+			$safeDescription = DatabaseSecurity::escapeString($this->data['description'], $this->db->Link_ID);
+			$query .= "'" . $safeDescription . "', ";
+			$safeNote = DatabaseSecurity::escapeString($this->data['note'], $this->db->Link_ID);
+			$query .= "'" . $safeNote . "', ";
 			$query .= "'" . $this->data['rate'] . "', ";
 			$query .= "'" . $this->data['user'] . "', ";
 			// Handle billed field with proper validation and quoting

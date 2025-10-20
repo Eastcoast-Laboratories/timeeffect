@@ -632,8 +632,9 @@
 			$data['date']			= "$year-$month-$day";
 			$data['begin']			= sprintf('%02d:%02d:%02d', intval($hour), intval($minute), intval($second));
 			// LOG_EFFORT_AUTOASSIGN: Save cleaned description
-			$data['description']	= add_slashes($cleaned_description);
-			$data['note']			= add_slashes($note);
+			// Note: Escaping is handled by DatabaseSecurity::escapeString() in Effort::save()
+			$data['description']	= $cleaned_description;
+			$data['note']			= $note;
 			$data['rate']			= $rate;
 			$data['user']			= $user;
 			$data['gid']			= $gid;

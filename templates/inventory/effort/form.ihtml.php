@@ -269,7 +269,7 @@ if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
 					</TD>
 				</TR><TR>
 					<TD CLASS="FormFieldName"><?php if(!empty($GLOBALS['_PJ_strings']['description'])) echo $GLOBALS['_PJ_strings']['description'] ?>:</TD>
-					<TD CLASS="FormField"><TEXTAREA CLASS="FormField" NAME="description" ID="description-field" COLS="35" ROWS="5" WRAP autofocus><?php print $description; ?></TEXTAREA></TD>
+					<TD CLASS="FormField"><TEXTAREA CLASS="FormField" NAME="description" ID="description-field" COLS="35" ROWS="5" WRAP autofocus tabindex="1"><?php print $description; ?></TEXTAREA></TD>
 				</TR><TR>
 					<TD CLASS="FormFieldName"></TD>
 					<TD CLASS="FormField">
@@ -363,6 +363,11 @@ if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
 								$a_minute = round($current_minute / 5) * 5;
 							} else {
 								$a_minute = $current_minute;
+							}
+						} else {
+							// Round existing minute to nearest 5-minute step if not showing all minutes
+							if (!$show_all_minutes && $minute % 5 != 0) {
+								$a_minute = round($minute / 5) * 5;
 							}
 						}
 	
@@ -609,7 +614,7 @@ if($_PJ_auth->checkPermission('admin') || (!$effort || !$effort->giveValue('id')
 					<TD>&nbsp;</TD>
 					<TD>&nbsp;</TD>
 				</TR><TR>
-					<TD COLSPAN="2"><INPUT CLASS="FormSubmit" TYPE="SUBMIT" VALUE="<?php if(!empty($GLOBALS['_PJ_strings']['save'])) echo $GLOBALS['_PJ_strings']['save'] ?> >>" onclick="saveLastUsedRate()"></TD>
+					<TD COLSPAN="2"><INPUT CLASS="FormSubmit" TYPE="SUBMIT" VALUE="<?php if(!empty($GLOBALS['_PJ_strings']['save'])) echo $GLOBALS['_PJ_strings']['save'] ?> >>" onclick="saveLastUsedRate()" tabindex="2"></TD>
 				</TR>
 			</TABLE>
 			</TD>
