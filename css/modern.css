@@ -266,6 +266,11 @@ input[type="submit"]:hover, button[type="submit"]:hover, button:hover {
     box-shadow: 0 8px 24px -4px rgba(99,102,241,0.18);
     transform: translateY(-2px) scale(1.03);
 }
+input[type="submit"]:focus, button[type="submit"]:focus, button:focus {
+    outline: none;
+    border: 3px solid var(--border-focus);
+    box-shadow: 0 0 0 4px var(--glow-color), 0 8px 24px -4px rgba(99,102,241,0.18);
+}
 
 input:not([type="radio"]):not([type="submit"]):not([type="checkbox"]), textarea, select {
     background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
@@ -434,6 +439,12 @@ select {
     left: 100%;
 }
 
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px var(--glow-color), var(--shadow-md);
+    border: 2px solid var(--border-focus);
+}
+
 .btn-primary {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     color: white;
@@ -444,6 +455,12 @@ select {
     background: linear-gradient(135deg, var(--primary-hover) 0%, #7c3aed 100%);
     transform: translateY(-2px) scale(1.05);
     box-shadow: var(--shadow-lg), 0 0 20px rgba(99, 102, 241, 0.3);
+}
+
+.btn-primary:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px var(--glow-color), var(--shadow-lg), 0 0 20px rgba(99, 102, 241, 0.3);
+    border: 2px solid var(--border-focus);
 }
 
 .btn-success {
@@ -457,6 +474,12 @@ select {
     box-shadow: var(--shadow-md);
 }
 
+.btn-success:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px var(--glow-color), var(--shadow-md);
+    border: 2px solid var(--border-focus);
+}
+
 .btn-secondary {
     background-color: var(--surface-color);
     color: var(--text-primary);
@@ -466,6 +489,12 @@ select {
 .btn-secondary:hover {
     background-color: var(--background-color);
     border-color: var(--secondary-color);
+}
+
+.btn-secondary:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px var(--glow-color), var(--shadow-sm);
+    border-color: var(--border-focus);
 }
 
 /* Modern cards and containers with gradients */
