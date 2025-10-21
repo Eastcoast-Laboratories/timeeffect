@@ -18,12 +18,12 @@ bei http://localhost/inventory/efforts.php?stop_all=1
 
 auch die beschreibungen  auflisten mit links zum bearbeiten ders efforts , welche efforts gestoppt wurden (localized)@efforts.php#L17-45 
 
-8. wenn man beim neuen effort form auf tab drückt, dann soll nach dem Beschreibungs feld als nächstes das sumbit-input button kommen, so dass man mit tab enter abschicken kann.
-
 10. in der effort detail ansicht einen löschen button einbauen
 
-11. bei neuem eintrag wird der standard tarif nicht immer genomen
----
+11. 
+in der ansicht für tarife bearbeiten:
+customer.php?edit=1&rates=1&cid=4
 
-merke dir: rate keine funktionen, sondern verifiziere auch , ob diese existieren
+, soll es eine radio box geben, für den standard tarif, also eine db migration nötig, die in die vorhandene migration eingebaut werden muss. 
 
+erstelle als erstes im dev ordner ein md file mit diesen ganzen änderungen

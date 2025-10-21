@@ -459,7 +459,7 @@ if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
 						}
 					?>
 					</TD>
-				</TR><TR class="advanced-field" style="display: none;">
+				</TR><TR>
 					<TD CLASS="FormFieldName"><?php if(!empty($GLOBALS['_PJ_strings']['rate'])) echo $GLOBALS['_PJ_strings']['rate'] ?>:</TD>
 					<TD CLASS="FormField">
 					<SELECT CLASS="FormField" NAME="rate" ID="rate-select">
@@ -468,7 +468,39 @@ if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
 						$a_rate = $rate;
 						$rates->resetList();
 						$rate_found = false;
+						
+						// Collect all rates for default rate selection
+						$all_rates = array();
 						while($data = $rates->giveNext()) {
+							$all_rates[] = $data;
+						}
+						
+						// Auto-select default rate if no rate is set (new effort)
+						if(empty($a_rate) && count($all_rates) > 0) {
+							// First, try to find a rate named "standard" or "Standard"
+							$default_rate_found = false;
+							foreach($all_rates as $rate_data) {
+								if(strtolower($rate_data['name']) === 'standard') {
+									$a_rate = $rate_data['price'];
+									$default_rate_found = true;
+									break;
+								}
+							}
+							
+							// If no "standard" rate found, select the highest rate
+							if(!$default_rate_found) {
+								$highest_rate = 0;
+								foreach($all_rates as $rate_data) {
+									if($rate_data['price'] > $highest_rate) {
+										$highest_rate = $rate_data['price'];
+									}
+								}
+								$a_rate = $highest_rate;
+							}
+						}
+						
+						// Display all rates
+						foreach($all_rates as $data) {
 							print "<OPTION ";
 							if($a_rate == $data['price']) {
 								print " SELECTED";
