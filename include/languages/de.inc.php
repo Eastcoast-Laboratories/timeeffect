@@ -522,6 +522,7 @@
 	$GLOBALS['_PJ_strings']['telephone']				= 'Telefon';
 	$GLOBALS['_PJ_strings']['time']						= $GLOBALS['_PJ_strings']['from_to'];
 	$GLOBALS['_PJ_strings']['time_of_beginning']		= 'Startzeit';
+	$GLOBALS['_PJ_strings']['time_rounded_warning']		= 'Startzeit wurde gerundet: Original war %s Uhr';
 	$GLOBALS['_PJ_strings']['translations']				= '<b>Uebersetzungsteam</b><br>&nbsp;&nbsp;&nbsp;Franz&ouml;sisch:&nbsp;Yann Laviolette';
 	$GLOBALS['_PJ_strings']['usebilled']				= 'berechnete Aufw&auml;nde verwenden';
 	$GLOBALS['_PJ_strings']['user']						= 'Benutzer';

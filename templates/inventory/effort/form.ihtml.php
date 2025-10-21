@@ -330,9 +330,26 @@ if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
 					?>
 					</SELECT>
 					</TD>
-				</TR><TR>
+				</TR>
+				<?php
+					// Calculate rounded time warning before displaying the time field
+					$rounded_time_warning = null;
+					if (isset($minute) && !empty($minute) && !$show_all_minutes && $minute % 5 != 0) {
+						$original_time = sprintf('%02d:%02d', $hour, $minute);
+						$rounded_time_warning = '⚠️ ' . sprintf(
+							$GLOBALS['_PJ_strings']['time_rounded_warning'],
+							$original_time
+						);
+					}
+				?>
+				<TR>
 					<TD CLASS="FormFieldName"><?php if(!empty($GLOBALS['_PJ_strings']['time_of_beginning'])) echo $GLOBALS['_PJ_strings']['time_of_beginning'] ?>:</TD>
 					<TD CLASS="FormField">
+					<?php if(isset($rounded_time_warning) && $rounded_time_warning): ?>
+						<div class="warning" style="margin-bottom: 8px; padding: 8px; background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 4px; color: #856404;">
+							<?= htmlspecialchars($rounded_time_warning) ?>
+						</div>
+					<?php endif; ?>
 					<button type="button" class="time-btn time-btn-minus" onclick="adjustTime('hour', -1)">−</button>
 					<SELECT CLASS="FormSelect time-field time-hour" NAME="hour" title="<?php if(!empty($GLOBALS['_PJ_strings']['hour'])) echo $GLOBALS['_PJ_strings']['hour'] ?>">
 					<?php
@@ -354,7 +371,7 @@ if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
 					<button type="button" class="time-btn time-btn-minus" onclick="adjustTime('minute', <?= $show_all_minutes ? -1 : -5 ?>)">−</button>
 					<SELECT CLASS="FormSelect time-field time-minute" NAME="minute" title="<?php if(!empty($GLOBALS['_PJ_strings']['minute'])) echo $GLOBALS['_PJ_strings']['minute'] ?>">
 					<?php
-					    // ############# Beginn: minute
+					// ############# Beginn: minute
 						$a_minute = $minute;
 						if(empty($minute)) {
 							$current_minute = date("i");

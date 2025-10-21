@@ -475,6 +475,7 @@
 	$GLOBALS['_PJ_strings']['telephone']				= 'Phone';
 	$GLOBALS['_PJ_strings']['time']						= 'from/to';
 	$GLOBALS['_PJ_strings']['time_of_beginning']		= 'Start time';
+	$GLOBALS['_PJ_strings']['time_rounded_warning']		= 'Start time was rounded: Original was %s';
 	$GLOBALS['_PJ_strings']['translations']				= '<b>Translation team</b><br>&nbsp;&nbsp;&nbsp;French:&nbsp;Yann Laviolette';
 	$GLOBALS['_PJ_strings']['usebilled']				= 'use charged efforts';
 	$GLOBALS['_PJ_strings']['user']						= 'User';
