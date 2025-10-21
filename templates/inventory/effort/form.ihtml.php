@@ -195,7 +195,7 @@ if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
 				</TR><TR>
 					<TD CLASS="FormFieldName" WIDTH="<?php if(isset($_PJ_form_field_name_width)) echo $_PJ_form_field_name_width; ?>"><b><?php if(!empty($GLOBALS['_PJ_strings']['customer'])) echo $GLOBALS['_PJ_strings']['customer'] ?>:</b></TD>
 					<TD CLASS="FormField" WIDTH="<?php if(isset($_PJ_form_field_width)) echo $_PJ_form_field_width; ?>">
-						<SELECT CLASS="FormField" NAME="selected_cid" ID="customer-select" onchange="updateProjectList()">
+						<SELECT CLASS="FormField" NAME="selected_cid" ID="customer-select" onchange="updateProjectList()" tabindex="3">
 							<OPTION VALUE="">-- <?php echo $GLOBALS['_PJ_strings']['select_customer']; ?> --</OPTION>
 							<?php
 								// Generate customer options - only customers where user has 'new' rights in at least one project
@@ -227,7 +227,7 @@ if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
 				</TR><TR>
 					<TD CLASS="FormFieldName"><b><?php if(!empty($GLOBALS['_PJ_strings']['project'])) echo $GLOBALS['_PJ_strings']['project'] ?>:</b></TD>
 					<TD CLASS="FormField">
-						<SELECT CLASS="FormField" NAME="selected_pid" ID="project-select">
+						<SELECT CLASS="FormField" NAME="selected_pid" ID="project-select" tabindex="4">
 							<OPTION VALUE="">-- <?php echo $GLOBALS['_PJ_strings']['select_project']; ?> --</OPTION>
 							<?php
 								// Pre-generate all projects with 'new' rights for JavaScript filtering
@@ -273,13 +273,13 @@ if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
 				</TR><TR>
 					<TD CLASS="FormFieldName"></TD>
 					<TD CLASS="FormField">
-						<button type="button" id="toggle-note-btn" class="btn btn-secondary" onclick="toggleNoteField()">
+						<button type="button" id="toggle-note-btn" class="btn btn-secondary" onclick="toggleNoteField()" tabindex="10">
 							📝 Notiz einfügen
 						</button>
 					</TD>
 				</TR><TR id="note-row" style="display: none;">
 					<TD CLASS="FormFieldName"><?php if(!empty($GLOBALS['_PJ_strings']['note'])) echo $GLOBALS['_PJ_strings']['note'] ?>:</TD>
-					<TD CLASS="FormField"><TEXTAREA CLASS="FormField" NAME="note" COLS="35" ROWS="5" WRAP><?php print $note; ?></TEXTAREA></TD>
+					<TD CLASS="FormField"><TEXTAREA CLASS="FormField" NAME="note" COLS="35" ROWS="5" WRAP tabindex="11"><?php print $note; ?></TEXTAREA></TD>
 				</TR><TR>
 					<TD CLASS="FormFieldName"><?php if(!empty($GLOBALS['_PJ_strings']['date'])) echo $GLOBALS['_PJ_strings']['date'] ?>:</TD>
 					<TD CLASS="FormField">
@@ -411,7 +411,7 @@ if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
 				</TR><TR>
 					<TD CLASS="FormFieldName"></TD>
 					<TD CLASS="FormField">
-						<button type="button" id="toggle-advanced-btn" class="btn btn-secondary" onclick="toggleAdvancedFields()">
+						<button type="button" id="toggle-advanced-btn" class="btn btn-secondary" onclick="toggleAdvancedFields()" tabindex="20">
 							⚙️ Erweitert
 						</button>
 					</TD>
@@ -693,6 +693,23 @@ function applyRecentEffort(recentData) {
 		// Sync hidden pid field
 		if (pidHidden && recentData.project_id) {
 			pidHidden.value = recentData.project_id;
+		}
+		
+		// Set rate if available
+		var rateSelect = document.getElementById('rate-select');
+		if (rateSelect && recentData.rate) {
+			// First update rate dropdown for the customer to ensure rate option exists
+			updateRateDropdownForCustomer();
+			
+			// Set rate after a short delay to ensure dropdown is updated
+			setTimeout(function() {
+				if (rateSelect.querySelector('option[value="' + recentData.rate + '"]')) {
+					rateSelect.value = recentData.rate;
+					console.log('LOG_RECENT_EFFORTS_UI: Set rate to:', recentData.rate);
+				} else {
+					console.log('LOG_RECENT_EFFORTS_UI: Rate not found in dropdown:', recentData.rate);
+				}
+			}, 50);
 		}
 	}, 50);
 	
