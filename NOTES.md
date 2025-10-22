@@ -7,7 +7,7 @@
 ### 🚀 **Modern Infrastructure**
 - **PHP 8.4 Compatibility**: Full upgrade from legacy PHP versions
 - **Composer Dependencies**: Modern dependency management with Doctrine DBAL, Symfony components
-- **Docker Support**: Complete containerization with docker-compose setup
+- **Docker Support**: Complete containerization with docker compose setup
 - **Environment Configuration**: `.env` file-based configuration system
 
 ### 🎨 **User Interface Overhaul**

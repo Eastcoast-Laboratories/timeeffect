@@ -55,7 +55,7 @@ TIMEEFFECT is a comprehensive, multi-user time tracking and project management s
 ```bash
 git clone https://github.com/rubo77/timeeffect.git
 cd docker
-docker-compose up -d
+docker compose up -d
 ```
 
 Install with https://localhost/install/

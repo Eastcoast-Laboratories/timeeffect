@@ -1,9 +1,9 @@
 # install
 
-# If you want to install a minimal docker-compose without loads of not-needed stuff:
-sudo apt install docker-compose --no-install-recommends
-sudo apt remove docker-compose
-sudo apt install docker-compose  bridge-utils cgroupfs-mount containerd docker.io pigz runc 
+# If you want to install a minimal docker compose without loads of not-needed stuff:
+sudo apt install docker compose --no-install-recommends
+sudo apt remove docker compose
+sudo apt install docker compose  bridge-utils cgroupfs-mount containerd docker.io pigz runc 
 # I removed it and installed again, because at the first round it suggested to install these too which I don't need:
 # bridge-utils cgroupfs-mount containerd docker.io golang-docker-credential-helpers pigz python3-cached-property python3-docker python3-dockerpty python3-dockerpycreds python3-docopt python3-jsonschema python3-texttable  python3-websocket runc ubuntu-fan
 
@@ -28,7 +28,7 @@ To get the app up and running in docker, follow these 3 steps:
     #systemctl disable nginx
     # now start the docker container:
     cd /var/www/timeeffect/docker/
-    sudo docker-compose up --build
+    sudo docker compose up --build
 
 # 2. install fresh:
 
@@ -100,7 +100,7 @@ login as user: pirates, pass: vt8yhnan and build its diplomatic vessel and move 
 # next time start
 next time, you can simply start 
 
-    docker-compose up
+    docker compose up
 
 And leave that window open. To do this in tmux automatically, use the script `docker/tmux-timeeffect`
 
@@ -108,7 +108,7 @@ And leave that window open. To do this in tmux automatically, use the script `do
   
 # debugging
 
-leave the `docker-compose up` shell open, there you see the debug output of the container.
+leave the `docker compose up` shell open, there you see the debug output of the container.
 
 ## ssh into the docker-container:
 

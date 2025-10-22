@@ -4,7 +4,7 @@
 Icons are not accessible locally via `http://localhost/icons/customer.gif`
 
 ## Docker-Compose Investigation
-Checking `/var/www/timeeffect/docker/docker-compose.yml`:
+Checking `/var/www/timeeffect/docker/docker compose.yml`:
 ```yaml
 app:
   volumes:
@@ -19,22 +19,22 @@ app:
 ### Option 1: Restart Docker Services (with sudo)
 ```bash
 cd /var/www/timeeffect/docker
-sudo docker-compose down
-sudo docker-compose up -d
+sudo docker compose down
+sudo docker compose up -d
 ```
 
 ### Option 2: Check Container Mount (with sudo)
 ```bash
 cd /var/www/timeeffect/docker
-sudo docker-compose exec app ls -la /var/www/html/icons/
+sudo docker compose exec app ls -la /var/www/html/icons/
 ```
 
 ### Option 3: Rebuild Container (if needed)
 ```bash
 cd /var/www/timeeffect/docker
-sudo docker-compose down
-sudo docker-compose build --no-cache
-sudo docker-compose up -d
+sudo docker compose down
+sudo docker compose build --no-cache
+sudo docker compose up -d
 ```
 
 ### Option 4: Add User to Docker Group (permanent fix)
@@ -45,7 +45,7 @@ sudo usermod -aG docker $USER
 
 ## Current Status
 - Icons work online: https://te.eclabs.de/icons/customer.gif ✅
-- Icons work in Docker: `sudo docker-compose exec app ls -la /var/www/html/icons/` ✅
+- Icons work in Docker: `sudo docker compose exec app ls -la /var/www/html/icons/` ✅
 - Docker containers running on ports 8081 (HTTP) and 3307 (MySQL) to avoid conflicts
 - All subnav templates modernized to remove legacy image dependencies
 - Breadcrumb templates fixed and functional
@@ -54,8 +54,8 @@ sudo usermod -aG docker $USER
 ## Final Solution Applied
 ```bash
 cd /var/www/timeeffect/docker
-sudo docker-compose down --volumes --remove-orphans
-sudo docker-compose up -d --build
+sudo docker compose down --volumes --remove-orphans
+sudo docker compose up -d --build
 ```
 
 **Result:** Icons are now properly mounted and accessible within the Docker environment.

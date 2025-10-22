@@ -29,16 +29,16 @@ docker_db_1   - UP (MariaDB 10.5)
 - **MySQL**: localhost:3306
 
 ### Durchgeführte Reparaturen:
-1. **Container-Bereinigung**: `docker-compose down --volumes --remove-orphans`
+1. **Container-Bereinigung**: `docker compose down --volumes --remove-orphans`
 2. **System-Bereinigung**: `docker system prune -f`
-3. **Neustart**: `docker-compose up -d`
+3. **Neustart**: `docker compose up -d`
 4. **Dependencies**: Composer install erfolgreich
 5. **Verifikation**: Alle Services funktional
 
 ### Nächste Schritte:
 1. **Installation starten**: http://localhost/install
 2. **Anwendung testen**: http://localhost/inventory/customer.php
-3. **Logs überwachen**: `docker-compose logs -f app`
+3. **Logs überwachen**: `docker compose logs -f app`
 4. **MySQL-Verbindung**: Host: db, Port: 3306, DB: timeeffect_db
 
 ### Moderne Features verfügbar:

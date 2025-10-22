@@ -35,8 +35,8 @@ cd docker/
 # NEVER CANCEL: Takes 10-20 minutes including image build. Set timeout to 1200+ seconds (20 minutes).
 
 # Alternative: Manual Docker commands
-sudo docker-compose build --no-cache
-sudo docker-compose up -d
+sudo docker compose build --no-cache
+sudo docker compose up -d
 # Each step takes 5-15 minutes. NEVER CANCEL.
 ```
 
@@ -283,9 +283,9 @@ if (!$no_login) {
 - **Test**: Access installer at `/install/` to configure database
 
 ### Docker issues
-- **Check**: `docker --version` and `docker-compose --version`
+- **Check**: `docker --version` and `docker compose --version`
 - **Alternative**: Use PHP built-in server for development
-- **Logs**: `docker-compose logs app` for debugging
+- **Logs**: `docker compose logs app` for debugging
 
 ### Permission errors
 - **Set**: `chmod 755 logs/` for log directory
