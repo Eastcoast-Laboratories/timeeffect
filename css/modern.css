@@ -13,6 +13,29 @@
     --warning-light: #fde68a;
     --danger-color: #f87171;
     --danger-light: #fca5a5;
+    
+    /* GitHub-style button colors */
+    --btn-primary-bg: #1f883d;
+    --btn-primary-hover-bg: #1a7f37;
+    --btn-primary-active-bg: #166e2f;
+    --btn-primary-text: #ffffff;
+    --btn-primary-border: rgba(31, 35, 40, 0.15);
+    --btn-primary-shadow: 0 1px 0 rgba(31, 35, 40, 0.1);
+    
+    --btn-secondary-bg: #f6f8fa;
+    --btn-secondary-hover-bg: #f3f4f6;
+    --btn-secondary-active-bg: #ebecf0;
+    --btn-secondary-text: #24292f;
+    --btn-secondary-border: rgba(31, 35, 40, 0.15);
+    --btn-secondary-shadow: 0 1px 0 rgba(31, 35, 40, 0.04);
+    
+    --btn-danger-bg: #cf222e;
+    --btn-danger-hover-bg: #a40e26;
+    --btn-danger-active-bg: #8e0920;
+    --btn-danger-text: #ffffff;
+    --btn-danger-border: rgba(31, 35, 40, 0.15);
+    --btn-danger-shadow: 0 1px 0 rgba(31, 35, 40, 0.1);
+    
     --background-color: #f1f5f9;
     --background-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
     --surface-color: #ffffff;
@@ -20,8 +43,8 @@
     --text-primary: #334155;
     --text-secondary: #64748b;
     --border-color: #e2e8f0;
-    --border-focus: #6366f1;
-    --glow-color: rgba(99, 102, 241, 0.4);
+    --border-focus: #0969da;
+    --glow-color: rgba(9, 105, 218, 0.3);
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -244,32 +267,37 @@ table[background*="option-bg.gif"] tr td {
 
 /* Modern input fields with ease-in effects, larger borders and shadows */
 
-/* Modern submit and button styling */
+/* GitHub-style submit and button styling */
 input[type="submit"], button[type="submit"], button {
-    background: linear-gradient(90deg, #a7c7e7 0%, #b7e7c7 100%);
-    color: #222;
-    border: none;
-    border-radius: 1rem;
-    padding: 0.75rem 2rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    box-shadow: 0 4px 12px -2px rgba(99,102,241,0.12);
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    border: 1px solid var(--btn-primary-border);
+    border-radius: 6px;
+    padding: 5px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    box-shadow: var(--btn-primary-shadow);
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
     outline: none;
-    margin: 0.1rem 0;
+    margin: 0;
     display: inline-block;
+    vertical-align: middle;
+    white-space: nowrap;
 }
 input[type="submit"]:hover, button[type="submit"]:hover, button:hover {
-    background: linear-gradient(90deg, #b7e7c7 0%, #a7c7e7 100%);
-    color: #1e40af;
-    box-shadow: 0 8px 24px -4px rgba(99,102,241,0.18);
-    transform: translateY(-2px) scale(1.03);
+    background: var(--btn-primary-hover-bg);
+    border-color: var(--btn-primary-border);
+}
+input[type="submit"]:active, button[type="submit"]:active, button:active {
+    background: var(--btn-primary-active-bg);
+    box-shadow: inset 0 1px 0 rgba(31, 35, 40, 0.12);
 }
 input[type="submit"]:focus, button[type="submit"]:focus, button:focus {
-    outline: none;
-    border: 3px solid var(--border-focus);
-    box-shadow: 0 0 0 4px var(--glow-color), 0 8px 24px -4px rgba(99,102,241,0.18);
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+    box-shadow: var(--btn-primary-shadow);
 }
 
 input:not([type="radio"]):not([type="submit"]):not([type="checkbox"]), textarea, select {
@@ -404,97 +432,94 @@ select {
     padding-right: 3rem;
 }
 
-/* Modern buttons with gradients and animations */
+/* GitHub-style buttons */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.875rem 1.75rem;
-    border: none;
-    border-radius: var(--radius-md);
+    padding: 5px 16px;
+    border-radius: 6px;
     font-size: 14px;
     font-weight: 500;
+    line-height: 20px;
     font-family: inherit;
     text-decoration: none;
     cursor: pointer;
-    transition: var(--transition-normal);
+    transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
     box-sizing: border-box;
     gap: 0.5rem;
     position: relative;
-    overflow: hidden;
-}
-
-.btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: var(--transition-slow);
-}
-
-.btn:hover::before {
-    left: 100%;
+    white-space: nowrap;
+    vertical-align: middle;
 }
 
 .btn:focus {
-    outline: none;
-    box-shadow: 0 0 0 4px var(--glow-color), var(--shadow-md);
-    border: 2px solid var(--border-focus);
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    color: white;
-    box-shadow: var(--shadow-sm);
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    border: 1px solid var(--btn-primary-border);
+    box-shadow: var(--btn-primary-shadow);
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, var(--primary-hover) 0%, #7c3aed 100%);
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: var(--shadow-lg), 0 0 20px rgba(99, 102, 241, 0.3);
+    background: var(--btn-primary-hover-bg);
 }
 
-.btn-primary:focus {
-    outline: none;
-    box-shadow: 0 0 0 4px var(--glow-color), var(--shadow-lg), 0 0 20px rgba(99, 102, 241, 0.3);
-    border: 2px solid var(--border-focus);
+.btn-primary:active {
+    background: var(--btn-primary-active-bg);
+    box-shadow: inset 0 1px 0 rgba(31, 35, 40, 0.12);
 }
 
 .btn-success {
-    background-color: var(--success-color);
-    color: white;
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    border: 1px solid var(--btn-primary-border);
+    box-shadow: var(--btn-primary-shadow);
 }
 
 .btn-success:hover {
-    background-color: #059669;
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+    background: var(--btn-primary-hover-bg);
 }
 
-.btn-success:focus {
-    outline: none;
-    box-shadow: 0 0 0 4px var(--glow-color), var(--shadow-md);
-    border: 2px solid var(--border-focus);
+.btn-success:active {
+    background: var(--btn-primary-active-bg);
+    box-shadow: inset 0 1px 0 rgba(31, 35, 40, 0.12);
 }
 
 .btn-secondary {
-    background-color: var(--surface-color);
-    color: var(--text-primary);
-    border: 2px solid var(--border-color);
+    background: var(--btn-secondary-bg);
+    color: var(--btn-secondary-text);
+    border: 1px solid var(--btn-secondary-border);
+    box-shadow: var(--btn-secondary-shadow);
 }
 
 .btn-secondary:hover {
-    background-color: var(--background-color);
-    border-color: var(--secondary-color);
+    background: var(--btn-secondary-hover-bg);
 }
 
-.btn-secondary:focus {
-    outline: none;
-    box-shadow: 0 0 0 4px var(--glow-color), var(--shadow-sm);
-    border-color: var(--border-focus);
+.btn-secondary:active {
+    background: var(--btn-secondary-active-bg);
+    box-shadow: inset 0 1px 0 rgba(31, 35, 40, 0.04);
+}
+
+.btn-danger {
+    background: var(--btn-danger-bg);
+    color: var(--btn-danger-text);
+    border: 1px solid var(--btn-danger-border);
+    box-shadow: var(--btn-danger-shadow);
+}
+
+.btn-danger:hover {
+    background: var(--btn-danger-hover-bg);
+}
+
+.btn-danger:active {
+    background: var(--btn-danger-active-bg);
+    box-shadow: inset 0 1px 0 rgba(31, 35, 40, 0.12);
 }
 
 /* Modern cards and containers with gradients */
@@ -814,6 +839,29 @@ a.stop-efforts-list {
         --warning-light: #fef08a;
         --danger-color: #f87171;
         --danger-light: #fca5a5;
+        
+        /* GitHub-style button colors for dark mode */
+        --btn-primary-bg: #238636;
+        --btn-primary-hover-bg: #2ea043;
+        --btn-primary-active-bg: #298538;
+        --btn-primary-text: #ffffff;
+        --btn-primary-border: rgba(240, 246, 252, 0.1);
+        --btn-primary-shadow: 0 0 transparent;
+        
+        --btn-secondary-bg: #21262d;
+        --btn-secondary-hover-bg: #30363d;
+        --btn-secondary-active-bg: #282e33;
+        --btn-secondary-text: #c9d1d9;
+        --btn-secondary-border: rgba(240, 246, 252, 0.1);
+        --btn-secondary-shadow: 0 0 transparent;
+        
+        --btn-danger-bg: #da3633;
+        --btn-danger-hover-bg: #f85149;
+        --btn-danger-active-bg: #d5232d;
+        --btn-danger-text: #ffffff;
+        --btn-danger-border: rgba(240, 246, 252, 0.1);
+        --btn-danger-shadow: 0 0 transparent;
+        
         --background-color: #0f172a;
         --background-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
         --surface-color: #1e293b;
@@ -821,8 +869,8 @@ a.stop-efforts-list {
         --text-primary: #f1f5f9;
         --text-secondary: #94a3b8;
         --border-color: #334155;
-        --border-focus: #818cf8;
-        --glow-color: rgba(129, 140, 248, 0.4);
+        --border-focus: #58a6ff;
+        --glow-color: rgba(88, 166, 255, 0.4);
     }
 }
 
@@ -839,6 +887,29 @@ html[data-theme="dark"] {
     --warning-light: #fef08a;
     --danger-color: #f87171;
     --danger-light: #fca5a5;
+    
+    /* GitHub-style button colors for dark mode */
+    --btn-primary-bg: #238636;
+    --btn-primary-hover-bg: #2ea043;
+    --btn-primary-active-bg: #298538;
+    --btn-primary-text: #ffffff;
+    --btn-primary-border: rgba(240, 246, 252, 0.1);
+    --btn-primary-shadow: 0 0 transparent;
+    
+    --btn-secondary-bg: #21262d;
+    --btn-secondary-hover-bg: #30363d;
+    --btn-secondary-active-bg: #282e33;
+    --btn-secondary-text: #c9d1d9;
+    --btn-secondary-border: rgba(240, 246, 252, 0.1);
+    --btn-secondary-shadow: 0 0 transparent;
+    
+    --btn-danger-bg: #da3633;
+    --btn-danger-hover-bg: #f85149;
+    --btn-danger-active-bg: #d5232d;
+    --btn-danger-text: #ffffff;
+    --btn-danger-border: rgba(240, 246, 252, 0.1);
+    --btn-danger-shadow: 0 0 transparent;
+    
     --background-color: #0f172a;
     --background-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     --surface-color: #1e293b;
@@ -846,8 +917,8 @@ html[data-theme="dark"] {
     --text-primary: #f1f5f9;
     --text-secondary: #94a3b8;
     --border-color: #334155;
-    --border-focus: #818cf8;
-    --glow-color: rgba(129, 140, 248, 0.4);
+    --border-focus: #58a6ff;
+    --glow-color: rgba(88, 166, 255, 0.4);
 }
 
 /* Dark mode logo border */
@@ -1109,6 +1180,29 @@ html[data-theme="dark"] a.option:hover {
     --warning-light: #fde68a;
     --danger-color: #f87171;
     --danger-light: #fca5a5;
+    
+    /* GitHub-style button colors */
+    --btn-primary-bg: #1f883d;
+    --btn-primary-hover-bg: #1a7f37;
+    --btn-primary-active-bg: #166e2f;
+    --btn-primary-text: #ffffff;
+    --btn-primary-border: rgba(31, 35, 40, 0.15);
+    --btn-primary-shadow: 0 1px 0 rgba(31, 35, 40, 0.1);
+    
+    --btn-secondary-bg: #f6f8fa;
+    --btn-secondary-hover-bg: #f3f4f6;
+    --btn-secondary-active-bg: #ebecf0;
+    --btn-secondary-text: #24292f;
+    --btn-secondary-border: rgba(31, 35, 40, 0.15);
+    --btn-secondary-shadow: 0 1px 0 rgba(31, 35, 40, 0.04);
+    
+    --btn-danger-bg: #cf222e;
+    --btn-danger-hover-bg: #a40e26;
+    --btn-danger-active-bg: #8e0920;
+    --btn-danger-text: #ffffff;
+    --btn-danger-border: rgba(31, 35, 40, 0.15);
+    --btn-danger-shadow: 0 1px 0 rgba(31, 35, 40, 0.1);
+    
     --background-color: #f1f5f9;
     --background-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
     --surface-color: #ffffff;
@@ -1116,8 +1210,8 @@ html[data-theme="dark"] a.option:hover {
     --text-primary: #334155;
     --text-secondary: #64748b;
     --border-color: #e2e8f0;
-    --border-focus: #6366f1;
-    --glow-color: rgba(99, 102, 241, 0.4);
+    --border-focus: #0969da;
+    --glow-color: rgba(9, 105, 218, 0.3);
 }
 
 /* Dark mode specific styles for better contrast and readability */
