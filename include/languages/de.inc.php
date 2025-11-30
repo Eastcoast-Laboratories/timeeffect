@@ -338,6 +338,7 @@
 	$GLOBALS['_PJ_strings']['error']					= 'Fehler';
 	$GLOBALS['_PJ_strings']['information']				= 'Information';
 	$GLOBALS['_PJ_strings']['no_message_to_display']	= 'Keine Nachricht anzuzeigen';
+	$GLOBALS['_PJ_strings']['effort_date_normalized']	= 'Das eingegebene Datum wurde automatisch auf %s angepasst, weil der ausgew&auml;hlte Monat nicht so viele Tage hat.';
 	
 	// Activity stop messages
 	$GLOBALS['_PJ_strings']['activities_stopped']		= 'Aktivitäten gestoppt';

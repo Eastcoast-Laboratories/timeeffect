@@ -449,8 +449,26 @@
 			if($this->checkDuplicate()) {
 				return $GLOBALS['_PJ_strings']['error_effort_duplicate'];
 			}
-
+			
 			list($year, $month, $day) = explode("-", $this->data['date']);
+			
+			// LOG_EFFORT_DATE_NORMALIZE: Ensure date is valid for MySQL by clamping day to last day of month if necessary
+			$year = (int)$year;
+			$month = (int)$month;
+			$day = (int)$day;
+			if($year > 0 && $month > 0 && $day > 0) {
+				$max_day = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+				if($day > $max_day) {
+					$original_date = $this->data['date'];
+					$day = $max_day;
+					$this->data['date'] = sprintf('%04d-%02d-%02d', $year, $month, $day);
+					debugLog('LOG_EFFORT_DATE_NORMALIZE', 'Normalized invalid effort date ' . $original_date . ' to ' . $this->data['date']);
+					$_SESSION['effort_date_normalized'] = true;
+					$_SESSION['effort_date_normalized_value'] = $this->data['date'];
+				} else {
+					$this->data['date'] = sprintf('%04d-%02d-%02d', $year, $month, $day);
+				}
+			}
 			list($b_hour, $b_minute, $b_second) = explode(":", $this->data['begin']);
 			list($e_hour, $e_minute, $e_second) = explode(":", $this->data['end']);
 

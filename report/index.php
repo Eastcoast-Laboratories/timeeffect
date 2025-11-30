@@ -6,6 +6,14 @@
 	// Fix: Initialize request variables to prevent undefined variable warnings
 	$pid = $_REQUEST['pid'] ?? null;
 	$cid = $_REQUEST['cid'] ?? null;
+
+	// Use last viewed customer/project from session as defaults when no explicit selection is provided
+	if((empty($cid) || $cid === '0') && isset($_SESSION['last_viewed_customer'])) {
+		$cid = $_SESSION['last_viewed_customer'];
+	}
+	if((empty($pid) || $pid === '0') && isset($_SESSION['last_viewed_project'])) {
+		$pid = $_SESSION['last_viewed_project'];
+	}
 	$shown = $_REQUEST['shown'] ?? [];
 	$report = $_REQUEST['report'] ?? null;
 	$syear = $_REQUEST['syear'] ?? null;

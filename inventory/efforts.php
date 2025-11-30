@@ -837,6 +837,14 @@
 		$billed_limit = ($sbe == 1) ? $config_default : intval($sbe); // Convert sbe=1 to config default, use numeric value otherwise
 		debugLog("LOG_SBE_LIMIT", "SBE parameter: sbe=$sbe, billed_limit=$billed_limit, config_default=$config_default");
 	}
+	// Store last viewed customer and project in session for later defaults (e.g. in reports)
+	if(!empty($cid) && $cid !== 'unassigned') {
+		$_SESSION['last_viewed_customer'] = (int)$cid;
+	}
+	if(!empty($pid)) {
+		$_SESSION['last_viewed_project'] = (int)$pid;
+	}
+
 	$efforts			= new EffortList($customer, $project, $_PJ_auth, isset($shown['be']) ? $shown['be'] : false, NULL, $sort_order, $billed_limit);
 	// LOG_TITLE_GENERATION: Set appropriate title based on project context
 	if ($project && $project->giveValue('project_name')) {
@@ -859,6 +867,23 @@
 		echo '<div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; margin: 20px; border-radius: 5px; text-align: center;">';
 		echo $success_message;
 		echo '</div>';
+	}
+
+	// Display effort date normalization info message if applicable
+	if(!empty($_SESSION['effort_date_normalized'])) {
+		$info_title = $GLOBALS['_PJ_strings']['information'] ?? 'Information';
+		$info_message_template = $GLOBALS['_PJ_strings']['effort_date_normalized'] ?? '';
+		$normalized_date = $_SESSION['effort_date_normalized_value'] ?? '';
+		if($info_message_template !== '' && $normalized_date !== '') {
+			// Protect date value but keep translation HTML entities (e.g. &auml;) intact
+			$info_message = sprintf($info_message_template, htmlspecialchars($normalized_date, ENT_QUOTES, 'UTF-8'));
+		} else {
+			$info_message = $info_message_template;
+		}
+		echo '<div style="background: #cce5ff; border: 1px solid #b8daff; color: #004085; padding: 15px; margin: 20px; border-radius: 5px; text-align: center;">';
+		echo '<strong>' . htmlspecialchars($info_title, ENT_QUOTES, 'UTF-8') . '</strong><br>' . $info_message;
+		echo '</div>';
+		unset($_SESSION['effort_date_normalized'], $_SESSION['effort_date_normalized_value']);
 	}
 	
 	// Display bulk edit success message
