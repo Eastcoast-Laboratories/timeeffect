@@ -27,3 +27,5 @@ customer.php?edit=1&rates=1&cid=4
 , soll es eine radio box geben, für den standard tarif, also eine db migration nötig, die in die vorhandene migration eingebaut werden muss. 
 
 erstelle als erstes im dev ordner ein md file mit diesen ganzen änderungen
+
+- wenn man beim report bei Enddatum einen tag auswählt, der in dem monat nicht existiert (z.b. 31. im september), soll er automatisch den letzten tag des monats nehmen (also den 30.sept.) anstatt die tage im folgemonat weiterzuzählen

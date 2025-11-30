@@ -56,6 +56,18 @@
 		$eday = intval(date('d'));
 	}
 
+	// Fix: Adjust day to last day of month if selected day doesn't exist in the month
+	// e.g., if 31st September is selected, use 30th September instead
+	$max_sday = cal_days_in_month(CAL_GREGORIAN, $smonth, $syear);
+	if ($sday > $max_sday) {
+		$sday = $max_sday;
+	}
+	
+	$max_eday = cal_days_in_month(CAL_GREGORIAN, $emonth, $eyear);
+	if ($eday > $max_eday) {
+		$eday = $max_eday;
+	}
+
 	$statistic	= new Statistics($_PJ_auth, false, $customer, $project, $users, $mode, $show_unassigned);
 	if($_PJ_auth->checkPermission('accountant') && is_array($charge)) {
 		$statistic->billEfforts(date('Y-m-d'), implode(',', array_keys($charge)));
