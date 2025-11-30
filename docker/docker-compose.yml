@@ -1,15 +1,14 @@
-version: '2'
-
 volumes:
   db:
 
 services:
   db:
     image: mariadb:10.5
+    container_name: timeeffect-db
     volumes:
       - db:/var/lib/mysql
     ports:
-      - 3306:3306
+      - 3307:3306
     environment:
       - MYSQL_ROOT_PASSWORD=very_unsecure_timeeffect_PW1 
       - MYSQL_PASSWORD=very_unsecure_timeeffect_PW1 
@@ -21,6 +20,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: timeeffect-app
     # Fallback to base image if build fails:
     # image: webdevops/php-apache:8.4
     ports:

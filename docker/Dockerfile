@@ -10,6 +10,10 @@ LABEL description="TimeEffect PHP 8.4 with Apache and MySQL support"
 # Copy custom Apache VHost configuration
 COPY vhost-fix.conf /opt/docker/etc/httpd/vhost.conf
 
+# Copy and set entrypoint script to fix Apache config at startup
+COPY entrypoint-fix.sh /entrypoint-fix.sh
+RUN chmod +x /entrypoint-fix.sh
+
 # Enable PHP short tags for legacy compatibility and error logging
 RUN echo "short_open_tag = On" >> /opt/docker/etc/php/php.ini && \
     echo "log_errors = On" >> /opt/docker/etc/php/php.ini && \
@@ -40,6 +44,10 @@ WORKDIR /var/www/html
 
 # Expose ports
 EXPOSE 80 443
+
+# Set custom entrypoint that fixes Apache config
+ENTRYPOINT ["/entrypoint-fix.sh"]
+CMD ["supervisord"]
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
