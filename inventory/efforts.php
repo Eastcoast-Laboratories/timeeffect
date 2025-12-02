@@ -880,7 +880,7 @@
 		} else {
 			$info_message = $info_message_template;
 		}
-		echo '<div style="background: #cce5ff; border: 1px solid #b8daff; color: #004085; padding: 15px; margin: 20px; border-radius: 5px; text-align: center;">';
+		echo '<div class="info-message" style="background: #cce5ff; border: 1px solid #b8daff; color: #004085; padding: 15px; margin: 20px; border-radius: 5px; text-align: center;">';
 		echo '<strong>' . htmlspecialchars($info_title, ENT_QUOTES, 'UTF-8') . '</strong><br>' . $info_message;
 		echo '</div>';
 		unset($_SESSION['effort_date_normalized'], $_SESSION['effort_date_normalized_value']);
@@ -892,7 +892,7 @@
 		$message = $count === 1 ? 
 			"Successfully updated 1 effort." : 
 			"Successfully updated $count efforts.";
-		echo '<div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; margin: 20px; border-radius: 5px; text-align: center;">';
+		echo '<div class="success-message" style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; margin: 20px; border-radius: 5px; text-align: center;">';
 		echo $message;
 		echo '</div>';
 	}
@@ -900,7 +900,7 @@
 	// Display error message if present
 	if(isset($_GET['error'])) {
 		$error_message = urldecode($_GET['error']);
-		echo '<div style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 15px; margin: 20px; border-radius: 5px; text-align: center;">';
+		echo '<div class="error-message" style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 15px; margin: 20px; border-radius: 5px; text-align: center;">';
 		echo '<strong>❌ Fehler!</strong><br>' . $error_message;
 		echo '</div>';
 	}

@@ -115,4 +115,3 @@
 	include("$_PJ_root/templates/edit.ihtml.php");
 
 	include_once("$_PJ_include_path/degestiv.inc.php");
-?>

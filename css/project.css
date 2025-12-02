@@ -271,6 +271,12 @@ A.topNav {
 	font-style:			normal;
 }
 
+.FormSubmitDelete {
+	background-color:	#dc3545;
+	color:				#ffffff;
+	border:				1px solid #dc3545;
+}
+
 .FormField {
 	font-family:		Verdana,Arial,sans-serif;
 	font-size:			13px;

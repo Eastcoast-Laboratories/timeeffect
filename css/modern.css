@@ -300,6 +300,41 @@ input[type="submit"]:focus, button[type="submit"]:focus, button:focus {
     box-shadow: var(--btn-primary-shadow);
 }
 
+input.FormSubmitDelete[type="button"],
+button.FormSubmitDelete {
+    background: var(--btn-danger-bg) !important;
+    color: var(--btn-danger-text) !important;
+    border-color: var(--btn-danger-border) !important;
+    box-shadow: var(--btn-danger-shadow);
+}
+
+input.FormSubmitDelete[type="button"]:hover,
+button.FormSubmitDelete:hover {
+    background: var(--btn-danger-hover-bg) !important;
+}
+
+input.FormSubmitDelete[type="button"]:active,
+button.FormSubmitDelete:active {
+    background: var(--btn-danger-active-bg) !important;
+}
+
+html[data-theme="dark"] input.FormSubmitDelete[type="button"],
+html[data-theme="dark"] button.FormSubmitDelete {
+    background: var(--btn-danger-bg) !important;
+    color: var(--btn-danger-text) !important;
+    border-color: var(--btn-danger-border) !important;
+}
+
+html[data-theme="dark"] input.FormSubmitDelete[type="button"]:hover,
+html[data-theme="dark"] button.FormSubmitDelete:hover {
+    background: var(--btn-danger-hover-bg) !important;
+}
+
+html[data-theme="dark"] input.FormSubmitDelete[type="button"]:active,
+html[data-theme="dark"] button.FormSubmitDelete:active {
+    background: var(--btn-danger-active-bg) !important;
+}
+
 input:not([type="radio"]):not([type="submit"]):not([type="checkbox"]), textarea, select {
     background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
     border: 3px solid var(--border-color);
@@ -931,7 +966,7 @@ html[data-theme="dark"] img[src*="logo_te_150.png"] {
 }
 
 /* Dark mode form elements */
-html[data-theme="dark"] input:not([type="radio"]):not([type="submit"]):not([type="checkbox"]),
+html[data-theme="dark"] input:not([type="radio"]):not([type="submit"]):not([type="checkbox"]):not(.FormSubmitDelete),
 html[data-theme="dark"] textarea,
 html[data-theme="dark"] select {
     background: var(--surface-color) !important;
