@@ -880,8 +880,10 @@
 		} else {
 			$info_message = $info_message_template;
 		}
-		echo '<div class="info-message">';
-		echo '<strong>' . htmlspecialchars($info_title, ENT_QUOTES, 'UTF-8') . '</strong><br>' . $info_message;
+		echo '<div class="info-message" title="';
+		echo $info_title;
+		echo '">';
+		echo $info_message;
 		echo '</div>';
 		unset($_SESSION['effort_date_normalized'], $_SESSION['effort_date_normalized_value']);
 	}
