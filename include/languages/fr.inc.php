@@ -183,6 +183,7 @@
 	$GLOBALS['_PJ_strings']['system_default']			= 'Par Défaut du Système';
 	$GLOBALS['_PJ_strings']['light_mode']				= 'Mode Clair';
 	$GLOBALS['_PJ_strings']['dark_mode']				= 'Mode Sombre';
+	$GLOBALS['_PJ_strings']['theme_preference']		= 'Thème de couleur';
 	$GLOBALS['_PJ_strings']['invoice_settings']			= 'Paramètres de Facturation';
 	$GLOBALS['_PJ_strings']['company_name']				= 'Nom de l\'Entreprise';
 	$GLOBALS['_PJ_strings']['company_address']			= 'Adresse de l\'Entreprise';

@@ -87,9 +87,7 @@ if(!empty($GLOBALS['login_lockout'])) {
 		<div class="form-group">
 			<label class="form-label" for="lang"><?=$GLOBALS['_PJ_strings']['language']?>:</label>
 			<select id="lang" name="lang">
-				<option value="de"<?php if($GLOBALS['_PJ_language'] == 'de') print ' selected'; ?>><?=$GLOBALS['_PJ_strings']['language_de']?></option>
-				<option value="en"<?php if($GLOBALS['_PJ_language'] == 'en') print ' selected'; ?>><?=$GLOBALS['_PJ_strings']['language_en']?></option>
-				<option value="fr"<?php if($GLOBALS['_PJ_language'] == 'fr') print ' selected'; ?>><?=$GLOBALS['_PJ_strings']['language_fr']?></option>
+				<?php include($GLOBALS['_PJ_root'] . '/templates/shared/language_select_options.ihtml.php'); ?>
 			</select>
 		</div>
 		

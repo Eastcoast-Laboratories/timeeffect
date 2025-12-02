@@ -184,6 +184,7 @@
 	$GLOBALS['_PJ_strings']['system_default']			= 'Systemstandard';
 	$GLOBALS['_PJ_strings']['light_mode']				= 'Heller Modus';
 	$GLOBALS['_PJ_strings']['dark_mode']				= 'Dunkler Modus';
+	$GLOBALS['_PJ_strings']['theme_preference']		= 'Designmodus';
 	$GLOBALS['_PJ_strings']['invoice_settings']			= 'Rechnungseinstellungen';
 	$GLOBALS['_PJ_strings']['company_name']				= 'Firmenname';
 	$GLOBALS['_PJ_strings']['company_address']			= 'Firmenadresse';

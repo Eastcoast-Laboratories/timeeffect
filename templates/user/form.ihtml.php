@@ -118,14 +118,22 @@
 									<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['facsimile'])) echo $GLOBALS['_PJ_strings']['facsimile'] ?>:</TD>
 										<TD CLASS="content"><INPUT CLASS="FormField" TYPE="text" NAME="facsimile" VALUE="<?php if(isset($facsimile)) echo $facsimile; ?>"></TD>
 									</TR><TR>
-						<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['theme_preference'])) echo $GLOBALS['_PJ_strings']['theme_preference'] ?></TD>
-						<TD CLASS="content">
-							<select name="theme_preference" class="<?php echo $ro_css_theme_preference ?>">
-								<option value="system" <?php echo (isset($theme_preference) && $theme_preference == 'system') ? 'selected' : '' ?>><?php if(!empty($GLOBALS['_PJ_strings']['system_default'])) echo $GLOBALS['_PJ_strings']['system_default']; else echo 'System Default'; ?></option>
-								<option value="light" <?php echo (isset($theme_preference) && $theme_preference == 'light') ? 'selected' : '' ?>><?php if(!empty($GLOBALS['_PJ_strings']['light_mode'])) echo $GLOBALS['_PJ_strings']['light_mode']; else echo 'Light Mode'; ?></option>
-								<option value="dark" <?php echo (isset($theme_preference) && $theme_preference == 'dark') ? 'selected' : '' ?>><?php if(!empty($GLOBALS['_PJ_strings']['dark_mode'])) echo $GLOBALS['_PJ_strings']['dark_mode']; else echo 'Dark Mode'; ?></option>
-							</select>
-						</TD>
+									<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['language'])) echo $GLOBALS['_PJ_strings']['language'] ?>:</TD>
+										<TD CLASS="content">
+											<select name="lang">
+												<?php include($GLOBALS['_PJ_root'] . '/templates/shared/language_select_options.ihtml.php'); ?>
+											</select>
+										</TD>
+									</TR><TR>
+									<TD CLASS="label"><?php if(!empty($GLOBALS['_PJ_strings']['theme_preference'])) echo $GLOBALS['_PJ_strings']['theme_preference'] ?></TD>
+										<TD CLASS="content">
+											<select name="theme_preference" class="<?php echo $ro_css_theme_preference ?>">
+												<option value="system" <?php echo (isset($theme_preference) && $theme_preference == 'system') ? 'selected' : '' ?>><?php if(!empty($GLOBALS['_PJ_strings']['system_default'])) echo $GLOBALS['_PJ_strings']['system_default']; else echo 'System Default'; ?></option>
+												<option value="light" <?php echo (isset($theme_preference) && $theme_preference == 'light') ? 'selected' : '' ?>><?php if(!empty($GLOBALS['_PJ_strings']['light_mode'])) echo $GLOBALS['_PJ_strings']['light_mode']; else echo 'Light Mode'; ?></option>
+												<option value="dark" <?php echo (isset($theme_preference) && $theme_preference == 'dark') ? 'selected' : '' ?>><?php if(!empty($GLOBALS['_PJ_strings']['dark_mode'])) echo $GLOBALS['_PJ_strings']['dark_mode']; else echo 'Dark Mode'; ?></option>
+											</select>
+										</TD>
+									</TR><TR>
 					</TR><TR>
 						<TD COLSPAN="2" CLASS="label" style="background-color: #f0f0f0; padding: 10px; font-weight: bold;">
 							<?php if(!empty($GLOBALS['_PJ_strings']['invoice_settings'])) echo $GLOBALS['_PJ_strings']['invoice_settings']; else echo 'Invoice Settings'; ?>

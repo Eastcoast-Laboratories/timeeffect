@@ -18,11 +18,16 @@ $sic = $_REQUEST['sic'] ?? null;
 $scp = $_REQUEST['scp'] ?? null;
 $sbe = $_REQUEST['sbe'] ?? null;
 
+$session_lang = $_SESSION['_PJ_language'] ?? null;
+
 /*
    if $lang is set set language to value of $lang. Otherwise select default language
 */
-if(isset($lang)) {
+if(!empty($lang)) {
 	$_PJ_language = $lang;
+	$_SESSION['_PJ_language'] = $lang;
+} else if(!empty($session_lang)) {
+	$_PJ_language = $session_lang;
 } else if(!isset($_PJ_language)) {
 	$_PJ_language		= $_PJ_default_language;
 }
