@@ -2140,3 +2140,49 @@ html[data-theme="dark"] .recent-effort-btn:hover {
         color: var(--primary-color);
     }
 }
+.info-message,
+.success-message,
+.error-message {
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    margin: 20px 10px;
+}
+
+@media (min-width: 800px) {
+    .info-message,
+    .success-message,
+    .error-message {
+        max-width: 600px;
+        margin: -3px 215px 9px 216px;
+    }
+}
+
+
+@media (min-width: 1100px) {
+    .info-message,
+    .success-message,
+    .error-message {
+        max-width: 800px;
+        margin: -3px 215px 9px 216px;
+    }
+}
+
+.info-message {
+    background: #cce5ff;
+    border: 1px solid #b8daff;
+    color: #004085;
+}
+
+.success-message {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.error-message {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
