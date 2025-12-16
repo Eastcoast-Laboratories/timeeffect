@@ -112,10 +112,9 @@ function splitSqlFile(&$ret, $sql, $release) {
 	} // end for
 
 	// add any rest to the returned array
-	if (!empty($sql) && ereg('[^[:space:]]+', $sql)) {
+	if (!empty($sql) && preg_match('/\S/', $sql)) {
 		$ret[] = $sql;
 	}
 
 	return TRUE;
 } // end of the 'splitSqlFile()' function
-?>
