@@ -1517,14 +1517,7 @@ function selectFont($fontName,$encoding='',$set=1){
         // note that pdf supports only binary format type 1 font files, though there is a 
         // simple utility to convert them from pfa to pfb.
         $fp = fopen($fbfile,'rb');
-        if (function_exists('get_magic_quotes_runtime')) {
-          $tmp = get_magic_quotes_runtime();
-          set_magic_quotes_runtime(0);
-        }
         $data = fread($fp,filesize($fbfile));
-        if (function_exists('set_magic_quotes_runtime') && isset($tmp)) {
-          set_magic_quotes_runtime($tmp);
-        }
         fclose($fp);
 
         // create the font descriptor
@@ -2668,10 +2661,6 @@ function PRVT_getBytes(&$data,$pos,$num){
 function addPngFromFile($file,$x,$y,$w=0,$h=0){
   // read in a png file, interpret it, then add to the system
   $error=0;
-  if (function_exists('get_magic_quotes_runtime')) {
-    $tmp = get_magic_quotes_runtime();
-    set_magic_quotes_runtime(0);
-  }
   $fp = @fopen($file,'rb');
   if(!empty($fp)){
     $data='';
@@ -2682,9 +2671,6 @@ function addPngFromFile($file,$x,$y,$w=0,$h=0){
   } else {
     $error = 1;
     $errormsg = 'trouble opening file: '.$file;
-  }
-  if (function_exists('set_magic_quotes_runtime') && isset($tmp)) {
-    set_magic_quotes_runtime($tmp);
   }
   
   if(empty($error)){
@@ -2887,14 +2873,7 @@ function addJpegFromFile($img,$x,$y,$w=0,$h=0){
 
   $fp=fopen($img,'rb');
 
-  if (function_exists('get_magic_quotes_runtime')) {
-    $tmp = get_magic_quotes_runtime();
-    set_magic_quotes_runtime(0);
-  }
   $data = fread($fp,filesize($img));
-  if (function_exists('set_magic_quotes_runtime') && isset($tmp)) {
-    set_magic_quotes_runtime($tmp);
-  }
   
   fclose($fp);
 
@@ -2942,10 +2921,6 @@ function addImage(&$img,$x,$y,$w=0,$h=0,$quality=75){
   imagejpeg($img,$tmpName,$quality);
   $fp=fopen($tmpName,'rb');
 
-  if (function_exists('get_magic_quotes_runtime')) {
-    $tmp = get_magic_quotes_runtime();
-    set_magic_quotes_runtime(0);
-  }
   $fp = @fopen($tmpName,'rb');
   if(!empty($fp)){
     $data='';
@@ -2958,9 +2933,6 @@ function addImage(&$img,$x,$y,$w=0,$h=0,$quality=75){
     $errormsg = 'trouble opening file';
   }
 //  $data = fread($fp,filesize($tmpName));
-  if (function_exists('set_magic_quotes_runtime') && isset($tmp)) {
-    set_magic_quotes_runtime($tmp);
-  }
 //  fclose($fp);
   unlink($tmpName);
   $this->addJpegImage_common($data,$x,$y,$imageWidth,$imageHeight,$w,$h);
