@@ -31,7 +31,9 @@ class LoginTest extends TestCase
     protected function tearDown(): void
     {
         if ($this->ch) {
-            curl_close($this->ch);
+            if (PHP_VERSION_ID < 80000) {
+                curl_close($this->ch);
+            }
         }
         // Clean up cookie file
         if (file_exists('/tmp/cookies.txt')) {
