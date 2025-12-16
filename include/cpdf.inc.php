@@ -1045,7 +1045,8 @@ function o_encryption($id,$action,$options=''){
       $ovalue=$this->ARC4($user);
       $this->objects[$id]['info']['O']=$ovalue;
       // now make the u value, phew.
-      $tmp = $this->md5_16($user.$ovalue.chr($options['p']).chr(255).chr(255).chr(255).$this->fileIdentifier);
+      $p = (int)$options['p'];
+      $tmp = $this->md5_16($user.$ovalue.pack('V', $p).$this->fileIdentifier);
       $ukey = substr($tmp,0,5);
 
       $this->ARC4_init($ukey);
