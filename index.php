@@ -59,14 +59,14 @@
     }
 
     require_once(__DIR__ . "/bootstrap.php");
-	$no_login = true; // Disable automatic login requirement
-	include_once("include/config.inc.php");
-	include_once($_PJ_include_path . '/scripts.inc.php');
+    $no_login = true; // Disable automatic login requirement
+    include_once("include/config.inc.php");
+    include_once($_PJ_include_path . '/scripts.inc.php');
 
-	// Set form action for login form include
-	$form_action = 'inventory/customer.php';
-	$form_class = 'loginForm';
-	$container_style = 'margin: 0; padding: 1.5rem;';
+    // Set form action for login form include
+    $form_action = 'inventory/customer.php';
+    $form_class = 'loginForm';
+    $container_style = 'margin: 0; padding: 1.5rem;';
 ?>
 <!DOCTYPE html>
 <html lang="<?= $GLOBALS['_PJ_language'] ?? 'de' ?>">

@@ -22,7 +22,7 @@ services:
       dockerfile: Dockerfile
     container_name: timeeffect-app
     # Fallback to base image if build fails:
-    # image: webdevops/php-apache:8.4
+    # image: webdevops/php-apache:8.5
     ports:
       - 80:80
       - 443:443 

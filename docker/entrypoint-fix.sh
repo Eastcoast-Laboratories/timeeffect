@@ -5,5 +5,5 @@ if [ -f /etc/apache2/sites-enabled/000-default.conf ]; then
     sed -i 's|<Directory /var/www/html/webroot>|<Directory /var/www/html>|g' /etc/apache2/sites-enabled/000-default.conf
 fi
 
-# Execute the original entrypoint
-exec /entrypoint "$@"
+# Execute the container command
+exec "$@"
