@@ -8,7 +8,7 @@
 
 class MigrationManager {
     private $db;
-    private $current_version = 7; // Current target version - increment for new migrations
+    private $current_version = 8; // Current target version - increment for new migrations
     private $migrations_table;
 
     public function __construct() {
@@ -154,6 +154,14 @@ class MigrationManager {
             if ($this->runMigration7()) {
                 $migrations_run[] = 'Fix customer_contracts table schema';
                 $this->recordMigration(7, 'Fix customer_contracts table schema');
+            }
+        }
+        
+        // Migration 8: Add customer_address column to customer table
+        if ($current_version < 8) {
+            if ($this->runMigration8()) {
+                $migrations_run[] = 'Add customer_address column to customer table';
+                $this->recordMigration(8, 'Add customer_address column to customer table');
             }
         }
         
@@ -652,6 +660,40 @@ class MigrationManager {
             
         } catch (Exception $e) {
             debugLog("MIGRATION_7", "Migration 7 failed: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Migration 8: Add customer_address column to customer table
+     */
+    private function runMigration8() {
+        try {
+            $customer_table = $GLOBALS['_PJ_customer_table'];
+            
+            // Check if column already exists
+            $check_query = "SHOW COLUMNS FROM $customer_table LIKE 'customer_address'";
+            $this->db->query($check_query);
+            
+            if ($this->db->next_record()) {
+                return true; // Column already exists
+            }
+            
+            // Add customer_address column after customer_desc
+            $alter_query = "ALTER TABLE $customer_table ADD COLUMN customer_address TEXT NULL AFTER customer_desc";
+            if (!$this->db->query($alter_query)) {
+                error_log("Migration 8: Failed to add customer_address column to $customer_table");
+                return false;
+            }
+            
+            // Set empty string for existing customers
+            $update_query = "UPDATE $customer_table SET customer_address = '' WHERE customer_address IS NULL";
+            $this->db->query($update_query);
+            
+            return true;
+            
+        } catch (Exception $e) {
+            error_log("Migration 8 failed: " . $e->getMessage());
             return false;
         }
     }
