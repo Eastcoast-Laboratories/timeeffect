@@ -13,7 +13,7 @@
 	}
 	$customer_budget_currency	= $_PJ_currency;
 ?>
-	<FORM ACTION="<? print $PHP_SELF; ?>" METHOD="<? print $_PJ_form_method; ?>">
+	<FORM ACTION="<?php print $PHP_SELF; ?>" METHOD="<?php print $_PJ_form_method; ?>">
 	<INPUT TYPE="hidden" NAME="rates" VALUE="1">
 	<INPUT TYPE="hidden" NAME="edit" VALUE="1">
 	<INPUT TYPE="hidden" NAME="altered" VALUE="1">

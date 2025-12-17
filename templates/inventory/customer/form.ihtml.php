@@ -39,7 +39,7 @@
 	}
 	$customer_budget_currency	= $GLOBALS['_PJ_currency'];
 ?>
-	<FORM ACTION="<? print $GLOBALS['_PJ_customer_inventory_script']; ?>" METHOD="<?php if(!empty($GLOBALS['_PJ_form_method'])) echo $GLOBALS['_PJ_form_method']; ?>">
+	<FORM ACTION="<?php print $GLOBALS['_PJ_customer_inventory_script']; ?>" METHOD="<?php if(!empty($GLOBALS['_PJ_form_method'])) echo $GLOBALS['_PJ_form_method']; ?>">
 	<INPUT TYPE="hidden" NAME="customer_budget_currency" VALUE="<?php if(isset($customer_budget_currency)) echo $customer_budget_currency; ?>">
 	<INPUT TYPE="hidden" NAME="edit" VALUE="1">
 	<INPUT TYPE="hidden" NAME="altered" VALUE="1">

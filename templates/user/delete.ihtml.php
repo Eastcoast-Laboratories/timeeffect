@@ -18,7 +18,7 @@
 
 ?>
 
-	<FORM ACTION="<? print $GLOBALS['_PJ_user_script']; ?>" METHOD="<?php if(!empty($GLOBALS['_PJ_form_method'])) echo $GLOBALS['_PJ_form_method']; ?>">
+	<FORM ACTION="<?php print $GLOBALS['_PJ_user_script']; ?>" METHOD="<?php if(!empty($GLOBALS['_PJ_form_method'])) echo $GLOBALS['_PJ_form_method']; ?>">
 
 	<INPUT TYPE="hidden" NAME="uid" VALUE="<?php if(isset($uid)) echo $uid; ?>">
 

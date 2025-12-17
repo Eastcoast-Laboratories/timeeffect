@@ -171,7 +171,7 @@ if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
 }
 ?>
 
-<FORM ACTION="<? print $PHP_SELF; ?>" METHOD="<? print $_PJ_form_method; ?>">
+<FORM ACTION="<?php print $PHP_SELF; ?>" METHOD="<?php print $_PJ_form_method; ?>">
 <INPUT TYPE="hidden" NAME="edit" VALUE="1">
 <INPUT TYPE="hidden" NAME="altered" VALUE="1">
 <INPUT TYPE="hidden" NAME="cid" VALUE="<?php if(isset($cid)) echo $cid; ?>">

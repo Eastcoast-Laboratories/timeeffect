@@ -8,7 +8,7 @@
 		return;
 	}
 ?>
-	<FORM ACTION="<? print $GLOBALS['_PJ_group_script']; ?>" METHOD="<?php if(!empty($GLOBALS['_PJ_form_method'])) echo $GLOBALS['_PJ_form_method']; ?>">
+	<FORM ACTION="<?php print $GLOBALS['_PJ_group_script']; ?>" METHOD="<?php if(!empty($GLOBALS['_PJ_form_method'])) echo $GLOBALS['_PJ_form_method']; ?>">
 	<INPUT TYPE="hidden" NAME="gid" VALUE="<?php if(isset($gid)) echo $gid; ?>">
 	<INPUT TYPE="hidden" NAME="delete" VALUE="1">
 	<CENTER>

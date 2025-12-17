@@ -8,7 +8,7 @@
 		exit;
 	}
 ?>
-	<FORM ACTION="<? print $GLOBALS['_PJ_efforts_inventory_script']; ?>" METHOD="<?php if(!empty($GLOBALS['_PJ_form_method'])) echo $GLOBALS['_PJ_form_method']; ?>">
+	<FORM ACTION="<?php print $GLOBALS['_PJ_efforts_inventory_script']; ?>" METHOD="<?php if(!empty($GLOBALS['_PJ_form_method'])) echo $GLOBALS['_PJ_form_method']; ?>">
 	<INPUT TYPE="hidden" NAME="eid" VALUE="<?php if(isset($eid)) echo $eid; ?>">
 	<INPUT TYPE="hidden" NAME="pid" VALUE="<?php if(isset($pid)) echo $pid; ?>">
 	<INPUT TYPE="hidden" NAME="cid" VALUE="<?php if(isset($cid)) echo $cid; ?>">
