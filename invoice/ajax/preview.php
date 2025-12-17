@@ -16,7 +16,7 @@ if (!isset($GLOBALS['suppress_headers'])) {
 
 try {
     $customer_id = $_GET['customer_id'] ?? '';
-    $project_id = $_GET['project_id'] ?? null;
+    $project_id = !empty($_GET['project_id']) ? $_GET['project_id'] : null;
     $period_start = $_GET['period_start'] ?? '';
     $period_end = $_GET['period_end'] ?? '';
     $generate_type = $_GET['generate_type'] ?? 'manual';

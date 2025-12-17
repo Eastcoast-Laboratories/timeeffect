@@ -21,7 +21,7 @@ $success = false;
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $customer_id = $_POST['customer_id'] ?? '';
-    $project_id = $_POST['project_id'] ?? null;
+    $project_id = !empty($_POST['project_id']) ? $_POST['project_id'] : null;
     $period_start = $_POST['period_start'] ?? '';
     $period_end = $_POST['period_end'] ?? '';
     $invoice_date = $_POST['invoice_date'] ?? date('Y-m-d');
