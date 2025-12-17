@@ -112,14 +112,22 @@
                             <tr>
                                 <th><?php if(!empty($GLOBALS['_PJ_strings']['date'])) echo $GLOBALS['_PJ_strings']['date']; else echo 'Date'; ?></th>
                                 <th><?php if(!empty($GLOBALS['_PJ_strings']['hours'])) echo $GLOBALS['_PJ_strings']['hours']; else echo 'Hours'; ?></th>
+                                <th><?php if(!empty($GLOBALS['_PJ_strings']['hourly_rate'])) echo $GLOBALS['_PJ_strings']['hourly_rate']; else echo 'Rate'; ?></th>
+                                <th><?php if(!empty($GLOBALS['_PJ_strings']['amount'])) echo $GLOBALS['_PJ_strings']['amount']; else echo 'Amount'; ?></th>
                                 <th><?php if(!empty($GLOBALS['_PJ_strings']['description'])) echo $GLOBALS['_PJ_strings']['description']; else echo 'Description'; ?></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($invoice_efforts as $effort): ?>
+                            <?php foreach ($invoice_efforts as $effort): 
+                                $effort_hours = floatval($effort['hours'] ?? 0);
+                                $effort_rate = floatval($effort['rate'] ?? 0);
+                                $effort_amount = $effort_hours * $effort_rate;
+                            ?>
                                 <tr>
                                     <td><?php echo date('d.m.Y', strtotime($effort['date'])); ?></td>
-                                    <td><?php echo number_format($effort['hours'] ?? ($effort['minutes'] ?? 0) / 60, 2); ?>h</td>
+                                    <td><?php echo number_format($effort_hours, 2); ?>h</td>
+                                    <td><?php echo number_format($effort_rate, 2); ?>€/h</td>
+                                    <td><?php echo number_format($effort_amount, 2); ?>€</td>
                                     <td><?php echo htmlspecialchars($effort['description']); ?></td>
                                 </tr>
                             <?php endforeach; ?>

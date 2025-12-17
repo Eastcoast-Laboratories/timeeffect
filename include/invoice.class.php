@@ -238,7 +238,8 @@ class Invoice {
      * Get efforts linked to invoice
      */
     public function getInvoiceEfforts($invoice_id) {
-        $sql = "SELECT e.*, ie.id as link_id
+        $sql = "SELECT e.*, ie.id as link_id,
+                       TIME_TO_SEC(TIMEDIFF(e.end, e.begin)) / 3600 as hours
                 FROM " . $GLOBALS['_PJ_table_prefix'] . "effort e
                 JOIN " . $GLOBALS['_PJ_table_prefix'] . "invoice_efforts ie ON e.id = ie.effort_id
                 WHERE ie.invoice_id = " . intval($invoice_id) . "
