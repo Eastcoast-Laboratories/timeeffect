@@ -129,6 +129,10 @@ function updateProjects() {
     const customerId = document.getElementById('customer_id').value;
     const projectSelect = document.getElementById('project_id');
     
+    // Get project_id from URL params to preserve selection
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedProjectId = urlParams.get('project_id') || '';
+    
     // Clear existing options
     projectSelect.innerHTML = '<option value=""><?php if(!empty($GLOBALS['_PJ_strings']['all_projects'])) echo $GLOBALS['_PJ_strings']['all_projects']; else echo 'All Projects'; ?></option>';
     
@@ -140,6 +144,9 @@ function updateProjects() {
             const option = document.createElement('option');
             option.value = project.id;
             option.textContent = project.name;
+            if (project.id == selectedProjectId) {
+                option.selected = true;
+            }
             projectSelect.appendChild(option);
         });
     }
