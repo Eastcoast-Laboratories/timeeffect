@@ -138,11 +138,11 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="effort-actions" style="margin-top: 15px; display: flex; gap: 10px;">
+                    <div class="effort-actions" style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
                         <button type="button" class="btn btn-danger" onclick="removeSelectedEfforts()" id="btn-remove-efforts" disabled>
                             <?php echo !empty($GLOBALS['_PJ_strings']['remove_from_invoice']) ? $GLOBALS['_PJ_strings']['remove_from_invoice'] : 'Remove from Invoice'; ?>
                         </button>
-                        <a href="#" class="btn btn-primary" id="btn-view-report" style="pointer-events: none; opacity: 0.5;">
+                        <a href="../report/index.php?customer_budget_currency=EUR&report=1&cid=<?php echo $invoice_data['customer_id']; ?>&pid=<?php echo $invoice_data['project_id'] ?? ''; ?>&syear=<?php echo date('Y', strtotime($invoice_data['period_start'])); ?>&smonth=<?php echo date('n', strtotime($invoice_data['period_start'])); ?>&sday=<?php echo date('j', strtotime($invoice_data['period_start'])); ?>&eyear=<?php echo date('Y', strtotime($invoice_data['period_end'])); ?>&emonth=<?php echo date('n', strtotime($invoice_data['period_end'])); ?>&eday=<?php echo date('j', strtotime($invoice_data['period_end'])); ?>" class="btn btn-primary" id="btn-view-report">
                             <?php echo !empty($GLOBALS['_PJ_strings']['view_in_report']) ? $GLOBALS['_PJ_strings']['view_in_report'] : 'View in Report'; ?>
                         </a>
                     </div>
@@ -159,15 +159,6 @@
             function updateEffortButtons() {
                 const checked = document.querySelectorAll('.effort-checkbox:checked').length;
                 document.getElementById('btn-remove-efforts').disabled = checked === 0;
-                const reportBtn = document.getElementById('btn-view-report');
-                if (checked > 0) {
-                    reportBtn.style.pointerEvents = 'auto';
-                    reportBtn.style.opacity = '1';
-                    reportBtn.href = '../report/index.php?customer_budget_currency=EUR&report=1&cid=<?php echo $invoice_data['customer_id']; ?>&pid=<?php echo $invoice_data['project_id'] ?? ''; ?>&syear=<?php echo date('Y', strtotime($invoice_data['period_start'])); ?>&smonth=<?php echo date('n', strtotime($invoice_data['period_start'])); ?>&sday=<?php echo date('j', strtotime($invoice_data['period_start'])); ?>&eyear=<?php echo date('Y', strtotime($invoice_data['period_end'])); ?>&emonth=<?php echo date('n', strtotime($invoice_data['period_end'])); ?>&eday=<?php echo date('j', strtotime($invoice_data['period_end'])); ?>';
-                } else {
-                    reportBtn.style.pointerEvents = 'none';
-                    reportBtn.style.opacity = '0.5';
-                }
             }
             function removeSelectedEfforts() {
                 if (confirm('<?php echo !empty($GLOBALS['_PJ_strings']['confirm_remove_efforts']) ? addslashes($GLOBALS['_PJ_strings']['confirm_remove_efforts']) : 'Remove selected efforts from this invoice?'; ?>')) {

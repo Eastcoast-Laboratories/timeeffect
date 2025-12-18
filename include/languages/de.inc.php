@@ -156,6 +156,9 @@
 	$GLOBALS['_PJ_strings']['invoice_summary']			= 'Rechnungsübersicht';
 	$GLOBALS['_PJ_strings']['previous_carryover']		= 'Vorheriger Übertrag';
 	$GLOBALS['_PJ_strings']['included_efforts']			= 'Enthaltene Aufwände (%d Einträge)';
+	$GLOBALS['_PJ_strings']['remove_from_invoice']		= 'Aus Rechnung entfernen';
+	$GLOBALS['_PJ_strings']['view_in_report']			= 'Im Report anzeigen';
+	$GLOBALS['_PJ_strings']['confirm_remove_efforts']	= 'Ausgewählte Aufwände aus dieser Rechnung entfernen?';
 	$GLOBALS['_PJ_strings']['hours']					= 'Stunden';
 	$GLOBALS['_PJ_strings']['payments']					= 'Zahlungen';
 	$GLOBALS['_PJ_strings']['method']					= 'Methode';

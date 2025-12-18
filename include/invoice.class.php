@@ -254,7 +254,7 @@ class Invoice {
     }
     
     /**
-     * Remove specific efforts from invoice
+     * Remove specific efforts from invoice and recalculate totals
      */
     public function removeEffortsFromInvoice($invoice_id, $effort_ids) {
         if (empty($effort_ids)) {
@@ -265,6 +265,56 @@ class Invoice {
         $sql = "DELETE FROM " . $GLOBALS['_PJ_table_prefix'] . "invoice_efforts 
                 WHERE invoice_id = " . intval($invoice_id) . " 
                 AND effort_id IN (" . implode(',', $ids) . ")";
+        
+        $result = $this->db->query($sql);
+        
+        if ($result) {
+            // Recalculate invoice totals from remaining efforts
+            $this->recalculateInvoiceTotals($invoice_id);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * Recalculate invoice totals from linked efforts
+     */
+    public function recalculateInvoiceTotals($invoice_id) {
+        // Get current invoice for vat_rate
+        $invoice = $this->getInvoice($invoice_id);
+        if (!$invoice) {
+            return false;
+        }
+        
+        $vat_rate = floatval($invoice['vat_rate']);
+        
+        // Calculate totals from remaining efforts
+        $sql = "SELECT 
+                    SUM(TIME_TO_SEC(TIMEDIFF(e.end, e.begin)) / 3600) as total_hours,
+                    SUM((TIME_TO_SEC(TIMEDIFF(e.end, e.begin)) / 3600) * e.rate) as total_amount
+                FROM " . $GLOBALS['_PJ_table_prefix'] . "effort e
+                JOIN " . $GLOBALS['_PJ_table_prefix'] . "invoice_efforts ie ON e.id = ie.effort_id
+                WHERE ie.invoice_id = " . intval($invoice_id);
+        
+        $this->db->query($sql);
+        $totals = ['total_hours' => 0, 'total_amount' => 0];
+        if ($this->db->next_record()) {
+            $totals['total_hours'] = floatval($this->db->Record['total_hours']) ?: 0;
+            $totals['total_amount'] = floatval($this->db->Record['total_amount']) ?: 0;
+        }
+        
+        // Calculate VAT and gross
+        $vat_amount = $totals['total_amount'] * ($vat_rate / 100);
+        $gross_amount = $totals['total_amount'] + $vat_amount;
+        
+        // Update invoice
+        $sql = "UPDATE " . $GLOBALS['_PJ_table_prefix'] . "invoices SET
+                    total_hours = " . floatval($totals['total_hours']) . ",
+                    total_amount = " . floatval($totals['total_amount']) . ",
+                    vat_amount = " . floatval($vat_amount) . ",
+                    gross_amount = " . floatval($gross_amount) . ",
+                    updated_at = CURRENT_TIMESTAMP
+                WHERE id = " . intval($invoice_id);
         
         return $this->db->query($sql);
     }
