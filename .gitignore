@@ -25,3 +25,6 @@ deploy.sh
 
 cookies.txt
 uploads/
+
+# DB dumps
+dev/timeeffect_*.sql
