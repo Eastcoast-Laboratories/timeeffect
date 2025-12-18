@@ -50,6 +50,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             $payments = $payment->getInvoicePayments($invoice_id);
             $invoice_data = $invoice->getInvoice($invoice_id);
         }
+    } elseif ($_POST['action'] === 'remove_efforts') {
+        $effort_ids = $_POST['effort_ids'] ?? [];
+        if (!empty($effort_ids)) {
+            $invoice->removeEffortsFromInvoice($invoice_id, $effort_ids);
+            // Refresh data
+            $invoice_efforts = $invoice->getInvoiceEfforts($invoice_id);
+        }
     }
 }
 

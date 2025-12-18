@@ -106,35 +106,76 @@
             <!-- Linked Efforts -->
             <div class="section">
                 <h3><?php if(!empty($GLOBALS['_PJ_strings']['included_efforts'])) echo sprintf($GLOBALS['_PJ_strings']['included_efforts'], count($invoice_efforts)); else echo 'Included Efforts (' . count($invoice_efforts) . ' entries)'; ?></h3>
-                <div class="efforts-table">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th><?php if(!empty($GLOBALS['_PJ_strings']['date'])) echo $GLOBALS['_PJ_strings']['date']; else echo 'Date'; ?></th>
-                                <th><?php if(!empty($GLOBALS['_PJ_strings']['hours'])) echo $GLOBALS['_PJ_strings']['hours']; else echo 'Hours'; ?></th>
-                                <th><?php if(!empty($GLOBALS['_PJ_strings']['hourly_rate'])) echo $GLOBALS['_PJ_strings']['hourly_rate']; else echo 'Rate'; ?></th>
-                                <th><?php if(!empty($GLOBALS['_PJ_strings']['amount'])) echo $GLOBALS['_PJ_strings']['amount']; else echo 'Amount'; ?></th>
-                                <th><?php if(!empty($GLOBALS['_PJ_strings']['description'])) echo $GLOBALS['_PJ_strings']['description']; else echo 'Description'; ?></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($invoice_efforts as $effort): 
-                                $effort_hours = floatval($effort['hours'] ?? 0);
-                                $effort_rate = floatval($effort['rate'] ?? 0);
-                                $effort_amount = $effort_hours * $effort_rate;
-                            ?>
+                <form method="post" action="view.php?id=<?php echo $invoice_data['id']; ?>" id="efforts-form">
+                    <input type="hidden" name="action" value="">
+                    <div class="efforts-table">
+                        <table class="data-table">
+                            <thead>
                                 <tr>
-                                    <td><?php echo date('d.m.Y', strtotime($effort['date'])); ?></td>
-                                    <td><?php echo number_format($effort_hours, 2); ?>h</td>
-                                    <td><?php echo number_format($effort_rate, 2); ?>€/h</td>
-                                    <td><?php echo number_format($effort_amount, 2); ?>€</td>
-                                    <td><?php echo htmlspecialchars($effort['description']); ?></td>
+                                    <th><input type="checkbox" id="select-all-efforts" title="<?php echo !empty($GLOBALS['_PJ_strings']['select_all']) ? $GLOBALS['_PJ_strings']['select_all'] : 'Select All'; ?>"></th>
+                                    <th><?php if(!empty($GLOBALS['_PJ_strings']['date'])) echo $GLOBALS['_PJ_strings']['date']; else echo 'Date'; ?></th>
+                                    <th><?php if(!empty($GLOBALS['_PJ_strings']['hours'])) echo $GLOBALS['_PJ_strings']['hours']; else echo 'Hours'; ?></th>
+                                    <th><?php if(!empty($GLOBALS['_PJ_strings']['hourly_rate'])) echo $GLOBALS['_PJ_strings']['hourly_rate']; else echo 'Rate'; ?></th>
+                                    <th><?php if(!empty($GLOBALS['_PJ_strings']['amount'])) echo $GLOBALS['_PJ_strings']['amount']; else echo 'Amount'; ?></th>
+                                    <th><?php if(!empty($GLOBALS['_PJ_strings']['description'])) echo $GLOBALS['_PJ_strings']['description']; else echo 'Description'; ?></th>
                                 </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($invoice_efforts as $effort): 
+                                    $effort_hours = floatval($effort['hours'] ?? 0);
+                                    $effort_rate = floatval($effort['rate'] ?? 0);
+                                    $effort_amount = $effort_hours * $effort_rate;
+                                ?>
+                                    <tr>
+                                        <td><input type="checkbox" name="effort_ids[]" value="<?php echo $effort['id']; ?>" class="effort-checkbox"></td>
+                                        <td><?php echo date('d.m.Y', strtotime($effort['date'])); ?></td>
+                                        <td><?php echo number_format($effort_hours, 2); ?>h</td>
+                                        <td><?php echo number_format($effort_rate, 2); ?>€/h</td>
+                                        <td><?php echo number_format($effort_amount, 2); ?>€</td>
+                                        <td><?php echo htmlspecialchars($effort['description']); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="effort-actions" style="margin-top: 15px; display: flex; gap: 10px;">
+                        <button type="button" class="btn btn-danger" onclick="removeSelectedEfforts()" id="btn-remove-efforts" disabled>
+                            <?php echo !empty($GLOBALS['_PJ_strings']['remove_from_invoice']) ? $GLOBALS['_PJ_strings']['remove_from_invoice'] : 'Remove from Invoice'; ?>
+                        </button>
+                        <a href="#" class="btn btn-primary" id="btn-view-report" style="pointer-events: none; opacity: 0.5;">
+                            <?php echo !empty($GLOBALS['_PJ_strings']['view_in_report']) ? $GLOBALS['_PJ_strings']['view_in_report'] : 'View in Report'; ?>
+                        </a>
+                    </div>
+                </form>
             </div>
+            <script>
+            document.getElementById('select-all-efforts').addEventListener('change', function() {
+                document.querySelectorAll('.effort-checkbox').forEach(cb => cb.checked = this.checked);
+                updateEffortButtons();
+            });
+            document.querySelectorAll('.effort-checkbox').forEach(cb => {
+                cb.addEventListener('change', updateEffortButtons);
+            });
+            function updateEffortButtons() {
+                const checked = document.querySelectorAll('.effort-checkbox:checked').length;
+                document.getElementById('btn-remove-efforts').disabled = checked === 0;
+                const reportBtn = document.getElementById('btn-view-report');
+                if (checked > 0) {
+                    reportBtn.style.pointerEvents = 'auto';
+                    reportBtn.style.opacity = '1';
+                    reportBtn.href = '../report/index.php?customer_budget_currency=EUR&report=1&cid=<?php echo $invoice_data['customer_id']; ?>&pid=<?php echo $invoice_data['project_id'] ?? ''; ?>&syear=<?php echo date('Y', strtotime($invoice_data['period_start'])); ?>&smonth=<?php echo date('n', strtotime($invoice_data['period_start'])); ?>&sday=<?php echo date('j', strtotime($invoice_data['period_start'])); ?>&eyear=<?php echo date('Y', strtotime($invoice_data['period_end'])); ?>&emonth=<?php echo date('n', strtotime($invoice_data['period_end'])); ?>&eday=<?php echo date('j', strtotime($invoice_data['period_end'])); ?>';
+                } else {
+                    reportBtn.style.pointerEvents = 'none';
+                    reportBtn.style.opacity = '0.5';
+                }
+            }
+            function removeSelectedEfforts() {
+                if (confirm('<?php echo !empty($GLOBALS['_PJ_strings']['confirm_remove_efforts']) ? addslashes($GLOBALS['_PJ_strings']['confirm_remove_efforts']) : 'Remove selected efforts from this invoice?'; ?>')) {
+                    document.querySelector('input[name="action"]').value = 'remove_efforts';
+                    document.getElementById('efforts-form').submit();
+                }
+            }
+            </script>
         <?php endif; ?>
 
         <!-- Payments Section -->

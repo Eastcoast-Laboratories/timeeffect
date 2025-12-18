@@ -39,7 +39,7 @@ RUN apt-get update && apt-get install -y \
     && a2enmod rewrite ssl headers
 
 # Enable PHP extensions required by the application
-RUN docker-php-ext-install mysqli pdo_mysql
+RUN docker-php-ext-install mysqli pdo_mysql calendar
 
 # Set working directory
 WORKDIR /var/www/html

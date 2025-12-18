@@ -254,6 +254,22 @@ class Invoice {
     }
     
     /**
+     * Remove specific efforts from invoice
+     */
+    public function removeEffortsFromInvoice($invoice_id, $effort_ids) {
+        if (empty($effort_ids)) {
+            return false;
+        }
+        
+        $ids = array_map('intval', $effort_ids);
+        $sql = "DELETE FROM " . $GLOBALS['_PJ_table_prefix'] . "invoice_efforts 
+                WHERE invoice_id = " . intval($invoice_id) . " 
+                AND effort_id IN (" . implode(',', $ids) . ")";
+        
+        return $this->db->query($sql);
+    }
+    
+    /**
      * Calculate invoice totals
      */
     public function calculateInvoiceTotals($net_amount, $vat_rate) {
