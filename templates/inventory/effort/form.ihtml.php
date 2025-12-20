@@ -475,8 +475,10 @@ if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
 							$all_rates[] = $data;
 						}
 						
-						// Auto-select default rate if no rate is set (new effort)
-						if(empty($a_rate) && count($all_rates) > 0) {
+						// Auto-select default rate ONLY for NEW efforts (no eid)
+						// For existing efforts, always use the stored rate (even if 0)
+						$is_new_effort = empty($eid) || $eid == 0;
+						if($is_new_effort && ($a_rate === null || $a_rate === '') && count($all_rates) > 0) {
 							// First, try to find a rate named "standard" or "Standard"
 							$default_rate_found = false;
 							foreach($all_rates as $rate_data) {
