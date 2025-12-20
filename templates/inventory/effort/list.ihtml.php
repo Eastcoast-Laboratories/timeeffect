@@ -46,23 +46,51 @@ if($pid && $project && $project->checkUserAccess('new')) {
 				</TABLE></TD>
 			</TR><TR>
 				<TD ALIGN="center"><TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="90%">
+<?php
+// Helper function to build sort link
+$current_sort_col = $_GET['sort_col'] ?? 'date';
+$current_sort_dir = $_GET['sort'] ?? 'desc';
+
+function buildSortLink($column, $current_col, $current_dir) {
+	// Toggle direction if clicking same column, otherwise default to desc
+	$new_dir = ($column === $current_col && $current_dir === 'desc') ? 'asc' : 'desc';
+	$params = array_merge($_GET, ['sort_col' => $column, 'sort' => $new_dir]);
+	return $_SERVER['PHP_SELF'] . '?' . http_build_query($params);
+}
+
+function getSortArrow($column, $current_col, $current_dir) {
+	if ($column !== $current_col) return '';
+	return ($current_dir === 'desc') ? ' ↓' : ' ↑';
+}
+?>
 					<TR>
 						<TH CLASS="list" WIDTH="60">
 							<input type="checkbox" id="select-all-efforts" onchange="toggleAllEfforts()">
 							<?php echo $GLOBALS['_PJ_strings']['bulk_edit_select_all']; ?>
 						</TH>
-						<TH CLASS="list" WIDTH="30%"><?php if(!empty($GLOBALS['_PJ_strings']['description'])) echo $GLOBALS['_PJ_strings']['description'] ?></TH>
+						<TH CLASS="list" WIDTH="30%">
+							<a href="<?= buildSortLink('description', $current_sort_col, $current_sort_dir) ?>" class="sort-header" title="<?= $GLOBALS['_PJ_strings']['sort_by'] ?? 'Sort by' ?> <?= $GLOBALS['_PJ_strings']['description'] ?>">
+								<?php if(!empty($GLOBALS['_PJ_strings']['description'])) echo $GLOBALS['_PJ_strings']['description'] ?><?= getSortArrow('description', $current_sort_col, $current_sort_dir) ?>
+							</a>
+						</TH>
 						<?php if(empty($cid)) { ?><TH CLASS="list"><?php if(!empty($GLOBALS['_PJ_strings']['customer'])) echo $GLOBALS['_PJ_strings']['customer']; ?></TH><?php } ?>
 						<?php if(empty($pid)) { ?><TH CLASS="list"><?php if(!empty($GLOBALS['_PJ_strings']['project'])) echo $GLOBALS['_PJ_strings']['project']; ?></TH><?php } ?>
 						<TH CLASS="list"><?php if(!empty($GLOBALS['_PJ_strings']['agent'])) echo $GLOBALS['_PJ_strings']['agent']; ?></TH>
 						<TH CLASS="list" WIDTH="150">
-							<?php if(!empty($GLOBALS['_PJ_strings']['date'])) echo $GLOBALS['_PJ_strings']['date'] ?>
-							<a href="<?= $_SERVER['PHP_SELF'] ?>?<?= http_build_query(array_merge($_GET, ['sort' => ($_GET['sort'] ?? 'desc') === 'desc' ? 'asc' : 'desc'])) ?>" class="sort-toggle" title="Sortierung umkehren">
-								<?= ($_GET['sort'] ?? 'desc') === 'desc' ? '↓' : '↑' ?>
+							<a href="<?= buildSortLink('date', $current_sort_col, $current_sort_dir) ?>" class="sort-header" title="<?= $GLOBALS['_PJ_strings']['sort_by'] ?? 'Sort by' ?> <?= $GLOBALS['_PJ_strings']['date'] ?>">
+								<?php if(!empty($GLOBALS['_PJ_strings']['date'])) echo $GLOBALS['_PJ_strings']['date'] ?><?= getSortArrow('date', $current_sort_col, $current_sort_dir) ?>
 							</a>
 						</TH>
-						<TH CLASS="listNumeric"><?php if(!empty($GLOBALS['_PJ_strings']['workinghours'])) echo $GLOBALS['_PJ_strings']['workinghours']; ?></TH>
-						<TH CLASS="listNumeric" WIDTH="200"><?= $GLOBALS['_PJ_strings']['costs'] . '&nbsp;' . $GLOBALS['_PJ_currency']; ?></TH>
+						<TH CLASS="listNumeric">
+							<a href="<?= buildSortLink('hours', $current_sort_col, $current_sort_dir) ?>" class="sort-header" title="<?= $GLOBALS['_PJ_strings']['sort_by'] ?? 'Sort by' ?> <?= $GLOBALS['_PJ_strings']['workinghours'] ?>">
+								<?php if(!empty($GLOBALS['_PJ_strings']['workinghours'])) echo $GLOBALS['_PJ_strings']['workinghours']; ?><?= getSortArrow('hours', $current_sort_col, $current_sort_dir) ?>
+							</a>
+						</TH>
+						<TH CLASS="listNumeric" WIDTH="200">
+							<a href="<?= buildSortLink('costs', $current_sort_col, $current_sort_dir) ?>" class="sort-header" title="<?= $GLOBALS['_PJ_strings']['sort_by'] ?? 'Sort by' ?> <?= $GLOBALS['_PJ_strings']['costs'] ?>">
+								<?= $GLOBALS['_PJ_strings']['costs'] . '&nbsp;' . $GLOBALS['_PJ_currency']; ?><?= getSortArrow('costs', $current_sort_col, $current_sort_dir) ?>
+							</a>
+						</TH>
 						<TH CLASS="list">&nbsp;</TH>
 						<TH CLASS="list">&nbsp;</TH>
 					</TR>
@@ -106,18 +134,28 @@ if($pid && $project && $project->checkUserAccess('new')) {
 				</TABLE></TD>
 			</TR><TR>
 				<TD ALIGN="center"><TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="90%">
+<?php
+// Build base params preserving sort settings
+$sort_params = '';
+if (!empty($current_sort_col) && $current_sort_col !== 'date') {
+	$sort_params .= '&sort_col=' . urlencode($current_sort_col);
+}
+if (!empty($current_sort_dir) && $current_sort_dir !== 'desc') {
+	$sort_params .= '&sort=' . urlencode($current_sort_dir);
+}
+?>
 					<TR>
 						<TD COLSPAN="2"><IMG src="<?php echo $GLOBALS['_PJ_image_path'] ?>/abstand.gif" HEIGHT="3" WIDTH="1" BORDER="0"></TD>
 					</TR><TR>
 						<TD CLASS="listFoot" ALIGN="left"><?php
 if(empty($shown['be'])) {
-						?><A CLASS="listFoot" HREF="<?= $GLOBALS['_PJ_efforts_inventory_script'] . "?sbe=" . (isset($GLOBALS['_PJ_default_billed_entries_limit']) ? $GLOBALS['_PJ_default_billed_entries_limit'] : 100) . "&cid=".@$cid.'&pid='.@$pid.'&eid='.@$eid.""; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/show-closed.gif" WIDTH="16" HEIGHT="16" BORDER="0" ALIGN="absmiddle">&nbsp;<?php if(!empty($GLOBALS['_PJ_strings']['show_closed_efforts'])) echo $GLOBALS['_PJ_strings']['show_closed_efforts'] ?></A><?php
+						?><A CLASS="listFoot" HREF="<?= $GLOBALS['_PJ_efforts_inventory_script'] . "?sbe=" . (isset($GLOBALS['_PJ_default_billed_entries_limit']) ? $GLOBALS['_PJ_default_billed_entries_limit'] : 100) . "&cid=".@$cid.'&pid='.@$pid.'&eid='.@$eid . $sort_params; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/show-closed.gif" WIDTH="16" HEIGHT="16" BORDER="0" ALIGN="absmiddle">&nbsp;<?php if(!empty($GLOBALS['_PJ_strings']['show_closed_efforts'])) echo $GLOBALS['_PJ_strings']['show_closed_efforts'] ?></A><?php
 } else {
-						?><A CLASS="listFoot" HREF="<?= $GLOBALS['_PJ_efforts_inventory_script'] . "?sbe=0&cid=".@$cid.'&pid='.@$pid.'&eid='.@$eid.""; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/hide-closed.gif" WIDTH="16" HEIGHT="16" BORDER="0" ALIGN="absmiddle">&nbsp;<?php if(!empty($GLOBALS['_PJ_strings']['hide_closed_efforts'])) echo $GLOBALS['_PJ_strings']['hide_closed_efforts'] ?></A><?php
+						?><A CLASS="listFoot" HREF="<?= $GLOBALS['_PJ_efforts_inventory_script'] . "?sbe=0&cid=".@$cid.'&pid='.@$pid.'&eid='.@$eid . $sort_params; ?>"><IMG SRC="<?php if(!empty($GLOBALS['_PJ_icon_path'])) echo $GLOBALS['_PJ_icon_path'] ?>/hide-closed.gif" WIDTH="16" HEIGHT="16" BORDER="0" ALIGN="absmiddle">&nbsp;<?php if(!empty($GLOBALS['_PJ_strings']['hide_closed_efforts'])) echo $GLOBALS['_PJ_strings']['hide_closed_efforts'] ?></A><?php
 	// Add "Show All" link when showing limited billed entries
 	$current_sbe = $_GET['sbe'] ?? null;
 	if(isset($shown['be']) && is_numeric($current_sbe) && $current_sbe < 9999 && $efforts && $efforts->giveEffortCount() >= $current_sbe) {
-						?><br><A CLASS="listFoot" HREF="<?= $GLOBALS['_PJ_efforts_inventory_script'] . "?sbe=9999&cid=".@$cid.'&pid='.@$pid.'&eid='.@$eid.""; ?>">ALLE abgerechnete Aufwände anzeigen</A><?php
+						?><br><A CLASS="listFoot" HREF="<?= $GLOBALS['_PJ_efforts_inventory_script'] . "?sbe=9999&cid=".@$cid.'&pid='.@$pid.'&eid='.@$eid . $sort_params; ?>">ALLE abgerechnete Aufwände anzeigen</A><?php
 	}
 }
 						?></TD>

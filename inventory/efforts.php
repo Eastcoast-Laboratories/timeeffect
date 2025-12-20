@@ -830,6 +830,7 @@
 		debugLog("LOG_PROJECT_ACCESS", "No project object available for pid=$pid, allowing access");
 	}
 	$sort_order = $_GET['sort'] ?? 'desc';
+	$sort_column = $_GET['sort_col'] ?? 'date';
 	// Handle SBE limit parameter for billed entries
 	$billed_limit = null;
 	if(isset($shown['be']) && isset($sbe) && is_numeric($sbe) && $sbe > 0) {
@@ -845,7 +846,7 @@
 		$_SESSION['last_viewed_project'] = (int)$pid;
 	}
 
-	$efforts			= new EffortList($customer, $project, $_PJ_auth, isset($shown['be']) ? $shown['be'] : false, NULL, $sort_order, $billed_limit);
+	$efforts			= new EffortList($customer, $project, $_PJ_auth, isset($shown['be']) ? $shown['be'] : false, NULL, $sort_order, $billed_limit, $sort_column);
 	// LOG_TITLE_GENERATION: Set appropriate title based on project context
 	if ($project && $project->giveValue('project_name')) {
 		// Single project view

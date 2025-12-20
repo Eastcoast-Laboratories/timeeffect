@@ -95,7 +95,7 @@
 			self::__construct($customer, $project, $user, $show_billed, $limit);
 		}
 		
-		function __construct(&$customer, &$project, &$user, $show_billed = false, $limit = NULL, $sort_order = 'desc', $billed_limit = NULL) {
+		function __construct(&$customer, &$project, &$user, $show_billed = false, $limit = NULL, $sort_order = 'desc', $billed_limit = NULL, $sort_column = 'date') {
 			$this->customer	= $customer;
 			$this->project	= $project;
 			$this->user		= $user;
@@ -112,7 +112,10 @@
 			$safeCustomerTable = DatabaseSecurity::sanitizeColumnName($GLOBALS['_PJ_customer_table']);
 			
 			// Use LEFT JOIN to include efforts without project (project_id = 0)
-			$query  = "SELECT {$safeEffortTable}.*, {$safeProjectTable}.project_name, {$safeCustomerTable}.customer_name ";
+			// Add calculated columns as aliases for UNION ORDER BY compatibility
+			$query  = "SELECT {$safeEffortTable}.*, {$safeProjectTable}.project_name, {$safeCustomerTable}.customer_name, ";
+			$query .= "TIME_TO_SEC(TIMEDIFF({$safeEffortTable}.end, {$safeEffortTable}.begin)) AS sort_hours, ";
+			$query .= "(TIME_TO_SEC(TIMEDIFF({$safeEffortTable}.end, {$safeEffortTable}.begin)) / 3600 * {$safeEffortTable}.rate) AS sort_costs ";
 			$query .= " FROM {$safeEffortTable}";
 			$query .= " LEFT JOIN {$safeProjectTable} ON {$safeEffortTable}.project_id = {$safeProjectTable}.id";
 			$query .= " LEFT JOIN {$safeCustomerTable} ON {$safeProjectTable}.customer_id = {$safeCustomerTable}.id";
@@ -122,16 +125,16 @@
 				$safeProjectId = DatabaseSecurity::escapeInt($project->giveValue('id'));
 				$query .= " AND project_id={$safeProjectId}";
 				$sort_direction = ($sort_order === 'asc') ? 'ASC' : 'DESC';
-				// Fix: Sort billed entries newest first, then unbilled entries
-				$order_query = " ORDER BY billed, date $sort_direction, begin $sort_direction";
+				// Build ORDER BY based on sort_column
+				$order_query = $this->buildOrderQuery($sort_column, $sort_direction, $safeEffortTable);
 				$limit_query = '';
 			} else if(isset($customer) && is_object($customer) && $customer->giveValue('id')) {
 				$safeCustomerId = DatabaseSecurity::escapeInt($customer->giveValue('id'));
 				// Filter by customer, but also include efforts without project (project_id = 0)
 				$query .= " AND ({$safeCustomerTable}.id={$safeCustomerId} OR {$safeEffortTable}.project_id = 0)";
-				// Fix: Sort billed entries newest first, respecting sort parameter
+				// Build ORDER BY based on sort_column
 				$sort_direction = ($sort_order === 'asc') ? 'ASC' : 'DESC';
-				$order_query = " ORDER BY billed, last $sort_direction, date $sort_direction, begin $sort_direction";
+				$order_query = $this->buildOrderQuery($sort_column, $sort_direction, $safeEffortTable);
 				// Default limit for customer queries to prevent performance issues
 				$default_limit = isset($GLOBALS['_PJ_max_efforts_total']) ? $GLOBALS['_PJ_max_efforts_total'] : 1000;
 				$limit_query = ' LIMIT ' . $default_limit;
@@ -179,16 +182,22 @@
 				// When showing billed entries with limit, use subquery approach
 				// First get unbilled entries, then limited billed entries
 				$sort_direction = ($sort_order === 'asc') ? 'ASC' : 'DESC';
+				
+				// Build sort expression for UNION query - use aliases (true) for final ORDER BY
+				$sort_expr = $this->buildSortExpression($sort_column, $sort_direction, $safeEffortTable, false);
+				$sort_expr_alias = $this->buildSortExpression($sort_column, $sort_direction, $safeEffortTable, true);
+				
 				$unbilled_query = $query . " AND (billed IS NULL OR billed = '0000-00-00')";
-				$billed_query = $query . " AND (billed IS NOT NULL AND billed != '0000-00-00') ORDER BY date $sort_direction, begin $sort_direction LIMIT " . intval($billed_limit);
+				$billed_query = $query . " AND (billed IS NOT NULL AND billed != '0000-00-00') ORDER BY $sort_expr LIMIT " . intval($billed_limit);
 				
 				// Debug: Log the billed limit being applied
-				debugLog("LOG_BILLED_LIMIT", "Applying billed entries limit: " . intval($billed_limit) . ", sort: $sort_direction");
+				debugLog("LOG_BILLED_LIMIT", "Applying billed entries limit: " . intval($billed_limit) . ", sort_col: $sort_column, sort: $sort_direction");
 				debugLog("LOG_BILLED_QUERY", "Billed query: " . $billed_query);
 				
-				// Combine queries with UNION - billed query already has LIMIT
+				// Combine queries with UNION - use column aliases in final ORDER BY (required for UNION)
 				$query = "($unbilled_query) UNION ALL ($billed_query)";
-				$order_query = " ORDER BY (billed IS NULL OR billed = '0000-00-00'), date $sort_direction, begin $sort_direction"; // Sort unbilled first, then billed by date
+				// Final ORDER BY for combined results - unbilled first, then sorted by column (using aliases)
+				$order_query = " ORDER BY (billed IS NULL OR billed = '0000-00-00') DESC, $sort_expr_alias";
 				$limit_query = ""; // Don't apply additional limit
 			}
 			if(!$this->user->checkPermission('admin')) {
@@ -202,6 +211,42 @@
 				$this->efforts[] = new Effort($this->db->Record, $this->user);
 				$this->effort_count++;
 			}
+		}
+
+		function buildSortExpression($sort_column, $sort_direction, $effortTable, $useAliases = false) {
+			// Validate sort_column to prevent SQL injection
+			$valid_columns = ['date', 'hours', 'costs', 'description', 'rate'];
+			if (!in_array($sort_column, $valid_columns)) {
+				$sort_column = 'date';
+			}
+			
+			// Build sort expression (without ORDER BY prefix) based on column
+			// Use aliases for UNION queries (cannot reference table names in UNION ORDER BY)
+			switch ($sort_column) {
+				case 'hours':
+					if ($useAliases) {
+						return "sort_hours $sort_direction, date DESC";
+					}
+					return "TIME_TO_SEC(TIMEDIFF({$effortTable}.end, {$effortTable}.begin)) $sort_direction, date DESC";
+				case 'costs':
+					if ($useAliases) {
+						return "sort_costs $sort_direction, date DESC";
+					}
+					return "(TIME_TO_SEC(TIMEDIFF({$effortTable}.end, {$effortTable}.begin)) / 3600 * {$effortTable}.rate) $sort_direction, date DESC";
+				case 'rate':
+					return "rate $sort_direction, date DESC";
+				case 'description':
+					return "description $sort_direction, date DESC";
+				case 'date':
+				default:
+					return "date $sort_direction, begin $sort_direction";
+			}
+		}
+
+		function buildOrderQuery($sort_column, $sort_direction, $effortTable) {
+			// Build full ORDER BY clause using sort expression
+			$sort_expr = $this->buildSortExpression($sort_column, $sort_direction, $effortTable);
+			return " ORDER BY billed, $sort_expr";
 		}
 
 		function showBilled($do = '') {

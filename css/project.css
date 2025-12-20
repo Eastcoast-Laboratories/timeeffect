@@ -205,6 +205,19 @@ TH.listNumeric {
 	text-align:			right;
 }
 
+/* Sortable column headers */
+a.sort-header {
+	color:				#000063;
+	text-decoration:	none;
+	display:			block;
+	width:				100%;
+}
+
+a.sort-header:hover {
+	color:				#EE8000;
+	text-decoration:	underline;
+}
+
 TH.note {
 	font-weight:		bold;
 	font-size:			13px;
