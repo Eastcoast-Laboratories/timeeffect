@@ -24,7 +24,7 @@ services:
     # Fallback to base image if build fails:
     # image: webdevops/php-apache:8.5
     ports:
-      - 80:80
+      - 8283:80
       - 443:443 
     links:
       - db

@@ -29,4 +29,4 @@ sudo docker compose down
 sudo docker compose up -d
 
 echo "[TimeEffect] TimeEffect containers are up."
-echo "[TimeEffect] Open TimeEffect in your browser: http://localhost/"
+echo "[TimeEffect] Open TimeEffect in your browser: http://localhost:8283/"

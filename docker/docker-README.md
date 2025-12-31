@@ -43,7 +43,7 @@ To get the app up and running in docker, follow these 3 steps:
 
 open in webbrowser:
 
-http://localhost/install
+http://localhost:8283/install
 
 # or import mysql tables:
 
@@ -89,9 +89,9 @@ http://localhost/install
 # 4. Login in webbrowser
 open in webbrowser:
 
-http://localhost
+http://localhost:8283
 ## or 
-http://timeeffect.lvh.me
+http://timeeffect.lvh.me:8283
 
 login as user: pirates, pass: vt8yhnan and build its diplomatic vessel and move it into fleet 1
 

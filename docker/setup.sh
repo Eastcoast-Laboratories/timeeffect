@@ -44,7 +44,7 @@ echo "✅ $PHP_VERSION"
 # Test short tags
 echo "Testing PHP short tags..."
 sudo docker compose exec -T app bash -c "echo '<?= \"PHP Short Tags: \" . (ini_get('short_open_tag') ? 'ENABLED' : 'DISABLED') ?>' > /var/www/html/test_short_tags.php"
-SHORT_TAG_TEST=$(curl -s http://localhost/test_short_tags.php 2>/dev/null || echo "Connection failed")
+SHORT_TAG_TEST=$(curl -s http://localhost:8283/test_short_tags.php 2>/dev/null || echo "Connection failed")
 sudo docker compose exec -T app rm -f /var/www/html/test_short_tags.php
 echo "✅ $SHORT_TAG_TEST"
 
@@ -55,7 +55,7 @@ echo "✅ MySQL Extensions: $MYSQL_EXTENSIONS"
 
 # Test web server
 echo "Testing web server..."
-HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/ 2>/dev/null || echo "000")
+HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8283/ 2>/dev/null || echo "000")
 if [ "$HTTP_STATUS" = "200" ]; then
     echo "✅ Web server responding (HTTP $HTTP_STATUS)"
 else
@@ -64,7 +64,7 @@ fi
 
 # Test install page
 echo "Testing install page..."
-INSTALL_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/install/ 2>/dev/null || echo "000")
+INSTALL_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8283/install/ 2>/dev/null || echo "000")
 if [ "$INSTALL_STATUS" = "200" ]; then
     echo "✅ Install page accessible (HTTP $INSTALL_STATUS)"
 else
@@ -74,8 +74,8 @@ fi
 echo ""
 echo "=== Setup Complete! ==="
 echo "🚀 TimeEffect is ready:"
-echo "   📱 Application: http://localhost/"
-echo "   ⚙️  Installation: http://localhost/install/"
+echo "   📱 Application: http://localhost:8283/"
+echo "   ⚙️  Installation: http://localhost:8283/install/"
 echo "   📊 Container status: sudo docker compose ps"
 echo "   📋 Logs: sudo docker compose logs -f app"
 echo ""
