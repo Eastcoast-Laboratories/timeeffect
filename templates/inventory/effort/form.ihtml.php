@@ -671,7 +671,7 @@ if($_PJ_auth->checkPermission('admin') || (!$effort || !$effort->giveValue('id')
 						if(isset($effort) && is_object($effort) && $effort->giveValue('id') && ($effort->giveValue('billed') == '') && ($_PJ_auth->checkPermission('accountant') || $GLOBALS['_PJ_agents_allow_delete'])) {
 ?>
 						<span style="float: right;">
-							<INPUT CLASS="FormSubmit FormSubmitDelete" TYPE="button" VALUE="<?php if(!empty($GLOBALS['_PJ_strings']['delete'])) echo $GLOBALS['_PJ_strings']['delete'] ?>" onclick="window.location.href='<?php echo $GLOBALS['_PJ_efforts_inventory_script'] . "?delete=1&cid=$cid&pid=$pid&eid=$id"; ?>'">
+							<INPUT CLASS="FormSubmit FormSubmitDelete" TYPE="button" VALUE="<?php if(!empty($GLOBALS['_PJ_strings']['delete'])) echo $GLOBALS['_PJ_strings']['delete'] ?>" onclick="window.location.href='<?php echo $GLOBALS['_PJ_efforts_inventory_script'] . "?delete=1&cid=$cid&pid=$pid&eid=" . $effort->giveValue('id'); ?>'">
 						</span>
 <?php
 						}

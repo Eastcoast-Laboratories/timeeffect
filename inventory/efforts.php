@@ -800,6 +800,14 @@
 	}
 
 	if(isset($delete) && !isset($cancel)) {
+		// Check if effort object exists and is valid
+		if(!$effort) {
+			$error_message = 'Error: No effort ID specified for delete operation.';
+			$center_title = $GLOBALS['_PJ_strings']['error'];
+			include("$_PJ_root/templates/error.ihtml.php");
+			include_once("$_PJ_include_path/degestiv.inc.php");
+			exit;
+		}
 		if(!$effort->checkUserAccess('write') || (!$_PJ_auth->checkPermission('accountant') && !$GLOBALS['_PJ_agents_allow_delete'])) {
 			$error_message = $GLOBALS['_PJ_strings']['error_access'];
 			$center_title = $GLOBALS['_PJ_strings']['error'];
