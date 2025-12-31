@@ -1,19 +1,20 @@
 <!-- inventory/effort/delete.ihtml - START -->
 <?php
-	if(isset($effort) && is_object($effort)) {
+	if(isset($effort) && is_object($effort) && $effort->giveValue('id')) {
 		$eid				= $effort->giveValue('id');
 		$description		= $effort->giveValue('description');
 		$effort_date		= $effort->giveValue('date');
 		$effort_begin		= $effort->giveValue('begin');
 		$effort_end			= $effort->giveValue('end');
+		$effort_valid		= true;
 		include($GLOBALS['_PJ_root'] . '/templates/inventory/effort/options/delete.ihtml.php');
 	} else {
-		// Show error if effort doesn't exist
-		echo '<div class="alert alert-error" style="background-color: #f8d7da; color: #721c24; padding: 1rem; border-radius: 0.5rem; margin: 2rem auto; max-width: 600px;">';
-		echo '<h2 style="margin: 0 0 0.5rem 0;">❌ ' . htmlspecialchars($GLOBALS['_PJ_strings']['error']) . '</h2>';
-		echo '<p style="margin: 0; font-size: 1.1rem;">Error: The effort you are trying to delete does not exist or you do not have access to it.</p>';
+		// Show warning if effort doesn't exist or is invalid
+		$effort_valid = false;
+		echo '<div class="alert alert-warning" style="background-color: #fff3cd; color: #856404; padding: 1rem; border-radius: 0.5rem; margin: 2rem auto; max-width: 600px;">';
+		echo '<h2 style="margin: 0 0 0.5rem 0;">⚠️ ' . htmlspecialchars($GLOBALS['_PJ_strings']['warning'] ?? 'Warning') . '</h2>';
+		echo '<p style="margin: 0; font-size: 1.1rem;">The effort you are trying to delete does not exist or you do not have access to it.</p>';
 		echo '</div>';
-		exit;
 	}
 ?>
 	<FORM ACTION="<?php print $GLOBALS['_PJ_efforts_inventory_script']; ?>" METHOD="<?php if(!empty($GLOBALS['_PJ_form_method'])) echo $GLOBALS['_PJ_form_method']; ?>">
@@ -27,30 +28,30 @@
 			CELLPADDING="<?php print($_PJ_inner_frame_cellpadding); ?>"
 			CELLSPACING="<?php print($_PJ_inner_frame_cellspacing ); ?>">
 		<TR>
-			<TD CLASS="content">
-			<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
+			<TD CLASS="content" style="padding: 1.5rem; border-radius: 26px;">
+			<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="10" WIDTH="100%">
 				<TR>
 					<TD CLASS="MessageAsk" COLSPAN="2"><?php if(!empty($GLOBALS['_PJ_strings']['ask_effort_delete'])) echo $GLOBALS['_PJ_strings']['ask_effort_delete'] ?></TD>
-				</TR><TR>
-					<TD COLSPAN="2" style="padding: 1rem 0; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;">
+				</TR><?php if($effort_valid) { ?><TR>
+					<TD COLSPAN="2" style="padding: 1.5rem 0; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;">
 						<table style="width: 100%; margin: 0.5rem 0;">
 							<tr>
-								<td style="font-weight: bold; width: 30%;">Description:</td>
-								<td><?php echo htmlspecialchars($description); ?></td>
+								<td style="font-weight: bold; width: 30%;"><?php echo isset($GLOBALS['_PJ_strings']['description']) ? $GLOBALS['_PJ_strings']['description'] : 'Description'; ?>:</td>
+								<td><?php echo htmlspecialchars($description ?? ''); ?></td>
 							</tr>
 							<tr>
-								<td style="font-weight: bold;">Date:</td>
+								<td style="font-weight: bold;"><?php echo isset($GLOBALS['_PJ_strings']['date']) ? $GLOBALS['_PJ_strings']['date'] : 'Date'; ?>:</td>
 								<td><?php echo $effort->formatTime($effort_date, "d.m.Y"); ?></td>
 							</tr>
 							<tr>
-								<td style="font-weight: bold;">Time:</td>
+								<td style="font-weight: bold;"><?php echo isset($GLOBALS['_PJ_strings']['time']) ? $GLOBALS['_PJ_strings']['time'] : 'Time'; ?>:</td>
 								<td><?php echo $effort->formatTime($effort_begin, "H:i"); ?> - <?php echo $effort->formatTime($effort_end, "H:i"); ?></td>
 							</tr>
 						</table>
 					</TD>
-				</TR><TR>
-					<TD ALIGN="left"><INPUT CLASS="FormSubmit" TYPE="SUBMIT" NAME="cancel" VALUE="<< <?php if(!empty($GLOBALS['_PJ_strings']['cancel'])) echo $GLOBALS['_PJ_strings']['cancel'] ?>"></TD>
-					<TD ALIGN="right"><INPUT CLASS="FormSubmit" TYPE="SUBMIT" NAME="confirm" VALUE="<?php if(!empty($GLOBALS['_PJ_strings']['delete'])) echo $GLOBALS['_PJ_strings']['delete'] ?> >>"></TD>
+				</TR><?php } ?><TR>
+					<TD ALIGN="left"><INPUT CLASS="FormSubmit" TYPE="SUBMIT" NAME="cancel" VALUE="<< <?php if(!empty($GLOBALS['_PJ_strings']['cancel'])) echo $GLOBALS['_PJ_strings']['cancel'] ?>"<?php if(!$effort_valid) echo ' disabled style="opacity: 0.5; cursor: not-allowed;"'; ?>></TD>
+					<TD ALIGN="right"><INPUT CLASS="FormSubmit FormSubmitDelete" TYPE="SUBMIT" NAME="confirm" VALUE="<?php if(!empty($GLOBALS['_PJ_strings']['delete'])) echo $GLOBALS['_PJ_strings']['delete'] ?> >>"<?php if(!$effort_valid) echo ' disabled style="opacity: 0.5; cursor: not-allowed;"'; ?>></TD>
 				</TR>
 			</TABLE></TD>
 		</TR>

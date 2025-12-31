@@ -301,6 +301,7 @@ input[type="submit"]:focus, button[type="submit"]:focus, button:focus {
 }
 
 input.FormSubmitDelete[type="button"],
+input.FormSubmitDelete[type="submit"],
 button.FormSubmitDelete {
     background: var(--btn-danger-bg) !important;
     color: var(--btn-danger-text) !important;
@@ -309,16 +310,19 @@ button.FormSubmitDelete {
 }
 
 input.FormSubmitDelete[type="button"]:hover,
+input.FormSubmitDelete[type="submit"]:hover,
 button.FormSubmitDelete:hover {
     background: var(--btn-danger-hover-bg) !important;
 }
 
 input.FormSubmitDelete[type="button"]:active,
+input.FormSubmitDelete[type="submit"]:active,
 button.FormSubmitDelete:active {
     background: var(--btn-danger-active-bg) !important;
 }
 
 html[data-theme="dark"] input.FormSubmitDelete[type="button"],
+html[data-theme="dark"] input.FormSubmitDelete[type="submit"],
 html[data-theme="dark"] button.FormSubmitDelete {
     background: var(--btn-danger-bg) !important;
     color: var(--btn-danger-text) !important;
@@ -326,11 +330,13 @@ html[data-theme="dark"] button.FormSubmitDelete {
 }
 
 html[data-theme="dark"] input.FormSubmitDelete[type="button"]:hover,
+html[data-theme="dark"] input.FormSubmitDelete[type="submit"]:hover,
 html[data-theme="dark"] button.FormSubmitDelete:hover {
     background: var(--btn-danger-hover-bg) !important;
 }
 
 html[data-theme="dark"] input.FormSubmitDelete[type="button"]:active,
+html[data-theme="dark"] input.FormSubmitDelete[type="submit"]:active,
 html[data-theme="dark"] button.FormSubmitDelete:active {
     background: var(--btn-danger-active-bg) !important;
 }
