@@ -18,6 +18,7 @@ RUN printf '%s\n' \
     'display_errors = On' \
     'display_startup_errors = On' \
     'error_reporting = E_ALL' \
+    'date.timezone = Europe/Berlin' \
     > /usr/local/etc/php/conf.d/timeeffect.ini
 
 # Remove default Apache Alias for /icons/ (prevents conflict with project icons)

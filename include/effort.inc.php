@@ -517,8 +517,8 @@
 			list($b_hour, $b_minute, $b_second) = explode(":", $this->data['begin']);
 			list($e_hour, $e_minute, $e_second) = explode(":", $this->data['end']);
 
-			$b_timestamp = mktime($b_hour+1-1, $b_minute, $b_second, $month, $day, $year+1-1);
-			$e_timestamp = mktime($e_hour+1-1, $e_minute, $e_second, $month, $day, $year+1-1);
+			$b_timestamp = mktime((int)$b_hour, (int)$b_minute, (int)$b_second, (int)$month, (int)$day, (int)$year);
+			$e_timestamp = mktime((int)$e_hour, (int)$e_minute, (int)$e_second, (int)$month, (int)$day, (int)$year);
 
 			if((date("Y", $b_timestamp) <= 1970) ||
 			   (date("Y", $e_timestamp) <= 1970	))
@@ -681,7 +681,7 @@
 			}
 			// Running effort (begin == end, not in future) - can be stopped
 			debugLog('EFFORT_STOP', 'Effort can be stopped - proceeding with stop logic');
-			$e_time 			= mktime(date('H'), date('i'), date('s'));
+			$e_time 			= time();
 			if($b_time > $e_time) {
 				$e_time = mktime(date('H'), date('i'), date('s'), date('m', $b_time+86400), date('d', $b_time+86400), date('Y', $b_time+86400));
 			}

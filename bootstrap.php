@@ -6,6 +6,9 @@
  * while maintaining backward compatibility with legacy PEAR code
  */
 
+// Set PHP timezone to match system timezone (Europe/Berlin for CET/CEST)
+date_default_timezone_set('Europe/Berlin');
+
 // Load Composer autoloader
 require_once __DIR__ . '/vendor/autoload.php';
 

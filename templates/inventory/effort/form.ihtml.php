@@ -356,7 +356,8 @@ if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
 					    // ############# Beginn: hour
 						$a_hour = $hour;
 						if(empty($hour)) {
-							$a_hour = date("H");
+							// Use time() to get current timestamp and avoid timezone issues
+							$a_hour = date("H", time());
 						}
 	
 						for($i=0; $i < 24; $i++) {
@@ -371,22 +372,23 @@ if(!isset($effort) || !is_object($effort) || !$effort->giveValue('id')) {
 					<button type="button" class="time-btn time-btn-minus" onclick="adjustTime('minute', <?= $show_all_minutes ? -1 : -5 ?>)">−</button>
 					<SELECT CLASS="FormSelect time-field time-minute" NAME="minute" title="<?php if(!empty($GLOBALS['_PJ_strings']['minute'])) echo $GLOBALS['_PJ_strings']['minute'] ?>">
 					<?php
-					// ############# Beginn: minute
-						$a_minute = $minute;
-						if(empty($minute)) {
-							$current_minute = date("i");
-							// Round to nearest 5-minute step if not showing all minutes
-							if (!$show_all_minutes) {
-								$a_minute = round($current_minute / 5) * 5;
-							} else {
-								$a_minute = $current_minute;
-							}
+				// ############# Beginn: minute
+					$a_minute = $minute;
+					if(empty($minute)) {
+						// Use time() to get current timestamp and avoid timezone issues
+						$current_minute = date("i", time());
+						// Round to nearest 5-minute step if not showing all minutes
+						if (!$show_all_minutes) {
+							$a_minute = round($current_minute / 5) * 5;
 						} else {
-							// Round existing minute to nearest 5-minute step if not showing all minutes
-							if (!$show_all_minutes && $minute % 5 != 0) {
-								$a_minute = round($minute / 5) * 5;
-							}
+							$a_minute = $current_minute;
 						}
+					} else {
+						// Round existing minute to nearest 5-minute step if not showing all minutes
+						if (!$show_all_minutes && $minute % 5 != 0) {
+							$a_minute = round($minute / 5) * 5;
+						}
+					}
 	
 						if ($show_all_minutes) {
 							// Show all minutes (0-59) if non-5-divisible minutes exist
