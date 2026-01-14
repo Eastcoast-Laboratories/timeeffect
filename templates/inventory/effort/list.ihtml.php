@@ -96,10 +96,28 @@ function getSortArrow($column, $current_col, $current_dir) {
 					</TR>
 <?php
 	$rowclass = 1;
+	// Find the most recently edited effort (highest 'last' timestamp)
+	$last_edited_effort_id = null;
+	$max_last_timestamp = 0;
+	
+	// First pass: find the most recently edited effort
+	$efforts->reset();
+	while($efforts->nextEffort()) {
+		$temp_effort = $efforts->giveEffort();
+		$last_timestamp = strtotime($temp_effort->giveValue('last'));
+		if($last_timestamp > $max_last_timestamp) {
+			$max_last_timestamp = $last_timestamp;
+			$last_edited_effort_id = $temp_effort->giveValue('id');
+		}
+	}
+	
+	// Second pass: render efforts with bold styling for the most recently edited
+	$efforts->reset();
 	while($efforts->nextEffort()) {
 		$rowclass = !$rowclass;
 		$effort = $efforts->giveEffort();
 		$row_class = !$row_class;
+		$is_last_edited = ($effort->giveValue('id') == $last_edited_effort_id);
 		include("$_PJ_root/templates/inventory/effort/row.ihtml.php");
 	}
 ?>

@@ -20,6 +20,8 @@
 		$open_efforts = new OpenEfforts($_PJ_auth);
 		$stopped_count = 0;
 		$stopped_efforts_details = [];
+		$single_effort_cid = null;
+		$single_effort_pid = null;
 		
 		if($open_efforts->effortCount() > 0) {
 			// Get database connection for customer/project names
@@ -37,6 +39,7 @@
 					
 					$customer_name = 'Kein Kunde';
 					$project_name = 'Kein Projekt';
+					$customer_id = 0;
 					
 					// Get project and customer names via database query like in line 421-424
 					if($project_id && $project_id > 0) {
@@ -50,6 +53,7 @@
 						if($db->next_record()) {
 							$project_name = $db->Record['project_name'];
 							$customer_name = $db->Record['customer_name'];
+							$customer_id = $db->Record['customer_id'];
 						}
 					}
 					
@@ -57,8 +61,16 @@
 						'id' => $effort_id,
 						'description' => $effort_description,
 						'customer' => $customer_name,
-						'project' => $project_name
+						'project' => $project_name,
+						'customer_id' => $customer_id,
+						'project_id' => $project_id
 					];
+					
+					// Store cid and pid for single effort case
+					if($stopped_count == 0) {
+						$single_effort_cid = $customer_id;
+						$single_effort_pid = $project_id;
+					}
 					
 					$open_effort->stop();
 					$stopped_count++;
@@ -66,7 +78,7 @@
 			}
 		}
 		
-		$redirect_url = $GLOBALS['_PJ_customer_inventory_script'];
+		$redirect_url = $GLOBALS['_PJ_efforts_inventory_script'];
 		$favicon = '/images/stop.png';
 		// Use modern template structure
 		$center_title = $GLOBALS['_PJ_strings']['activities_stopped'];
@@ -76,6 +88,10 @@
 		} else {
 			if ($stopped_count == 1) {
 				$success_message = $GLOBALS['_PJ_strings']['one_activity_stopped'];
+				// For single effort, set redirect URL with cid and pid
+				if($single_effort_cid > 0 && $single_effort_pid > 0) {
+					$redirect_url = $GLOBALS['_PJ_efforts_inventory_script'] . "?list=1&cid=" . $single_effort_cid . "&pid=" . $single_effort_pid;
+				}
 			} else {
 				$success_message = sprintf($GLOBALS['_PJ_strings']['multiple_activities_stopped'], $stopped_count);
 			}
@@ -357,6 +373,44 @@
 			exit;
 		}
 		$effort->stop();
+		
+		// Store success message in session for display on next page
+		$effort_id = $effort->giveValue('id');
+		$effort_description = $effort->giveValue('description');
+		$project_id = $effort->giveValue('project_id');
+		
+		$customer_name = 'Kein Kunde';
+		$project_name = 'Kein Projekt';
+		
+		// Get project and customer names
+		if($project_id && $project_id > 0) {
+			$db = new Database();
+			$db->connect();
+			$safe_project_id = DatabaseSecurity::escapeString($project_id, $db->Link_ID);
+			$query = "SELECT p.project_name, p.customer_id, c.customer_name 
+					  FROM " . $GLOBALS['_PJ_project_table'] . " p 
+					  INNER JOIN " . $GLOBALS['_PJ_customer_table'] . " c ON p.customer_id = c.id 
+					  WHERE p.id = '$safe_project_id'";
+			
+			$db->query($query);
+			if($db->next_record()) {
+				$project_name = $db->Record['project_name'];
+				$customer_name = $db->Record['customer_name'];
+			}
+		}
+		
+		// Build success message with link to edit
+		$edit_link = "efforts.php?edit=1&eid=" . $effort_id;
+		$success_msg = $GLOBALS['_PJ_strings']['one_activity_stopped'] . '<br><br>';
+		$success_msg .= '<strong>' . htmlspecialchars($customer_name) . ' - ' . htmlspecialchars($project_name) . '</strong>';
+		if (!empty($effort_description)) {
+			$success_msg .= ': ' . htmlspecialchars($effort_description);
+		}
+		$success_msg .= '<br><br>';
+		$success_msg .= '<a href="' . $edit_link . '" style="text-decoration: none; color: #007bff; font-weight: bold;">→ ' . $GLOBALS['_PJ_strings']['click_to_edit'] . '</a>';
+		
+		// Store in session for display
+		$_SESSION['effort_stop_success'] = $success_msg;
 	}
 	if($pid == '') {
 		if(isset($effort) && is_object($effort)) {
@@ -876,6 +930,17 @@
 		echo '<div class="success-message">';
 		echo $success_message;
 		echo '</div>';
+	}
+	
+	// Display effort stop success message from session
+	if(!empty($_SESSION['effort_stop_success'])) {
+		echo '<div class="alert alert-success" style="background-color: #d4edda; color: #155724; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; margin-top: 1rem;">';
+		echo '<h3 style="margin: 0 0 0.5rem 0;">✅ ' . htmlspecialchars($GLOBALS['_PJ_strings']['success'] ?? 'Success') . '</h3>';
+		echo '<p style="margin: 0;">';
+		echo $_SESSION['effort_stop_success'];
+		echo '</p>';
+		echo '</div>';
+		unset($_SESSION['effort_stop_success']);
 	}
 
 	// Display effort date normalization info message if applicable

@@ -1,11 +1,13 @@
 <?php
 	$agent = $_PJ_auth->giveUserById($effort->giveValue('user'));
+	// Apply bold styling if this is the most recently edited effort
+	$bold_style = (isset($is_last_edited) && $is_last_edited) ? 'font-weight: bold; font-style:italic' : '';
 ?>
 <!-- inventory/effort/row.ihtml - START -->
 					<TR>
 						<TD COLSPAN="<?php echo (empty($cid) ? 1 : 0) + (empty($pid) ? 1 : 0) + 9; ?>"><IMG SRC="<?php echo $GLOBALS['_PJ_image_path'] ?>/gray.gif" WIDTH="100%" HEIGHT="1" BORDER="0"></TD>
 					</TR>
-					<TR HEIGHT="25">
+					<TR HEIGHT="25" style="<?= $bold_style ?>">
 						<TD CLASS="list<?php if(isset($rowclass)) echo $rowclass; ?>" WIDTH="60" ALIGN="center">
 							<?php if($effort->checkUserAccess('write')) { ?>
 								<input type="checkbox" name="bulk_edit[<?= $effort->giveValue('id') ?>]" 
