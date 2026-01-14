@@ -1,7 +1,7 @@
 <?php
 	$agent = $_PJ_auth->giveUserById($effort->giveValue('user'));
 	// Apply bold styling if this is the most recently edited effort
-	$bold_style = (isset($is_last_edited) && $is_last_edited) ? 'font-weight: bold; font-style:italic' : '';
+	$bold_style = (isset($is_last_edited) && $is_last_edited) ? 'font-weight: bold; box-shadow: 0 0 5px rgb(122, 110, 0);' : '';
 ?>
 <!-- inventory/effort/row.ihtml - START -->
 					<TR>
