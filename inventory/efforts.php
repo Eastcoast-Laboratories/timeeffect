@@ -78,20 +78,12 @@
 			}
 		}
 		
-		$redirect_url = $GLOBALS['_PJ_efforts_inventory_script'];
-		$favicon = '/images/stop.png';
-		// Use modern template structure
-		$center_title = $GLOBALS['_PJ_strings']['activities_stopped'];
-		
+		// Build success message for session storage
 		if ($stopped_count == 0) {
-			$info_message = $GLOBALS['_PJ_strings']['no_activities_stopped'];
+			$success_message = $GLOBALS['_PJ_strings']['no_activities_stopped'];
 		} else {
 			if ($stopped_count == 1) {
 				$success_message = $GLOBALS['_PJ_strings']['one_activity_stopped'];
-				// For single effort, set redirect URL with cid and pid
-				if($single_effort_cid > 0 && $single_effort_pid > 0) {
-					$redirect_url = $GLOBALS['_PJ_efforts_inventory_script'] . "?list=1&cid=" . $single_effort_cid . "&pid=" . $single_effort_pid;
-				}
 			} else {
 				$success_message = sprintf($GLOBALS['_PJ_strings']['multiple_activities_stopped'], $stopped_count);
 			}
@@ -112,8 +104,27 @@
 			$success_message .= '</ul>';
 		}
 
-		include("$_PJ_root/templates/note.ihtml.php");
-		include_once("$_PJ_include_path/degestiv.inc.php");
+		// Store success message in session for display on next page
+		$_SESSION['stop_all_success'] = $success_message;
+
+		// Set favicon override for display on next page
+		$_SESSION['favicon_override'] = $GLOBALS['_PJ_image_path'] . '/stop.png';
+
+		// Build redirect URL without stop_all parameter
+		$redirect_params = [];
+		if($single_effort_cid > 0 && $single_effort_pid > 0 && $stopped_count == 1) {
+			// For single effort, redirect with cid and pid
+			$redirect_params['list'] = 1;
+			$redirect_params['cid'] = $single_effort_cid;
+			$redirect_params['pid'] = $single_effort_pid;
+		}
+		$redirect_url = $GLOBALS['_PJ_efforts_inventory_script'];
+		if (!empty($redirect_params)) {
+			$redirect_url .= '?' . http_build_query($redirect_params);
+		}
+
+		// Redirect to clear stop_all parameter from URL
+		header("Location: $redirect_url");
 		exit;
 	}
 	$pid = $_REQUEST['pid'] ?? null;
@@ -941,6 +952,18 @@
 		echo '</p>';
 		echo '</div>';
 		unset($_SESSION['effort_stop_success']);
+	}
+
+	// Display stop all success message from session
+	if(!empty($_SESSION['stop_all_success'])) {
+		echo '<div class="alert alert-success" style="background-color: #d4edda; color: #155724; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; margin-top: 1rem;">';
+		echo '<h3 style="margin: 0 0 0.5rem 0;">✅ ' . htmlspecialchars($GLOBALS['_PJ_strings']['success'] ?? 'Success') . '</h3>';
+		echo '<p style="margin: 0;">';
+		echo $_SESSION['stop_all_success'];
+		echo '</p>';
+		echo '</div>';
+		unset($_SESSION['stop_all_success']);
+		unset($_SESSION['favicon_override']);
 	}
 
 	// Display effort date normalization info message if applicable

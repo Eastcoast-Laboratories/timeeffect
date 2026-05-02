@@ -24,15 +24,17 @@ if (isset($_PJ_auth) && is_object($_PJ_auth) && method_exists($_PJ_auth, 'giveVa
 // Dynamic favicon logic based on page context
 $favicon_path = '/favicon.png'; // default
 
-// Check for specific page contexts
-if (isset($favicon)) {
+// Check for session-based favicon override (highest priority)
+if (isset($_SESSION['favicon_override'])) {
+    $favicon_path = $_SESSION['favicon_override'];
+} elseif (isset($favicon)) {
     // Use explicitly set favicon
     $favicon_path = $favicon;
 } else {
     // Auto-detect favicon based on page context
     $current_script = $_SERVER['SCRIPT_NAME'] ?? '';
     $query_string = $_SERVER['QUERY_STRING'] ?? '';
-    
+
     // Check for effort-related pages
     if (strpos($current_script, 'efforts.php') !== false) {
         // Check if it's a new effort page
@@ -47,7 +49,7 @@ if (isset($favicon)) {
             $favicon_path = $GLOBALS['_PJ_image_path'] . '/stop.png';
         }
     }
-    
+
     // Check for specific action parameters
     if (isset($_REQUEST['action'])) {
         switch ($_REQUEST['action']) {
@@ -60,7 +62,7 @@ if (isset($favicon)) {
             break;
         }
     }
-    
+
     // Check for stop_all parameter
     if (isset($_REQUEST['stop_all']) && $_REQUEST['stop_all'] == '1') {
         $favicon_path = $GLOBALS['_PJ_image_path'] . '/stop.png';
