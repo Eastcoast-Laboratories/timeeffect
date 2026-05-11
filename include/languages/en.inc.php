@@ -18,6 +18,7 @@
 	$GLOBALS['_PJ_strings']['action_delete']			= 'delete';
 	$GLOBALS['_PJ_strings']['active']					= 'active';
 	$GLOBALS['_PJ_strings']['admin']					= 'Administration';
+	$GLOBALS['_PJ_strings']['kimai_export']				= 'Kimai Export';
 	$GLOBALS['_PJ_strings']['agent']					= 'Agent';
 	$GLOBALS['_PJ_strings']['allow_nc']					= 'allowed to create new customers';
 	$GLOBALS['_PJ_strings']['ask_customer_delete']		= '<B>WARNING: If you complete this action this customer and all related projects will be deleted!</b><br>Do you really want to delete this customer?';
