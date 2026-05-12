@@ -48,7 +48,7 @@ if(!empty($export_efforts)) {
 	$GLOBALS['_PJ_max_efforts_total'] = 999999999;
 	
 	// Generate CSV
-	$csv = '"Date","From","To","Duration","Rate","User","Email","Customer","Project","Activity","Description","Exported","Tags","HourlyRate","FixedRate","InternalRate","meta.timesheet_foo"' . "\n";
+	$csv = '"Date","From","To","Duration","Rate","User","Email","Customer","Project","Activity","Description","Exported","BilledDate","Tags","HourlyRate","FixedRate","InternalRate","meta.timesheet_foo"' . "\n";
 	
 	// Build customer IDs for SQL query
 	$safe_customer_ids = array_map(function($id) {
@@ -97,6 +97,7 @@ if(!empty($export_efforts)) {
 		$activity = 'global'; // Default activity
 		$description = $db->Record['description'] ?? '';
 		$exported = (!empty($db->Record['billed']) && $db->Record['billed'] != '0000-00-00') ? '1' : '0';
+		$billed_date = (!empty($db->Record['billed']) && $db->Record['billed'] != '0000-00-00') ? $db->Record['billed'] : '';
 		$tags = '';
 		$hourly_rate = $rate;
 		$fixed_rate = '0';
@@ -104,7 +105,7 @@ if(!empty($export_efforts)) {
 		$meta_timesheet_foo = '';
 		
 		// Escape fields for CSV (comma delimiter with quotes)
-		$csv .= '"' . $date . '","' . $from . '","' . $to . '","' . $duration . '","' . $rate . '","' . $user . '","' . $email . '","' . $customer_name . '","' . $project_name . '","' . $activity . '","' . $description . '","' . $exported . '","' . $tags . '","' . $hourly_rate . '","' . $fixed_rate . '","' . $internal_rate . '","' . $meta_timesheet_foo . '"' . "\n";
+		$csv .= '"' . $date . '","' . $from . '","' . $to . '","' . $duration . '","' . $rate . '","' . $user . '","' . $email . '","' . $customer_name . '","' . $project_name . '","' . $activity . '","' . $description . '","' . $exported . '","' . $billed_date . '","' . $tags . '","' . $hourly_rate . '","' . $fixed_rate . '","' . $internal_rate . '","' . $meta_timesheet_foo . '"' . "\n";
 	}
 	
 	// Store CSV in session
