@@ -9,56 +9,11 @@ if(!$_PJ_auth || !$_PJ_auth->giveValue('id')) {
 	exit;
 }
 
-$center_template = "kimai_efforts_export";
-$center_title = $GLOBALS['_PJ_strings']['kimai_efforts_export'] ?? 'Kimai Efforts Export';
-
-// Handle export request
-if(isset($_REQUEST['export'])) {
-	// Load all efforts - pass null for customer and project to get all efforts
-	$customer = null;
-	$project = null;
-	$effort_list = new EffortList($customer, $project, $_PJ_auth, true);
-	
-	// Generate CSV
-	$csv = '"Date","From","To","Duration","Rate","User","Customer","Project","Activity","Description","Exported","Tags","Hourly rate","Fixed rate"' . "\n";
-	
-	while($effort_list->nextEffort()) {
-		$effort = $effort_list->giveEffort();
-		
-		$date = date('Y-m-d', strtotime($effort->giveValue('date')));
-		$from = substr($effort->giveValue('begin'), 0, 5); // HH:MM
-		$to = substr($effort->giveValue('end'), 0, 5); // HH:MM
-		
-		// Calculate duration in seconds
-		$begin_time = strtotime($effort->giveValue('begin'));
-		$end_time = strtotime($effort->giveValue('end'));
-		$duration = $end_time - $begin_time;
-		
-		$rate = $effort->giveValue('rate');
-		$user = $_PJ_auth->giveValue('email') ? $_PJ_auth->giveValue('email') : $_PJ_auth->giveValue('username');
-		$customer_name = $effort->giveValue('customer_name') ? $effort->giveValue('customer_name') : '';
-		$project_name = $effort->giveValue('project_name') ? $effort->giveValue('project_name') : '';
-		$activity = 'global'; // Default activity
-		$description = $effort->giveValue('description') ? $effort->giveValue('description') : '';
-		$exported = $effort->giveValue('billed') ? '1' : '0';
-		$tags = '';
-		$hourly_rate = $rate;
-		$fixed_rate = '0';
-		
-		// Escape fields for CSV
-		$csv .= '"' . $date . '","' . $from . '","' . $to . '","' . $duration . '","' . $rate . '","' . $user . '","' . $customer_name . '","' . $project_name . '","' . $activity . '","' . $description . '","' . $exported . '","' . $tags . '","' . $hourly_rate . '","' . $fixed_rate . '"' . "\n";
-	}
-	
-	// Store CSV in session
-	$_SESSION['kimai_efforts_csv'] = $csv;
-	
-	// Redirect to download page
-	header('Location: kimai_efforts_export.php?download=1');
-	exit;
-}
+$export_efforts = $_REQUEST['export_efforts'] ?? null;
+$download = $_REQUEST['download'] ?? null;
 
 // Handle download request
-if(isset($_REQUEST['download'])) {
+if(!empty($download)) {
 	if(!isset($_SESSION['kimai_efforts_csv'])) {
 		$error_message = "No CSV data available";
 		include("$_PJ_root/templates/error.ihtml.php");
@@ -77,5 +32,104 @@ if(isset($_REQUEST['download'])) {
 	exit;
 }
 
-include("$_PJ_root/templates/list.ihtml.php");
+// Handle export request
+if(!empty($export_efforts)) {
+	$selected_customer_ids = $_REQUEST['customer_ids'] ?? [];
+	
+	if(empty($selected_customer_ids)) {
+		$error_message = 'Please select at least one customer to export.';
+		$center_title = 'Error';
+		include("$_PJ_root/templates/error.ihtml.php");
+		include_once("$_PJ_include_path/degestiv.inc.php");
+		exit;
+	}
+	
+	// Override global limit to export all efforts
+	$GLOBALS['_PJ_max_efforts_total'] = 999999999;
+	
+	// Generate CSV
+	$csv = '"Date","From","To","Duration","Rate","User","Email","Customer","Project","Activity","Description","Exported","Tags","HourlyRate","FixedRate","InternalRate","meta.timesheet_foo"' . "\n";
+	
+	// Build customer IDs for SQL query
+	$safe_customer_ids = array_map(function($id) {
+		return (int)$id;
+	}, $selected_customer_ids);
+	$customer_ids_string = implode(',', $safe_customer_ids);
+	
+	// Use direct SQL to load efforts for selected customers without limit
+	$db = new Database();
+	$db->connect();
+	
+	$safeEffortTable = DatabaseSecurity::sanitizeColumnName($GLOBALS['_PJ_effort_table']);
+	$safeProjectTable = DatabaseSecurity::sanitizeColumnName($GLOBALS['_PJ_project_table']);
+	$safeCustomerTable = DatabaseSecurity::sanitizeColumnName($GLOBALS['_PJ_customer_table']);
+	
+	$query = "SELECT {$safeEffortTable}.*, {$safeProjectTable}.project_name, {$safeCustomerTable}.customer_name
+			  FROM {$safeEffortTable}
+			  LEFT JOIN {$safeProjectTable} ON {$safeEffortTable}.project_id = {$safeProjectTable}.id
+			  LEFT JOIN {$safeCustomerTable} ON {$safeProjectTable}.customer_id = {$safeCustomerTable}.id
+			  WHERE {$safeCustomerTable}.id IN ($customer_ids_string)
+			  ORDER BY date DESC, begin DESC";
+	
+	$db->query($query);
+	
+	while($db->next_record()) {
+		$date = date('Y-m-d', strtotime($db->Record['date']));
+		$from = substr($db->Record['begin'], 0, 5); // HH:MM
+		$to = substr($db->Record['end'], 0, 5); // HH:MM
+		
+		// Calculate duration in seconds
+		$begin_time = strtotime($db->Record['begin']);
+		$end_time = strtotime($db->Record['end']);
+		$duration = $end_time - $begin_time;
+		
+		$rate = $db->Record['rate'];
+		$user = $_PJ_auth->giveValue('username');
+		$email = $_PJ_auth->giveValue('email') ?? '';
+		$customer_name = $db->Record['customer_name'] ?? '';
+		$project_name = $db->Record['project_name'] ?? '';
+		
+		// Use default project name if no project is assigned
+		if(empty($project_name)) {
+			$project_name = 'Unassigned';
+		}
+		
+		$activity = 'global'; // Default activity
+		$description = $db->Record['description'] ?? '';
+		$exported = (!empty($db->Record['billed']) && $db->Record['billed'] != '0000-00-00') ? '1' : '0';
+		$tags = '';
+		$hourly_rate = $rate;
+		$fixed_rate = '0';
+		$internal_rate = '0';
+		$meta_timesheet_foo = '';
+		
+		// Escape fields for CSV (comma delimiter with quotes)
+		$csv .= '"' . $date . '","' . $from . '","' . $to . '","' . $duration . '","' . $rate . '","' . $user . '","' . $email . '","' . $customer_name . '","' . $project_name . '","' . $activity . '","' . $description . '","' . $exported . '","' . $tags . '","' . $hourly_rate . '","' . $fixed_rate . '","' . $internal_rate . '","' . $meta_timesheet_foo . '"' . "\n";
+	}
+	
+	// Store CSV in session
+	$_SESSION['kimai_efforts_csv'] = $csv;
+	
+	// Redirect to download page
+	header('Location: kimai_efforts_export.php?download=1');
+	exit;
+}
+
+// Get all customers for selection
+$customer_list = new CustomerList($_PJ_auth);
+$customers = [];
+
+while($customer_list->nextCustomer()) {
+	$customer = $customer_list->giveCustomer();
+	if($customer->checkUserAccess('read')) {
+		$customers[] = [
+			'id' => $customer->giveValue('id'),
+			'name' => $customer->giveValue('customer_name'),
+			'active' => $customer->giveValue('active')
+		];
+	}
+}
+
+$center_title = $GLOBALS['_PJ_strings']['kimai_efforts_export'] ?? 'Kimai Efforts Export';
+include("$_PJ_root/templates/kimai_efforts_export/list.ihtml.php");
 include_once("$_PJ_include_path/degestiv.inc.php");
