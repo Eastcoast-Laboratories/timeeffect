@@ -100,12 +100,12 @@ if(!empty($export_efforts)) {
 		// Clean description: replace invalid characters for Kimai import
 		// 1a. -> becomes UTF-8 arrow →
 		$description = str_replace('->', '→', $description);
-		// 1b. > remaining > become utf8-arrow right →
-		$description = str_replace('>', '→', $description);
-		// 1c < becomes utf8-arrow left ←
-		$description = str_replace('<', '←', $description);
+		// 1b. > becomes unicode right angle bracket ›
+		$description = str_replace('>', '›', $description);
+		// 1c. < becomes unicode left angle bracket ‹
+		$description = str_replace('<', '‹', $description);
 		// 2. \" and " become '
-		$description = str_replace(['"', '\"'], "'", $description);
+		$description = str_replace(['\"', '"'], "'", $description);
 		// 3. = becomes "ist" (longer pattern first to avoid partial replacements)
 		$description = str_replace([' = ', '='], ' ist ', $description);
 		
