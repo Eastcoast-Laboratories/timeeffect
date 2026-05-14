@@ -94,8 +94,22 @@ if(!empty($export_efforts)) {
 			$project_name = 'Unassigned';
 		}
 		
-		$activity = 'global'; // Default activity
 		$description = $db->Record['description'] ?? '';
+		$note = $db->Record['note'] ?? '';
+		
+		// Clean description: replace invalid characters for Kimai import
+		// 1a. -> becomes UTF-8 arrow →
+		$description = str_replace('->', '→', $description);
+		// 1b. > remaining > become utf8-arrow right →
+		$description = str_replace('>', '→', $description);
+		// 1c < becomes utf8-arrow left ←
+		$description = str_replace('<', '←', $description);
+		// 2. \" and " become '
+		$description = str_replace(['"', '\"'], "'", $description);
+		// 3. = becomes "ist" (longer pattern first to avoid partial replacements)
+		$description = str_replace([' = ', '='], ' ist ', $description);
+		
+		$activity = !empty($description) ? $description : 'keine Beschreibung';
 		$exported = (!empty($db->Record['billed']) && $db->Record['billed'] != '0000-00-00') ? '1' : '0';
 		$billed_date = (!empty($db->Record['billed']) && $db->Record['billed'] != '0000-00-00') ? $db->Record['billed'] : '';
 		$tags = '';
@@ -105,7 +119,7 @@ if(!empty($export_efforts)) {
 		$meta_timesheet_foo = '';
 		
 		// Escape fields for CSV (comma delimiter with quotes)
-		$csv .= '"' . $date . '","' . $from . '","' . $to . '","' . $duration . '","' . $rate . '","' . $user . '","' . $email . '","' . $customer_name . '","' . $project_name . '","' . $activity . '","' . $description . '","' . $exported . '","' . $billed_date . '","' . $tags . '","' . $hourly_rate . '","' . $fixed_rate . '","' . $internal_rate . '","' . $meta_timesheet_foo . '"' . "\n";
+		$csv .= '"' . $date . '","' . $from . '","' . $to . '","' . $duration . '","' . $rate . '","' . $user . '","' . $email . '","' . $customer_name . '","' . $project_name . '","' . $activity . '","' . $note . '","' . $exported . '","' . $billed_date . '","' . $tags . '","' . $hourly_rate . '","' . $fixed_rate . '","' . $internal_rate . '","' . $meta_timesheet_foo . '"' . "\n";
 	}
 	
 	// Store CSV in session
